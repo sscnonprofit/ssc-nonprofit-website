@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Award, Star } from "lucide-react"
+import { ArrowRight, Award, CalendarDays, Star } from "lucide-react"
 
 import home from "@/content/home.json"
 import site from "@/content/site.json"
@@ -28,18 +28,35 @@ export default function HomePage() {
           fill
           priority
           sizes="100vw"
-          className="-z-10 object-cover"
+          className="-z-20 object-cover"
         />
         <div
-          className="absolute inset-0 -z-10 bg-gradient-to-br from-primary via-primary/94 to-primary/55"
+          className="absolute inset-0 -z-10 bg-gradient-to-br from-primary via-primary/93 to-primary/60"
+          aria-hidden="true"
+        />
+        {/* Signature glow, echoing the accent blur used on the closing CTA band. */}
+        <div
+          className="pointer-events-none absolute -right-32 -top-32 -z-10 size-[28rem] rounded-full bg-accent/15 blur-3xl"
           aria-hidden="true"
         />
 
-        <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28 lg:py-32">
-          <div className="max-w-3xl">
-            <BrandRule className="w-24" />
+        <div className="mx-auto max-w-7xl px-6 pb-24 pt-20 sm:pb-32 sm:pt-28 lg:pt-32">
+          <div className="max-w-2xl">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-1.5 backdrop-blur-sm">
+                <CalendarDays className="size-3.5 text-accent" aria-hidden="true" />
+                <span className="font-display text-xs font-semibold uppercase tracking-[0.14em]">
+                  Est. {site.founded}
+                </span>
+              </span>
+              <span className="font-display text-xs font-semibold uppercase tracking-[0.14em] text-primary-foreground/65">
+                Sheboygan County&apos;s Only Nonprofit Senior Care
+              </span>
+            </div>
+
+            <BrandRule className="mt-6 w-24" />
             <h1 className="mt-6 text-balance text-4xl font-semibold sm:text-5xl lg:text-6xl">{home.hero.title}</h1>
-            <p className="mt-6 text-pretty leading-relaxed text-primary-foreground/85">{home.hero.body}</p>
+            <p className="mt-6 max-w-xl text-pretty leading-relaxed text-primary-foreground/85">{home.hero.body}</p>
 
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
@@ -57,13 +74,17 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-primary-foreground/80">
-              <li className="flex items-center gap-2">
-                <Award className="size-4 text-accent" aria-hidden="true" />
+            <ul className="mt-9 flex flex-wrap gap-3 text-sm">
+              <li className="inline-flex items-center gap-2.5 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-2 backdrop-blur-sm">
+                <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-accent/20">
+                  <Award className="size-3.5 text-accent" aria-hidden="true" />
+                </span>
                 U.S. News &amp; World Report &ldquo;Best Nursing Home&rdquo;
               </li>
-              <li className="flex items-center gap-2">
-                <Star className="size-4 text-accent" aria-hidden="true" />
+              <li className="inline-flex items-center gap-2.5 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-2 backdrop-blur-sm">
+                <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-accent/20">
+                  <Star className="size-3.5 text-accent" aria-hidden="true" />
+                </span>
                 Consistently ranked a 5-Star facility
               </li>
             </ul>
@@ -71,9 +92,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section aria-label="Our impact by the numbers" className="border-b border-border bg-secondary/60">
-        <div className="mx-auto max-w-7xl px-6 py-14">
+      {/* Stats: an elevated panel that overlaps the hero image, so the campus
+          photo and the numbers read as one composition. */}
+      <section aria-label="Our impact by the numbers" className="relative z-10 mx-auto -mt-14 max-w-6xl px-6 sm:-mt-20">
+        <div className="ssc-card rounded-3xl bg-card/95 p-8 shadow-2xl shadow-primary/10 backdrop-blur-xl sm:p-10">
           <StatCounter stats={home.stats} />
         </div>
       </section>

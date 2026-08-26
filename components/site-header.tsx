@@ -253,20 +253,29 @@ function NavLink({
   child,
   className,
   onClick,
+  tabIndex,
 }: {
   child: NavChild
   className?: string
   onClick?: () => void
+  tabIndex?: number
 }) {
   if (child.external) {
     return (
-      <a href={child.href} target="_blank" rel="noopener noreferrer" className={className} onClick={onClick}>
+      <a
+        href={child.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+        onClick={onClick}
+        tabIndex={tabIndex}
+      >
         {child.label}
       </a>
     )
   }
   return (
-    <Link href={child.href} className={className} onClick={onClick}>
+    <Link href={child.href} className={className} onClick={onClick} tabIndex={tabIndex}>
       {child.label}
     </Link>
   )

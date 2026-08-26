@@ -17,9 +17,20 @@ const nav = site.nav as NavItem[]
 export function SiteHeader() {
   const [open, setOpen] = useState(false)
   const [expanded, setExpanded] = useState<string | null>(null)
+  /** Label of the open desktop dropdown, driven by both hover and click/keyboard. */
+  const [menu, setMenu] = useState<string | null>(null)
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur-md">
+    <header
+      className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur-md"
+      onKeyDown={(e) => {
+        if (e.key === "Escape") setMenu(null)
+      }}
+      onBlur={(e) => {
+        // Close the dropdown once focus leaves the header entirely.
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setMenu(null)
+      }}
+    >
       {/* Utility bar */}
       <div className="hidden bg-primary text-primary-foreground md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-2 text-sm">
@@ -69,20 +80,44 @@ export function SiteHeader() {
           <ul className="flex items-center gap-1">
             {nav.map((item) =>
               item.children ? (
-                <li key={item.label} className="group relative">
+                <li
+                  key={item.label}
+                  className="group relative"
+                  onMouseEnter={() => setMenu(item.label)}
+                  onMouseLeave={() => setMenu((v) => (v === item.label ? null : v))}
+                >
                   <button
                     type="button"
-                    className="flex items-center gap-1 rounded-md px-3 py-2 font-display text-sm font-semibold text-foreground/80 transition-colors group-hover:bg-secondary group-hover:text-primary"
-                    aria-expanded="false"
+                    className={cn(
+                      "flex items-center gap-1 rounded-md px-3 py-2 font-display text-sm font-semibold transition-colors",
+                      menu === item.label
+                        ? "bg-secondary text-primary"
+                        : "text-foreground/80 hover:bg-secondary hover:text-primary",
+                    )}
+                    aria-expanded={menu === item.label}
+                    onClick={() => setMenu((v) => (v === item.label ? null : item.label))}
                   >
                     {item.label}
-                    <ChevronDown className="size-4 transition-transform group-hover:rotate-180" aria-hidden="true" />
+                    <ChevronDown
+                      className={cn("size-4 transition-transform", menu === item.label && "rotate-180")}
+                      aria-hidden="true"
+                    />
                   </button>
-                  <div className="invisible absolute left-0 top-full w-64 pt-2 opacity-0 transition-all duration-150 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+                  <div
+                    className={cn(
+                      "absolute left-0 top-full w-64 pt-2 transition-opacity duration-150",
+                      menu === item.label ? "visible opacity-100" : "invisible opacity-0",
+                    )}
+                  >
                     <ul className="overflow-hidden rounded-lg border border-border bg-card p-2 shadow-lg shadow-foreground/5">
                       {item.children.map((child) => (
                         <li key={child.label}>
-                          <NavLink child={child} className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-secondary hover:text-primary" />
+                          <NavLink
+                            child={child}
+                            className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-secondary hover:text-primary"
+                            onClick={() => setMenu(null)}
+                            tabIndex={menu === item.label ? undefined : -1}
+                          />
                         </li>
                       ))}
                     </ul>

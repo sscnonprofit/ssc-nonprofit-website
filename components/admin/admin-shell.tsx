@@ -1,18 +1,33 @@
 "use client"
 
-import { LayoutDashboard, LogOut, Users } from "lucide-react"
+import { ExternalLinkIcon, LayoutDashboardIcon, LogOutIcon, UsersIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 
 import { authClient } from "@/lib/auth-client"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { cn } from "@/lib/utils"
 
 type AdminShellProps = {
   userName: string
   userEmail: string
   role: string
   children: React.ReactNode
+}
+
+function getInitials(name: string) {
+  const parts = name.trim().split(/\s+/)
+  const initials = parts.slice(0, 2).map((p) => p[0]?.toUpperCase() ?? "")
+  return initials.join("") || "U"
 }
 
 export function AdminShell({ userName, userEmail, role, children }: AdminShellProps) {
@@ -26,52 +41,94 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
   }
 
   const navItems = [
-    { href: "/admin", label: "Pages", icon: LayoutDashboard },
-    ...(role === "admin" ? [{ href: "/admin/users", label: "Users", icon: Users }] : []),
+    { href: "/admin", label: "Pages", icon: LayoutDashboardIcon },
+    ...(role === "admin" ? [{ href: "/admin/users", label: "Users", icon: UsersIcon }] : []),
   ]
 
   return (
-    <div className="min-h-svh bg-background">
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-6">
-            <Link href="/admin" className="font-serif text-lg font-semibold text-foreground">
-              SSC Content Manager
-            </Link>
-            <nav className="flex items-center gap-1">
-              {navItems.map((item) => {
-                const active = pathname === item.href
-                return (
-                  <Button
-                    key={item.href}
-                    render={<Link href={item.href} />}
-                    nativeButton={false}
-                    variant={active ? "secondary" : "ghost"}
-                    size="sm"
-                  >
-                    <item.icon data-icon="inline-start" />
-                    {item.label}
-                  </Button>
-                )
-              })}
-            </nav>
+    <div className="flex min-h-svh bg-muted/30">
+      <aside className="fixed inset-y-0 left-0 z-30 flex w-60 flex-col border-r border-border bg-card">
+        <div className="flex h-16 items-center gap-2.5 border-b border-border px-5">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary font-display text-sm font-bold text-primary-foreground">
+            S
           </div>
-          <div className="flex items-center gap-3">
-            <div className="hidden text-right sm:block">
-              <p className="text-sm font-medium text-foreground">{userName}</p>
-              <p className="text-xs text-muted-foreground">{userEmail}</p>
-            </div>
-            <Badge variant={role === "admin" ? "default" : "secondary"} className="capitalize">
-              {role}
-            </Badge>
-            <Button variant="ghost" size="sm" onClick={handleSignOut}>
-              <LogOut data-icon="inline-start" />
-              Sign out
-            </Button>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-foreground">SSC Content</p>
+            <p className="truncate text-xs text-muted-foreground">Manager</p>
           </div>
         </div>
-      </header>
-      <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>
+
+        <nav className="flex flex-1 flex-col gap-1 p-3">
+          {navItems.map((item) => {
+            const active = pathname === item.href
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                  active
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                )}
+              >
+                <item.icon className="size-4 shrink-0" />
+                {item.label}
+              </Link>
+            )
+          })}
+
+          <Link
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-auto flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          >
+            <ExternalLinkIcon className="size-4 shrink-0" />
+            View live site
+          </Link>
+        </nav>
+
+        <div className="border-t border-border p-3">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <button
+                  type="button"
+                  className="flex w-full items-center gap-2.5 rounded-md p-2 text-left transition-colors hover:bg-muted"
+                />
+              }
+            >
+              <Avatar className="size-8 shrink-0">
+                <AvatarFallback className="bg-primary/10 text-xs font-semibold text-primary">
+                  {getInitials(userName)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-foreground">{userName}</p>
+                <p className="truncate text-xs text-muted-foreground">{userEmail}</p>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+              <DropdownMenuLabel className="flex items-center gap-2 font-normal">
+                <span className="text-sm text-muted-foreground">Signed in as</span>
+                <Badge variant={role === "admin" ? "default" : "secondary"} className="capitalize">
+                  {role}
+                </Badge>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+                <LogOutIcon />
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </aside>
+
+      <main className="ml-60 flex-1 px-8 py-8">
+        <div className="mx-auto max-w-5xl">{children}</div>
+      </main>
     </div>
   )
 }

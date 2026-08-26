@@ -1,10 +1,13 @@
 import Link from "next/link"
 import { ArrowLeft, Phone } from "lucide-react"
 
-import site from "@/content/site.json"
+import siteFallback from "@/content/site.json"
 import { BrandRule } from "@/components/brand-rule"
+import { getContent } from "@/lib/cms/content"
 
-export default function NotFound() {
+export default async function NotFound() {
+  const site = await getContent("site", siteFallback)
+
   return (
     <main className="mx-auto flex min-h-[70vh] max-w-3xl flex-col items-start justify-center gap-6 px-6 py-24">
       <BrandRule />

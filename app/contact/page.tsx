@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
 import { Clock, Mail, MapPin, Phone } from "lucide-react"
 
-import site from "@/content/site.json"
+import siteFallback from "@/content/site.json"
 import { BrandRule } from "@/components/brand-rule"
 import { ContactForm } from "@/components/contact-form"
 import { PageHero } from "@/components/page-hero"
 import { SectionHeading } from "@/components/section-heading"
+import { getContent } from "@/lib/cms/content"
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -13,11 +14,12 @@ export const metadata: Metadata = {
     "Questions about care, tours, or availability at Sheboygan Senior Community? Call (920) 458-2137 or send us a message.",
 }
 
-const mapQuery = encodeURIComponent(
-  `${site.address.street}, ${site.address.city}, ${site.address.state} ${site.address.zip}`,
-)
+export default async function ContactPage() {
+  const site = await getContent("site", siteFallback)
+  const mapQuery = encodeURIComponent(
+    `${site.address.street}, ${site.address.city}, ${site.address.state} ${site.address.zip}`,
+  )
 
-export default function ContactPage() {
   return (
     <>
       <PageHero
@@ -114,7 +116,7 @@ export default function ContactPage() {
           <SectionHeading
             eyebrow="Directory"
             title="Who to ask for"
-            body="Reach the right department directly. All extensions run through our main line."
+            intro="Reach the right department directly. All extensions run through our main line."
           />
           <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {site.contacts.map((c) => (

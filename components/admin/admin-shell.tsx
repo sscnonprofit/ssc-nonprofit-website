@@ -42,11 +42,15 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
               {navItems.map((item) => {
                 const active = pathname === item.href
                 return (
-                  <Button key={item.href} asChild variant={active ? "secondary" : "ghost"} size="sm">
-                    <Link href={item.href}>
-                      <item.icon data-icon="inline-start" />
-                      {item.label}
-                    </Link>
+                  <Button
+                    key={item.href}
+                    render={<Link href={item.href} />}
+                    nativeButton={false}
+                    variant={active ? "secondary" : "ghost"}
+                    size="sm"
+                  >
+                    <item.icon data-icon="inline-start" />
+                    {item.label}
                   </Button>
                 )
               })}

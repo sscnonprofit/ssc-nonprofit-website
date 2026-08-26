@@ -55,7 +55,7 @@ export default async function OurCompanyPage() {
       {/* History */}
       <section id="history" className="border-y border-border bg-secondary py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-6">
-          <SectionHeading title={company.history.title} body={company.history.body} align="center" />
+          <SectionHeading title={company.history.title} intro={company.history.body} align="center" />
           <div className="mt-16">
             <HistoryTimeline milestones={company.history.milestones} />
           </div>
@@ -64,7 +64,7 @@ export default async function OurCompanyPage() {
 
       {/* Leadership */}
       <section id="leadership" className="mx-auto max-w-7xl px-6 py-20 sm:py-24">
-        <SectionHeading title={company.team.title} body={company.team.body} />
+        <SectionHeading title={company.team.title} intro={company.team.body} />
         <div className="mt-12">
           <TeamGrid members={company.team.members} />
         </div>

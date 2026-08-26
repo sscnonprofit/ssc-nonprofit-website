@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
 import { ArrowRight, FileText, Mail, Phone } from "lucide-react"
 
-import site from "@/content/site.json"
+import siteFallback from "@/content/site.json"
 import { BrandRule } from "@/components/brand-rule"
 import { PageHero } from "@/components/page-hero"
 import { SectionHeading } from "@/components/section-heading"
+import { getContent } from "@/lib/cms/content"
 
 export const metadata: Metadata = {
   title: "Donate",
@@ -12,9 +13,10 @@ export const metadata: Metadata = {
     "As a 501(c)(3) nonprofit, Sheboygan Senior Community relies on donors and community partners. Give by check, stock, or online.",
 }
 
-const philanthropy = site.contacts.find((c) => c.role === "Director of Philanthropy")
+export default async function DonatePage() {
+  const site = await getContent("site", siteFallback)
+  const philanthropy = site.contacts.find((c) => c.role === "Director of Philanthropy")
 
-export default function DonatePage() {
   return (
     <>
       <PageHero
@@ -60,7 +62,7 @@ export default function DonatePage() {
         <SectionHeading
           eyebrow="Ways to give"
           title="How to Give"
-          body="Every gift, no matter the size, helps enhance resident programs, services, and opportunities that make Sheboygan Senior Community a special place to call home."
+          intro="Every gift, no matter the size, helps enhance resident programs, services, and opportunities that make Sheboygan Senior Community a special place to call home."
         />
 
         <ul className="mt-12 grid gap-6 lg:grid-cols-3">

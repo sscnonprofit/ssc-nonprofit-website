@@ -50,7 +50,7 @@ export async function PillarPage({ slug }: { slug: PillarKey }) {
 
       {/* Benefits */}
       <section className="mx-auto max-w-7xl px-6 py-20 sm:py-24">
-        <SectionHeading eyebrow={p.benefits.eyebrow} title={p.benefits.title} body={p.benefits.body} />
+        <SectionHeading eyebrow={p.benefits.eyebrow} title={p.benefits.title} intro={p.benefits.body} />
         {benefitsCta ? (
           <CtaLink
             href={benefitsCta.href}
@@ -99,7 +99,7 @@ export async function PillarPage({ slug }: { slug: PillarKey }) {
             <SectionHeading
               eyebrow="Partners"
               title="Organizations we stand beside"
-              body="A few of the local causes and nonprofit partners we support each year."
+              intro="A few of the local causes and nonprofit partners we support each year."
               align="center"
             />
             <ul className="mt-12 grid grid-cols-2 items-center gap-x-8 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">

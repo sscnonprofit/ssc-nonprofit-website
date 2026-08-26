@@ -1,6 +1,7 @@
 "use server"
 
-import site from "@/content/site.json"
+import siteFallback from "@/content/site.json"
+import { getContent } from "@/lib/cms/content"
 
 export type FormState = {
   status: "idle" | "success" | "error"
@@ -61,7 +62,10 @@ async function sendMail({ subject, html, replyTo }: { subject: string; html: str
   return true
 }
 
-const UNCONFIGURED_MESSAGE = `We couldn't send your message just now. Please call us at ${site.phone} and we'll be glad to help right away.`
+async function unconfiguredMessage() {
+  const site = await getContent("site", siteFallback)
+  return `We couldn't send your message just now. Please call us at ${site.phone} and we'll be glad to help right away.`
+}
 
 export async function submitContactForm(_prev: FormState, formData: FormData): Promise<FormState> {
   // Honeypot — silently accept bot submissions.
@@ -103,7 +107,7 @@ export async function submitContactForm(_prev: FormState, formData: FormData): P
     })
 
     if (!sent) {
-      return { status: "error", message: UNCONFIGURED_MESSAGE, values }
+      return { status: "error", message: await unconfiguredMessage(), values }
     }
 
     return {
@@ -111,7 +115,7 @@ export async function submitContactForm(_prev: FormState, formData: FormData): P
       message: "Thank you. We've received your message and someone from our team will be in touch shortly.",
     }
   } catch {
-    return { status: "error", message: UNCONFIGURED_MESSAGE, values }
+    return { status: "error", message: await unconfiguredMessage(), values }
   }
 }
 
@@ -138,11 +142,11 @@ export async function submitNewsletterForm(_prev: FormState, formData: FormData)
     })
 
     if (!sent) {
-      return { status: "error", message: UNCONFIGURED_MESSAGE }
+      return { status: "error", message: await unconfiguredMessage() }
     }
 
     return { status: "success", message: "You're on the list. Thank you for subscribing." }
   } catch {
-    return { status: "error", message: UNCONFIGURED_MESSAGE }
+    return { status: "error", message: await unconfiguredMessage() }
   }
 }

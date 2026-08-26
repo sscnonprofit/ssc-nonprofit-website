@@ -41,7 +41,7 @@ export default async function TheChallengePage() {
           <SectionHeading
             eyebrow={challenge.keyChallenges.eyebrow}
             title={challenge.keyChallenges.title}
-            body={challenge.keyChallenges.body}
+            intro={challenge.keyChallenges.body}
           />
           <ul className="mt-12 grid gap-6 md:grid-cols-3">
             {challenge.keyChallenges.items.map((item) => (
@@ -76,7 +76,7 @@ export default async function TheChallengePage() {
         <SectionHeading
           eyebrow={challenge.solution.eyebrow}
           title={challenge.solution.title}
-          body={challenge.solution.body}
+          intro={challenge.solution.body}
         />
       </section>
 
@@ -119,7 +119,7 @@ export default async function TheChallengePage() {
           <SectionHeading
             eyebrow={challenge.progress.eyebrow}
             title={challenge.progress.title}
-            body={challenge.progress.body}
+            intro={challenge.progress.body}
             align="center"
           />
           <ol className="mt-14 flex flex-col gap-8">

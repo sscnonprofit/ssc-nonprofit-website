@@ -1,25 +1,33 @@
 import type { Metadata } from "next"
 import { Check, Download, Mail, MapPin } from "lucide-react"
 
-import gallery from "@/content/gallery.json"
-import site from "@/content/site.json"
+import galleryFallback from "@/content/gallery.json"
+import siteFallback from "@/content/site.json"
 import { BrandRule } from "@/components/brand-rule"
 import { CtaBand } from "@/components/cta-band"
 import { PageHero } from "@/components/page-hero"
 import { SectionHeading } from "@/components/section-heading"
+import { getContent } from "@/lib/cms/content"
 
-export const metadata: Metadata = {
-  title: "Artists Gallery",
-  description: gallery.hero.body,
+export async function generateMetadata(): Promise<Metadata> {
+  const gallery = await getContent("gallery", galleryFallback)
+  return {
+    title: "Artists Gallery",
+    description: gallery.hero.body,
+  }
 }
 
-export default function ArtistsGalleryPage() {
+export default async function ArtistsGalleryPage() {
+  const [gallery, site] = await Promise.all([
+    getContent("gallery", galleryFallback),
+    getContent("site", siteFallback),
+  ])
   const { intro, theme, guidelines, dropoff, display } = gallery
 
   return (
     <>
       <PageHero
-        badge={gallery.hero.badge}
+        eyebrow={gallery.hero.badge}
         title={gallery.hero.title}
         body={gallery.hero.body}
         image={gallery.hero.image}
@@ -62,7 +70,7 @@ export default function ArtistsGalleryPage() {
       {/* Theme */}
       <section className="border-y border-border bg-secondary py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-6">
-          <SectionHeading eyebrow={theme.eyebrow} title={theme.title} body={theme.body} />
+          <SectionHeading eyebrow={theme.eyebrow} title={theme.title} intro={theme.body} />
           <div className="mt-12 grid gap-8 lg:grid-cols-2">
             <div className="ssc-card p-8">
               <h3 className="font-display text-xl font-semibold">{theme.inspirationTitle}</h3>
@@ -118,7 +126,7 @@ export default function ArtistsGalleryPage() {
       {/* Drop-off */}
       <section className="border-y border-border bg-secondary py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-6">
-          <SectionHeading eyebrow={dropoff.eyebrow} title={dropoff.title} body={dropoff.body} />
+          <SectionHeading eyebrow={dropoff.eyebrow} title={dropoff.title} intro={dropoff.body} />
           <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_1fr]">
             <ul className="flex flex-col gap-3">
               {dropoff.dates.map((d) => (

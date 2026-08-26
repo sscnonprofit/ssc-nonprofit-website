@@ -73,18 +73,20 @@ function PageCard({
       <CardContent className="flex flex-col gap-4">
         <p className="text-sm text-muted-foreground">{description}</p>
         <div className="flex flex-wrap items-center gap-2">
-          <Button asChild size="sm">
-            <Link href={`/admin/pages/${slug}`}>
-              <Pencil data-icon="inline-start" />
-              Edit
-            </Link>
+          <Button render={<Link href={`/admin/pages/${slug}`} />} nativeButton={false} size="sm">
+            <Pencil data-icon="inline-start" />
+            Edit
           </Button>
           {routes.map((route) => (
-            <Button key={route} asChild size="sm" variant="ghost">
-              <Link href={route} target="_blank" rel="noopener noreferrer">
-                <ExternalLink data-icon="inline-start" />
-                {routes.length > 1 ? route : "View live"}
-              </Link>
+            <Button
+              key={route}
+              render={<Link href={route} target="_blank" rel="noopener noreferrer" />}
+              nativeButton={false}
+              size="sm"
+              variant="ghost"
+            >
+              <ExternalLink data-icon="inline-start" />
+              {routes.length > 1 ? route : "View live"}
             </Button>
           ))}
         </div>

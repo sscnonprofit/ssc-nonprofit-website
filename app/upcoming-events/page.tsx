@@ -3,22 +3,28 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Download, ExternalLink } from "lucide-react"
 
-import events from "@/content/events.json"
+import eventsFallback from "@/content/events.json"
 import { BrandRule } from "@/components/brand-rule"
 import { CtaBand } from "@/components/cta-band"
 import { PageHero } from "@/components/page-hero"
 import { SectionHeading } from "@/components/section-heading"
+import { getContent } from "@/lib/cms/content"
 
-export const metadata: Metadata = {
-  title: "Upcoming Events",
-  description: events.hero.body,
+export async function generateMetadata(): Promise<Metadata> {
+  const events = await getContent("events", eventsFallback)
+  return {
+    title: "Upcoming Events",
+    description: events.hero.body,
+  }
 }
 
-export default function UpcomingEventsPage() {
+export default async function UpcomingEventsPage() {
+  const events = await getContent("events", eventsFallback)
+
   return (
     <>
       <PageHero
-        badge={events.hero.badge}
+        eyebrow={events.hero.badge}
         title={events.hero.title}
         body={events.hero.body}
         image={events.hero.image}
@@ -67,7 +73,7 @@ export default function UpcomingEventsPage() {
           <SectionHeading
             eyebrow={events.calendars.eyebrow}
             title={events.calendars.title}
-            body={events.calendars.body}
+            intro={events.calendars.body}
           />
           <ul className="mt-12 grid gap-6 sm:grid-cols-2">
             {events.calendars.items.map((c) => (

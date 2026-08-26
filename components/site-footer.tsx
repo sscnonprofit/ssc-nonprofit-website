@@ -1,14 +1,16 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Facebook, Instagram, MapPin, Phone, Youtube } from "lucide-react"
+import { MapPin, Phone } from "lucide-react"
 
 import site from "@/content/site.json"
 import { BrandRule } from "@/components/brand-rule"
+import { NewsletterForm } from "@/components/newsletter-form"
+import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/social-icons"
 
 const socialIcons = {
-  Facebook,
-  Instagram,
-  YouTube: Youtube,
+  Facebook: FacebookIcon,
+  Instagram: InstagramIcon,
+  YouTube: YoutubeIcon,
 } as const
 
 export function SiteFooter() {
@@ -104,7 +106,19 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-2 border-t border-primary-foreground/20 pt-6 text-xs text-primary-foreground/70 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-6 border-t border-primary-foreground/20 pt-10 lg:flex-row lg:items-center lg:justify-between">
+          <div className="max-w-md">
+            <h2 className="font-display text-lg font-semibold">Stay in the loop</h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-primary-foreground/80">
+              Occasional news, events, and stories from our campus. No spam, ever.
+            </p>
+          </div>
+          <div className="w-full max-w-md">
+            <NewsletterForm onDark />
+          </div>
+        </div>
+
+        <div className="mt-10 flex flex-col gap-2 border-t border-primary-foreground/20 pt-6 text-xs text-primary-foreground/70 sm:flex-row sm:items-center sm:justify-between">
           <p>Copyright &copy; {new Date().getFullYear()} Sheboygan Senior Community. All rights reserved.</p>
           <p>A 501(c)(3) nonprofit organization serving Sheboygan County since {site.founded}.</p>
         </div>

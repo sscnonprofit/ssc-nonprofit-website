@@ -7,7 +7,6 @@ import home from "@/content/home.json"
 import site from "@/content/site.json"
 import { BrandRule } from "@/components/brand-rule"
 import { CtaBand } from "@/components/cta-band"
-import { NewsletterForm } from "@/components/newsletter-form"
 import { SectionHeading } from "@/components/section-heading"
 import { StatCounter } from "@/components/stat-counter"
 import { Testimonials } from "@/components/testimonials"
@@ -160,20 +159,6 @@ export default function HomePage() {
         title="Client Testimonials"
         intro="The true measure of our impact lies in the stories of those we serve. Hear firsthand how Sheboygan Senior Community has made a difference in the lives of our residents and their families. Their experiences highlight our commitment to compassionate care, vibrant community, and unwavering support. These testimonials reflect the 'SSC Difference' – a place where residents truly feel at home."
       />
-
-      {/* Newsletter */}
-      <section className="mx-auto max-w-7xl px-6 pb-6">
-        <div className="flex flex-col gap-8 rounded-3xl border border-border bg-card p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex max-w-xl flex-col gap-4">
-            <BrandRule />
-            <h2 className="text-balance text-3xl font-semibold">{home.newsletter.title}</h2>
-            <p className="text-pretty leading-relaxed text-muted-foreground">{home.newsletter.body}</p>
-          </div>
-          <div className="w-full max-w-md">
-            <NewsletterForm />
-          </div>
-        </div>
-      </section>
 
       <CtaBand
         title="Come see the SSC difference for yourself"

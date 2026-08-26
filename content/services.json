@@ -1,0 +1,305 @@
+{
+  "assisted-living": {
+    "slug": "assisted-living",
+    "eyebrow": "Sheboygan Senior Community",
+    "title": "Assisted Living",
+    "household": "Willow Lane",
+    "heroImage": "/images/Sheboygan-Senior-Community-_assisted-living.jpg",
+    "heroImageAlt": "A Willow Lane resident reading outdoors on the Sheboygan Senior Community campus",
+    "seo": {
+      "title": "Assisted Living at Willow Lane",
+      "description": "Willow Lane is Sheboygan Senior Community's licensed CBRF assisted living household — 25 private 410 sq ft apartments, all-inclusive care, fine dining, and a full activity calendar."
+    },
+    "intro": "Willow Lane is our community-based residential facility (CBRF) designed to support seniors in living with dignity, safety, and joy. Licensed by the State of Wisconsin, Willow Lane provides a household-style environment that fosters connection, friendship, and shared experiences. Residents enjoy a full, life-enriching lifestyle with opportunities for social engagement, enrichment activities, and personalized support, all within a caring and secure community.",
+    "servicesIntro": "At Willow Lane, our goal is to create a supportive, enriching, and convenient environment where seniors can thrive. Residents enjoy a full continuum of services all under one roof, including personal laundry, a barber and salon, interdenominational services, mail and postal services, comfortable sitting areas, and more. Our community also offers fine dining, housekeeping, linen service, maintenance, social services, and a variety of physical and life-enriching activities designed to support wellness, connection, and joy.",
+    "features": [
+      {
+        "title": "Individual Room Features",
+        "body": "These 410-square-foot private apartments feature a room, a bath with a walk-in shower, and separate living/sleeping spaces. They include a kitchenette, individual climate control, extended cable, and ample safety call lights. Couples are welcome in select apartments."
+      },
+      {
+        "title": "Dietary Options",
+        "body": "Dining is a delight with our four-week rotating menu featuring seasonal, made-to-order lunch and dinner options. We easily accommodate dietary modifications, including texture-modified (mechanical soft, pureed), specialty diets (low sodium, low fat, etc.), and thickened liquids."
+      },
+      {
+        "title": "Household Features",
+        "body": "Residents enjoy a separate main entrance, a communal kitchen and dining area, and a cozy living room. Our amenities include a patio, outdoor courtyard, spa with a whirlpool, laundry room, and included cable and WiFi."
+      },
+      {
+        "title": "Couples Housing",
+        "body": "Willow Lane can accommodate couples in the same 410-square-foot apartment, with special reduced rates for shared living while maintaining privacy and comfort."
+      },
+      {
+        "title": "Medical Partners",
+        "body": "For resident convenience, we offer on-site physician visits and services, including Health Drive specialists (optometrist, dentist, etc.), MobileX x-rays, and an in-house EKG and bladder scanner."
+      },
+      {
+        "title": "Salon Cypress",
+        "body": "Residents enjoy full-service hair and beauty treatments on-site, providing comfort and convenience without leaving the building. Appointments can be scheduled by calling (920) 458-2137 x712."
+      }
+    ],
+    "gallery": [
+      {
+        "src": "/images/Sheboygan-Senior-Community-_assisted-living-4.jpg",
+        "alt": "A private Willow Lane apartment at Sheboygan Senior Community"
+      },
+      {
+        "src": "/images/Sheboygan-Senior-Community-_assisted-living-5.jpg",
+        "alt": "The communal living area in the Willow Lane household"
+      },
+      {
+        "src": "/images/Sheboygan-Senior-Community-_assisted-living-6.jpg",
+        "alt": "The Willow Lane dining room set for a meal"
+      },
+      {
+        "src": "/images/Salon-Photo-scaled.jpeg",
+        "alt": "Salon Cypress, the on-site hair and beauty salon"
+      }
+    ],
+    "faqEyebrow": "Common Questions/Concerns",
+    "faqTitle": "Assisted Living FAQs",
+    "faqs": [
+      {
+        "q": "Do you have levels of care? What does that look like?",
+        "a": "We are an all-inclusive assisted living. We have one flat monthly rate that includes all of your loved one's care needs, with the exception of transportation and the beauty shop."
+      },
+      {
+        "q": "What is included in the monthly cost? Are there additional costs or fees?",
+        "a": "Included in the monthly cost is the following: one-bedroom apartment, 3 meals a day and snacks and beverages 24/7, housekeeping, laundry services, personal hygiene items including paper products, towels, a landline, cable, Wi-Fi, medication administration, 1-2 whirlpool tub baths a week, heating and air-conditioning, 24 hour staff to assist with care needs, and a variety of activities including community outings."
+      },
+      {
+        "q": "How many apartments do you have? Are there different options to choose from?",
+        "a": "We have 25 private apartments. They are all the same layout and size."
+      },
+      {
+        "q": "What activities and social programs are offered?",
+        "a": "We offer a variety of activities ranging from worship services, bingo, Wii bowling, live music, food demonstrations, socials, happy hours, arts and crafts, exercise class, trivia and word games, resident council, card clubs, walking club and multiple community outings including lunches at local restaurants, Bookworm Gardens, ice cream at South Pier, Meijer, and the Making Spirits Bright ride. All activities are included in the monthly cost."
+      },
+      {
+        "q": "What happens when my loved one's money runs out?",
+        "a": "Social services will assist with completing a Medicaid application."
+      },
+      {
+        "q": "What is the staff to resident ratio? What if there is an emergency during the night?",
+        "a": "The assisted living facility has 2-3 resident assistants working first shift, 2-3 on second shift and 1 overnight. There is a nurse on the unit Monday through Friday from 8:00 to 4:30. If a nurse is needed after hours, a nurse from the skilled nursing unit (which is attached) will come over to assist."
+      },
+      {
+        "q": "Do you have visitation policies?",
+        "a": "We do not have visiting hours. Family and friends are welcome to visit anytime."
+      },
+      {
+        "q": "Do you allow pets?",
+        "a": "Unfortunately we do not allow pets to live here at SSC, but we love animal visits."
+      },
+      {
+        "q": "Do you have transportation?",
+        "a": "We have transportation available 24/7. It is not included in the monthly cost. It is $45 round trip within Sheboygan County. Outside of Sheboygan County there is additional mileage."
+      },
+      {
+        "q": "Do you have a waitlist? How do I get on the waitlist?",
+        "a": "We do have a waitlist. To be added to the waitlist, a financial application needs to be completed. We require two years of private pay. Completing the application, which shows funds to be able to pay for at least two years privately, will allow your loved one to be added to the waitlist."
+      }
+    ],
+    "related": ["skilled-nursing", "short-term-rehab"]
+  },
+
+  "short-term-rehab": {
+    "slug": "short-term-rehab",
+    "eyebrow": "Sheboygan Senior Community",
+    "title": "Short-Term Rehab",
+    "household": "Hickory Hills",
+    "heroImage": "/images/Header_Kohler_1280x503_NewGym1.webp",
+    "heroImageAlt": "The therapy gym at Hickory Hills, Sheboygan Senior Community's short-term rehab household",
+    "seo": {
+      "title": "Short-Term Rehab at Hickory Hills",
+      "description": "Hickory Hills is Sheboygan Senior Community's short-term rehab household, with physical, occupational, and speech therapy for inpatient and outpatient recovery."
+    },
+    "intro": "At Hickory Hills, our short-term rehab household, the clinical team is dedicated to helping individuals regain independence and return to the life they love. Sheboygan Senior Community provides highly trained physical, occupational, and speech therapists who work closely with each resident to set and exceed personalized rehabilitation goals, whether inpatient or outpatient.",
+    "servicesIntro": "Our rehabilitation programs are designed to restore strength, mobility, and daily function, supporting residents every step of the way. Whether recovering from surgery, illness, or injury, our compassionate team provides individualized therapy to help residents rebuild confidence and independence.",
+    "features": [
+      {
+        "title": "Physical Therapy",
+        "body": "Our physical therapy team works to restore movement, strength, and balance, enabling residents to resume daily activities safely and confidently. Therapy plans are customized to meet each resident's unique needs and goals."
+      },
+      {
+        "title": "Speech Therapy",
+        "body": "Speech therapy focuses on communication, cognition, and swallowing, helping residents regain essential skills for daily living. Our team provides strategies to improve clarity, safety, and overall quality of life."
+      },
+      {
+        "title": "Occupational Therapy",
+        "body": "Occupational therapy supports residents in performing everyday activities such as cooking, cleaning, and self-care. Our goal is to help residents recover their independence and return to the routines and hobbies that bring them joy."
+      }
+    ],
+    "gallery": [
+      {
+        "src": "/images/Kohler_SmallerImages660x4042.webp",
+        "alt": "Rehabilitation equipment in the Hickory Hills therapy gym"
+      },
+      {
+        "src": "/images/STR_SmallerImages_weights2-1.webp",
+        "alt": "Free weights and strength training equipment used in therapy sessions"
+      },
+      {
+        "src": "/images/Sheboygan-Senior-Community-_services_short-term-rehab.jpg",
+        "alt": "A therapy session underway at Hickory Hills"
+      },
+      {
+        "src": "/images/DSC03562-scaled.jpg",
+        "alt": "A resident room in the Hickory Hills household"
+      }
+    ],
+    "faqEyebrow": "Common Questions/Concerns",
+    "faqTitle": "Short-Term Rehab FAQs",
+    "faqs": [
+      { "q": "Is the nursing home Medicare-certified?", "a": "Yes." },
+      { "q": "Is the nursing home Medicaid-certified?", "a": "Yes." },
+      {
+        "q": "Does the nursing home offer specialized training for staff to support residents living with dementia?",
+        "a": "Yes."
+      },
+      {
+        "q": "Are there extra charges for other services, like beauty shop services?",
+        "a": "Yes. The beauty shop and transportation would be out of pocket, along with medications that are billed to the resident's Plan D or prescription plan."
+      },
+      {
+        "q": "Will the nursing home tell me in writing about their services, charges, and fees before I move into the home?",
+        "a": "We can share this beforehand, and when admitted, paperwork is signed and a folder of information is given."
+      },
+      {
+        "q": "What is the nursing home doing to improve quality and staffing?",
+        "a": "Continued education and employing SSC staff rather than using agency or contracted staff."
+      },
+      {
+        "q": "Can I still see my personal doctor? If needed, does the facility help arrange transportation for this purpose?",
+        "a": "Yes to both. You may keep your personal physician, and we can help arrange transportation to appointments."
+      },
+      {
+        "q": "How will I get access to oral care?",
+        "a": "SSC would assist in finding a provider, or you can use the in-house provider."
+      },
+      {
+        "q": "How will I get access to mental health care?",
+        "a": "We have an onsite psychiatric nurse practitioner who comes in two times a month to see residents."
+      },
+      {
+        "q": "Has the nursing home corrected all citations on its last state inspection report?",
+        "a": "Yes."
+      },
+      {
+        "q": "Will I have a choice of food items at each meal?",
+        "a": "Yes. There are lots of choices, and residents can pick and choose what they want daily for all meals."
+      },
+      {
+        "q": "Can the nursing home provide for my individual dietary needs and preferences, like low-salt or no-sugar-added diets?",
+        "a": "Yes, we can accommodate all modified and textured diets."
+      },
+      { "q": "Are nutritious snacks available?", "a": "Yes, 24/7." },
+      { "q": "Can the staff help me eat and drink at mealtimes, if needed?", "a": "Yes." }
+    ],
+    "related": ["skilled-nursing", "assisted-living"]
+  },
+
+  "skilled-nursing": {
+    "slug": "skilled-nursing",
+    "eyebrow": "Sheboygan Senior Community",
+    "title": "Long-Term Skilled Nursing",
+    "household": "Maple Creek & Oak Drive",
+    "heroImage": "/images/Sheboygan-Senior-Community-_long-term-nursing_room_.jpg",
+    "heroImageAlt": "A private resident room in the Maple Creek skilled nursing household",
+    "seo": {
+      "title": "Long-Term Skilled Nursing at Maple Creek & Oak Drive",
+      "description": "Maple Creek and Oak Drive are Sheboygan Senior Community's mirrored skilled nursing households, offering 24-hour professional care in private 260 sq ft rooms."
+    },
+    "intro": "Maple Creek and Oak Drive are our mirrored skilled nursing households, thoughtfully designed for seniors who require 24-hour professional care. At Sheboygan Senior Community, we focus on meeting each resident's medical, nutritional, social, and spiritual needs through a personalized, resident-centered approach. Every individual is unique, and their care reflects that.",
+    "servicesIntro": "From medication management to help with transfers, bathing, dressing, eating, and daily activities, our dedicated caregivers anticipate and respond to each resident's needs. Our consistent, in-house team ensures continuity of care, building trusting relationships that enhance safety, comfort, and quality of life.",
+    "features": [
+      {
+        "title": "24-Hour Skilled Nursing Assistance",
+        "body": "From medication management to help with transfers, bathing, dressing, eating, and daily activities, our dedicated caregivers anticipate and respond to each resident's needs. Our consistent, in-house team ensures continuity of care."
+      },
+      {
+        "title": "Full Days of Engagement",
+        "body": "Residents enjoy meaningful daily routines, including activity programs in the morning and afternoon, weekend options, bus trips, and social gatherings. Every day offers opportunities for connection, learning, and joy."
+      },
+      {
+        "title": "Individual Room Features",
+        "body": "Each resident has a private, 260-square-foot room with a private bath, call lights, reclining chair, and storage. Rooms include TV, phone access, and individually controlled climate, and personalization is encouraged to make each space feel like home."
+      },
+      {
+        "title": "Dining and Dietary Options",
+        "body": "Our dining experience emphasizes choice and enjoyment. Residents select from a four-week rotating menu of seasonal, made-to-order meals. We accommodate diverse dietary needs, including texture-modified diets, specialty diets, and tube feeding."
+      },
+      {
+        "title": "Medical Partners",
+        "body": "We provide convenient, in-house healthcare with visits from Health Drive specialists such as optometrists and podiatrists, MobileX x-rays, and on-site EKG and bladder scanner services."
+      },
+      {
+        "title": "Salon Cypress",
+        "body": "Residents enjoy full-service hair and beauty treatments on-site, providing comfort and convenience without leaving the building. Appointments can be scheduled by calling (920) 458-2137 x712."
+      }
+    ],
+    "gallery": [
+      {
+        "src": "/images/Sheboygan-Senior-Community-_long-term-nursing_room_-2.jpg",
+        "alt": "A private skilled nursing room with a reclining chair and personal furnishings"
+      },
+      {
+        "src": "/images/DSC03945-scaled.jpg",
+        "alt": "A shared living space in the Maple Creek household"
+      },
+      {
+        "src": "/images/Sheboygan-Senior-Community-_Employment_Gallery-2.jpg",
+        "alt": "A Sheboygan Senior Community caregiver with a resident"
+      },
+      {
+        "src": "/images/Salon-Photo-scaled.jpeg",
+        "alt": "Salon Cypress, the on-site hair and beauty salon"
+      }
+    ],
+    "faqEyebrow": "Common Questions/Concerns",
+    "faqTitle": "Skilled Nursing FAQs",
+    "faqs": [
+      {
+        "q": "Is Sheboygan Senior Community Medicare and Medicaid certified?",
+        "a": "Yes. We are certified for both Medicare and Medicaid."
+      },
+      {
+        "q": "What does a private room include?",
+        "a": "Every skilled nursing resident has a private, 260-square-foot room with a private bath, safety call lights, a reclining chair, and storage. Rooms include a TV, phone access, and individually controlled climate. We encourage residents to personalize their space so it feels like home."
+      },
+      {
+        "q": "Is staffing in-house, or do you use agency staff?",
+        "a": "Our caregivers are SSC employees. We are 100% agency free, which means residents see the same familiar faces day to day and benefit from genuine continuity of care."
+      },
+      {
+        "q": "Do you offer specialized dementia care training for staff?",
+        "a": "Yes. Our team receives specialized training to support residents living with dementia."
+      },
+      {
+        "q": "Can I keep my personal physician?",
+        "a": "Yes. You may keep your own doctor, and we can help arrange transportation to appointments. We also bring care on-site through Health Drive specialists, MobileX x-rays, and in-house EKG and bladder scanner services."
+      },
+      {
+        "q": "How is mental health care handled?",
+        "a": "We have an onsite psychiatric nurse practitioner who visits twice a month to see residents."
+      },
+      {
+        "q": "Can you accommodate special diets?",
+        "a": "Yes. Residents choose from a four-week rotating menu of seasonal, made-to-order meals, and we accommodate texture-modified diets, specialty diets such as low sodium and low fat, thickened liquids, and tube feeding. Nutritious snacks are available 24/7, and staff assist with eating and drinking at mealtimes whenever needed."
+      },
+      {
+        "q": "Are there extra charges beyond the daily rate?",
+        "a": "Salon services and transportation are out of pocket, as are medications billed through the resident's Part D or prescription plan."
+      },
+      {
+        "q": "What are your visiting hours?",
+        "a": "We do not restrict visiting hours. Family and friends are welcome anytime."
+      },
+      {
+        "q": "How do I start the admission process?",
+        "a": "Call us at (920) 458-2137 or reach out through our contact page. Our social services team will walk you through availability, paperwork, and payment options, including help completing a Medicaid application if needed."
+      }
+    ],
+    "related": ["assisted-living", "short-term-rehab"]
+  }
+}

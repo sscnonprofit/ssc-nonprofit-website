@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react"
 
 import { updateUserRoleAction } from "@/app/admin/actions"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import {
   Select,
@@ -12,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { cn } from "@/lib/utils"
 
 type UserRow = {
   id: string
@@ -21,12 +23,18 @@ type UserRow = {
   createdAt: Date
 }
 
+function getInitials(name: string) {
+  const parts = name.trim().split(/\s+/)
+  const initials = parts.slice(0, 2).map((p) => p[0]?.toUpperCase() ?? "")
+  return initials.join("") || "?"
+}
+
 export function UsersTable({ users, currentUserId }: { users: UserRow[]; currentUserId: string }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-border">
-      <div className="grid grid-cols-[1fr_auto] gap-4 border-b border-border bg-muted/40 px-4 py-2.5 text-xs font-medium text-muted-foreground sm:grid-cols-[2fr_1fr_auto]">
+    <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="hidden grid-cols-[2fr_1fr_auto] gap-4 border-b border-border bg-muted/40 px-5 py-3 text-xs font-medium tracking-wide text-muted-foreground uppercase sm:grid">
         <span>User</span>
-        <span className="hidden sm:block">Joined</span>
+        <span>Joined</span>
         <span>Role</span>
       </div>
       <ul>
@@ -58,22 +66,34 @@ function UserRow({ user, isSelf }: { user: UserRow; isSelf: boolean }) {
   }
 
   return (
-    <li className="grid grid-cols-[1fr_auto] items-center gap-4 border-b border-border px-4 py-3 last:border-b-0 sm:grid-cols-[2fr_1fr_auto]">
-      <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-foreground">{user.name}</p>
-        <p className="truncate text-xs text-muted-foreground">{user.email}</p>
-        {error ? <p className="mt-1 text-xs text-destructive">{error}</p> : null}
+    <li className="grid grid-cols-[1fr_auto] items-center gap-4 border-b border-border px-5 py-4 last:border-b-0 sm:grid-cols-[2fr_1fr_auto]">
+      <div className="flex min-w-0 items-center gap-3">
+        <Avatar className="size-9 shrink-0 border border-border">
+          <AvatarFallback
+            className={cn(
+              "text-xs font-semibold",
+              role === "admin" ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground",
+            )}
+          >
+            {getInitials(user.name)}
+          </AvatarFallback>
+        </Avatar>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-medium text-foreground">{user.name}</p>
+          <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+          {error ? <p className="mt-1 text-xs text-destructive">{error}</p> : null}
+        </div>
       </div>
       <p className="hidden text-sm text-muted-foreground sm:block">
-        {new Date(user.createdAt).toLocaleDateString()}
+        {new Date(user.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
       </p>
       {isSelf ? (
-        <Badge variant="secondary" className="capitalize">
+        <Badge variant="secondary" className="w-fit justify-self-end capitalize">
           {role} (you)
         </Badge>
       ) : (
         <Select value={role} onValueChange={handleRoleChange} disabled={isPending}>
-          <SelectTrigger size="sm" className="w-28">
+          <SelectTrigger size="sm" className="w-28 justify-self-end">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

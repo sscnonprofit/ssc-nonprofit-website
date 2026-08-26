@@ -2,6 +2,7 @@
 
 import type React from "react"
 
+import { Loader2Icon, LockIcon } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -43,10 +44,19 @@ export function AdminAuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
   }
 
   return (
-    <main className="flex min-h-svh items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl">{isSignUp ? "Create an admin account" : "CMS Sign In"}</CardTitle>
+    <main className="relative flex min-h-svh items-center justify-center overflow-hidden bg-muted/30 px-4">
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-primary/10 to-transparent"
+      />
+      <Card className="relative w-full max-w-sm border-border/80 shadow-lg shadow-black/5">
+        <CardHeader className="items-center text-center">
+          <div className="mb-2 flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+            <LockIcon className="size-5" />
+          </div>
+          <CardTitle className="font-serif text-2xl">
+            {isSignUp ? "Create an admin account" : "CMS Sign In"}
+          </CardTitle>
           <CardDescription>
             {isSignUp
               ? "The first account created becomes the site administrator."
@@ -87,12 +97,13 @@ export function AdminAuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
               </Field>
 
               {error && (
-                <p className="text-sm text-destructive" role="alert">
+                <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive" role="alert">
                   {error}
                 </p>
               )}
 
               <Button type="submit" disabled={loading} className="w-full">
+                {loading ? <Loader2Icon className="animate-spin" /> : null}
                 {loading ? "Please wait..." : isSignUp ? "Create account" : "Sign in"}
               </Button>
             </FieldGroup>

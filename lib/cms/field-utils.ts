@@ -9,6 +9,7 @@ export type FieldKind =
   | "object"
 
 const IMAGE_KEY_PATTERN = /image|photo|avatar|icon|thumbnail|logo|picture|banner|hero.*src|headshot/i
+const IMAGE_KEY_EXCLUDE_PATTERN = /alt$|alt[A-Z_-]|caption|credit|description|label|title|name/i
 const LONG_TEXT_KEY_PATTERN = /description|body|content|bio|summary|paragraph|caption|excerpt|message|quote/i
 const IMAGE_VALUE_PATTERN = /\.(png|jpe?g|webp|gif|avif|svg)(\?.*)?$/i
 
@@ -38,7 +39,10 @@ export function inferFieldKind(key: string, value: unknown): FieldKind {
 
   const str = typeof value === "string" ? value : ""
 
-  if (IMAGE_KEY_PATTERN.test(key) || IMAGE_VALUE_PATTERN.test(str) || str.startsWith("/images/") || str.startsWith("/generated/")) {
+  const looksLikeImageKey = IMAGE_KEY_PATTERN.test(key) && !IMAGE_KEY_EXCLUDE_PATTERN.test(key)
+  const looksLikeImageValue = IMAGE_VALUE_PATTERN.test(str) || str.startsWith("/images/") || str.startsWith("/generated/")
+
+  if (looksLikeImageKey || looksLikeImageValue) {
     return "image"
   }
 

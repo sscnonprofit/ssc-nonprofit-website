@@ -64,7 +64,7 @@ export default function ArtistsGalleryPage() {
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading eyebrow={theme.eyebrow} title={theme.title} body={theme.body} />
           <div className="mt-12 grid gap-8 lg:grid-cols-2">
-            <div className="rounded-2xl border border-border bg-card p-8">
+            <div className="ssc-card p-8">
               <h3 className="font-display text-xl font-semibold">{theme.inspirationTitle}</h3>
               <ul className="mt-5 flex flex-col gap-3">
                 {theme.inspiration.map((item) => (
@@ -75,7 +75,7 @@ export default function ArtistsGalleryPage() {
                 ))}
               </ul>
             </div>
-            <div className="rounded-2xl border border-border bg-card p-8">
+            <div className="ssc-card p-8">
               <h3 className="font-display text-xl font-semibold">{theme.examplesTitle}</h3>
               <ul className="mt-5 flex flex-col gap-3">
                 {theme.examples.map((item) => (
@@ -97,7 +97,7 @@ export default function ArtistsGalleryPage() {
           {guidelines.items.map((item) => (
             <li
               key={item}
-              className="flex items-start gap-3 rounded-2xl border border-border bg-card p-6 leading-relaxed"
+              className="ssc-card flex items-start gap-3 p-6 leading-relaxed"
             >
               <Check className="mt-1 size-4 shrink-0 text-accent" aria-hidden="true" />
               {item}
@@ -124,14 +124,14 @@ export default function ArtistsGalleryPage() {
               {dropoff.dates.map((d) => (
                 <li
                   key={d.day}
-                  className="flex flex-col gap-1 rounded-2xl border border-border bg-card p-6 sm:flex-row sm:items-center sm:justify-between"
+                  className="ssc-card flex flex-col gap-1 p-6 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <span className="font-display font-semibold">{d.day}</span>
                   <span className="font-mono text-sm text-muted-foreground">{d.time}</span>
                 </li>
               ))}
             </ul>
-            <div className="flex flex-col gap-6 rounded-2xl border border-border bg-card p-8">
+            <div className="ssc-card flex flex-col gap-6 p-8">
               <div>
                 <h3 className="font-display text-xl font-semibold">Three ways to submit</h3>
                 <ol className="mt-5 flex flex-col gap-3">

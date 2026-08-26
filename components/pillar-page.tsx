@@ -61,7 +61,7 @@ export function PillarPage({ slug }: { slug: PillarKey }) {
 
         <ul className="mt-12 grid gap-6 md:grid-cols-2">
           {p.benefits.items.map((item) => (
-            <li key={item.title} className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-8">
+            <li key={item.title} className="ssc-card flex flex-col gap-3 p-8">
               <h3 className="font-display text-xl font-semibold">{item.title}</h3>
               <p className="text-pretty leading-relaxed text-muted-foreground">{item.body}</p>
             </li>
@@ -123,7 +123,7 @@ export function PillarPage({ slug }: { slug: PillarKey }) {
           <SectionHeading eyebrow="Gallery" title="Life at SSC" />
           <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {p.gallery.map((g) => (
-              <li key={g.src} className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-muted">
+              <li key={g.src} className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border/70 bg-muted shadow-[0_1px_2px_rgba(30,10,16,0.04)]">
                 <Image
                   src={g.src || "/placeholder.svg"}
                   alt={g.alt}
@@ -147,7 +147,7 @@ export function PillarPage({ slug }: { slug: PillarKey }) {
             <li key={key}>
               <Link
                 href={`/${key}`}
-                className="group flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-7 transition-colors hover:border-accent"
+                className="ssc-card group flex h-full flex-col gap-3 p-7 hover:-translate-y-1 hover:border-accent/50"
               >
                 <h3 className="font-display text-xl font-semibold">{pillars[key].navLabel}</h3>
                 <p className="text-pretty text-sm leading-relaxed text-muted-foreground">

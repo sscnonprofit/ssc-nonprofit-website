@@ -65,7 +65,7 @@ export default function DonatePage() {
 
         <ul className="mt-12 grid gap-6 lg:grid-cols-3">
           {/* Checks */}
-          <li className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-8">
+          <li className="ssc-card flex flex-col gap-4 p-8">
             <h3 className="font-display text-xl font-semibold">Checks</h3>
             <p className="leading-relaxed text-muted-foreground">
               Checks made payable to &ldquo;Sheboygan Senior Community&rdquo; can be mailed to:
@@ -91,7 +91,7 @@ export default function DonatePage() {
           </li>
 
           {/* Stock */}
-          <li className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-8">
+          <li className="ssc-card flex flex-col gap-4 p-8">
             <h3 className="font-display text-xl font-semibold">Gifts of stock</h3>
             <p className="leading-relaxed text-muted-foreground">
               Gifts of stock or other appreciated assets can be made by contacting our philanthropy team at{" "}

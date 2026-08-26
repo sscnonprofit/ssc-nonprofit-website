@@ -32,7 +32,7 @@ export function HistoryTimeline({ milestones }: { milestones: Milestone[] }) {
           </div>
 
           <div className={i % 2 === 0 ? "md:pl-12" : "md:order-1 md:pr-12"}>
-            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-border bg-muted">
+            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-border/70 bg-muted shadow-[0_1px_2px_rgba(30,10,16,0.04)]">
               <Image
                 src={m.image || "/placeholder.svg"}
                 alt={`${m.title}, ${m.years}`}

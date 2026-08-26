@@ -16,7 +16,7 @@ export function Testimonials({
 
       <ul className="mt-12 grid gap-6 md:grid-cols-3">
         {site.testimonials.map((t) => (
-          <li key={t.name} className="flex flex-col gap-5 rounded-2xl border border-border bg-card p-7">
+          <li key={t.name} className="ssc-card flex flex-col gap-5 p-7">
             <span className="font-display text-5xl leading-none text-accent" aria-hidden="true">
               &ldquo;
             </span>

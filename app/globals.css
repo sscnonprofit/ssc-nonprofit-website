@@ -100,6 +100,7 @@
     width: 4.5rem;
     overflow: hidden;
     border-radius: 9999px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   }
   .ssc-rule > span {
     flex: 1 1 0%;
@@ -107,6 +108,29 @@
 
   .eyebrow {
     @apply font-display text-xs font-semibold uppercase tracking-[0.18em] text-primary;
+  }
+
+  /* Elevated surface used for cards throughout the site: a hairline border
+     plus a soft, tinted shadow rather than a flat outline, for a more
+     refined, corporate feel. */
+  .ssc-card {
+    @apply rounded-2xl border border-border/70 bg-card shadow-[0_1px_2px_rgba(30,10,16,0.04)] transition-all duration-300;
+  }
+  .ssc-card:hover {
+    @apply border-primary/25 shadow-[0_20px_40px_-24px_rgba(30,10,16,0.22)];
+  }
+
+  /* Frosted-glass panel: header, dropdowns, and floating UI. */
+  .ssc-glass {
+    @apply border border-border/60 bg-card/90 backdrop-blur-xl;
+  }
+}
+
+/* Browsers without backdrop-filter support get a fully opaque header instead
+   of a translucent one, so text stays legible over hero imagery. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .ssc-header-glass {
+    background-color: var(--background) !important;
   }
 }
 

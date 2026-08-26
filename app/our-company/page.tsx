@@ -69,7 +69,7 @@ export default function OurCompanyPage() {
 
         {ceo?.bio ? (
           <div className="mt-16 grid gap-10 rounded-3xl border border-border bg-card p-8 sm:p-12 lg:grid-cols-[280px_1fr] lg:gap-14">
-            <div className="relative mx-auto aspect-[3/4] w-full max-w-[280px] overflow-hidden rounded-2xl border border-border bg-muted">
+            <div className="relative mx-auto aspect-[3/4] w-full max-w-[280px] overflow-hidden rounded-2xl border border-border/70 bg-muted shadow-[0_1px_2px_rgba(30,10,16,0.04)]">
               <Image
                 src={ceo.image || "/placeholder.svg"}
                 alt={ceo.name}

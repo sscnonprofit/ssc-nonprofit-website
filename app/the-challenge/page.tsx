@@ -44,7 +44,7 @@ export default function TheChallengePage() {
             {challenge.keyChallenges.items.map((item) => (
               <li
                 key={item.title}
-                className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
+                className="ssc-card flex flex-col overflow-hidden"
               >
                 <div className="relative aspect-[16/10] bg-muted">
                   <Image

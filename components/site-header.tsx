@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronDown, Menu, Phone, X } from "lucide-react"
@@ -19,10 +19,24 @@ export function SiteHeader() {
   const [expanded, setExpanded] = useState<string | null>(null)
   /** Label of the open desktop dropdown, driven by both hover and click/keyboard. */
   const [menu, setMenu] = useState<string | null>(null)
+  /** True once the page has scrolled past the utility bar, so the glass panel deepens. */
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   return (
     <header
-      className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur-md"
+      className={cn(
+        "ssc-header-glass sticky top-0 z-40 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
+        scrolled
+          ? "border-border/80 bg-background/85 shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_12px_32px_-16px_rgba(30,10,16,0.18)]"
+          : "border-border/40 bg-background/55 shadow-none",
+      )}
       onKeyDown={(e) => {
         if (e.key === "Escape") setMenu(null)
       }}
@@ -32,7 +46,7 @@ export function SiteHeader() {
       }}
     >
       {/* Utility bar */}
-      <div className="hidden bg-primary text-primary-foreground md:block">
+      <div className="hidden bg-gradient-to-r from-primary via-primary to-[oklch(0.315_0.128_12.5)] text-primary-foreground md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-2 text-sm">
           <a
             href={site.phoneHref}
@@ -55,7 +69,7 @@ export function SiteHeader() {
             </Link>
             <Link
               href="/donate"
-              className="rounded-full bg-accent px-4 py-1 font-display font-semibold text-accent-foreground transition-transform hover:-translate-y-px"
+              className="rounded-full bg-accent px-4 py-1 font-display font-semibold text-accent-foreground shadow-sm transition-transform hover:-translate-y-px"
             >
               Donate
             </Link>
@@ -89,32 +103,34 @@ export function SiteHeader() {
                   <button
                     type="button"
                     className={cn(
-                      "flex items-center gap-1 rounded-md px-3 py-2 font-display text-sm font-semibold transition-colors",
+                      "flex items-center gap-1 rounded-full px-3.5 py-2 font-display text-sm font-semibold transition-colors",
                       menu === item.label
-                        ? "bg-secondary text-primary"
-                        : "text-foreground/80 hover:bg-secondary hover:text-primary",
+                        ? "bg-primary/8 text-primary"
+                        : "text-foreground/75 hover:bg-primary/6 hover:text-primary",
                     )}
                     aria-expanded={menu === item.label}
                     onClick={() => setMenu((v) => (v === item.label ? null : item.label))}
                   >
                     {item.label}
                     <ChevronDown
-                      className={cn("size-4 transition-transform", menu === item.label && "rotate-180")}
+                      className={cn("size-3.5 transition-transform", menu === item.label && "rotate-180")}
                       aria-hidden="true"
                     />
                   </button>
                   <div
                     className={cn(
-                      "absolute left-0 top-full w-64 pt-2 transition-opacity duration-150",
-                      menu === item.label ? "visible opacity-100" : "invisible opacity-0",
+                      "absolute left-0 top-full w-64 pt-2.5 transition-all duration-200",
+                      menu === item.label
+                        ? "visible translate-y-0 opacity-100"
+                        : "invisible -translate-y-1 opacity-0",
                     )}
                   >
-                    <ul className="overflow-hidden rounded-lg border border-border bg-card p-2 shadow-lg shadow-foreground/5">
+                    <ul className="overflow-hidden rounded-xl border border-border/70 bg-card/95 p-1.5 shadow-xl shadow-primary/10 backdrop-blur-xl">
                       {item.children.map((child) => (
                         <li key={child.label}>
                           <NavLink
                             child={child}
-                            className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-secondary hover:text-primary"
+                            className="block rounded-lg px-3.5 py-2.5 text-sm transition-colors hover:bg-primary/6 hover:text-primary"
                             onClick={() => setMenu(null)}
                             tabIndex={menu === item.label ? undefined : -1}
                           />
@@ -127,7 +143,7 @@ export function SiteHeader() {
                 <li key={item.label}>
                   <Link
                     href={item.href ?? "/"}
-                    className="rounded-md px-3 py-2 font-display text-sm font-semibold text-foreground/80 transition-colors hover:bg-secondary hover:text-primary"
+                    className="rounded-full px-3.5 py-2 font-display text-sm font-semibold text-foreground/75 transition-colors hover:bg-primary/6 hover:text-primary"
                   >
                     {item.label}
                   </Link>
@@ -140,7 +156,7 @@ export function SiteHeader() {
         <div className="hidden shrink-0 lg:block">
           <Link
             href="/contact"
-            className="rounded-full bg-primary px-5 py-2.5 font-display text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-px"
+            className="rounded-full bg-primary px-5 py-2.5 font-display text-sm font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-md hover:shadow-primary/25"
           >
             Schedule A Visit
           </Link>
@@ -149,7 +165,7 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="rounded-md p-2 text-foreground transition-colors hover:bg-secondary lg:hidden"
+          className="rounded-full p-2 text-foreground transition-colors hover:bg-primary/6 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -164,7 +180,7 @@ export function SiteHeader() {
       <div
         id="mobile-nav"
         hidden={!open}
-        className="max-h-[calc(100vh-8rem)] overflow-y-auto border-t border-border bg-card px-6 py-4 lg:hidden"
+        className="max-h-[calc(100vh-8rem)] overflow-y-auto border-t border-border/70 bg-background/95 px-6 py-4 backdrop-blur-xl lg:hidden"
       >
         <nav aria-label="Mobile">
           <ul className="flex flex-col gap-1">

@@ -11,7 +11,7 @@ export function TeamGrid({ members }: { members: Member[] }) {
     <ul className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
       {members.map((m) => (
         <li key={m.name} className="flex flex-col">
-          <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-border bg-muted">
+          <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-border/70 bg-muted shadow-[0_1px_2px_rgba(30,10,16,0.04)]">
             <Image
               src={m.image || "/placeholder.svg"}
               alt={m.name}

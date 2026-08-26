@@ -44,14 +44,14 @@ export default function HomePage() {
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
                 href="/donate"
-                className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 font-display font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
+                className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 font-display font-semibold text-accent-foreground shadow-lg shadow-black/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/25"
               >
                 Donate Now
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center rounded-full border border-primary-foreground/35 px-7 py-3.5 font-display font-semibold transition-colors hover:bg-primary-foreground/10"
+                className="inline-flex items-center rounded-full border border-primary-foreground/35 px-7 py-3.5 font-display font-semibold backdrop-blur-sm transition-colors hover:bg-primary-foreground/10"
               >
                 Schedule A Visit
               </Link>
@@ -91,7 +91,7 @@ export default function HomePage() {
             <li key={item.label}>
               <Link
                 href={item.href}
-                className="group flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-7 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5"
+                className="ssc-card group flex h-full flex-col gap-3 p-7 hover:-translate-y-1"
               >
                 <p className="eyebrow">{item.label}</p>
                 <h3 className="font-display text-xl font-semibold">{item.heading}</h3>
@@ -125,7 +125,7 @@ export default function HomePage() {
               <li key={service.slug}>
                 <Link
                   href={`/${service.slug}`}
-                  className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5"
+                  className="ssc-card group flex h-full flex-col overflow-hidden hover:-translate-y-1"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <Image

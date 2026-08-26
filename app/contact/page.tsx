@@ -82,7 +82,7 @@ export default function ContactPage() {
               </div>
             </dl>
 
-            <div className="overflow-hidden rounded-2xl border border-border">
+            <div className="overflow-hidden rounded-2xl border border-border/70 shadow-[0_1px_2px_rgba(30,10,16,0.04)]">
               <iframe
                 title={`Map of ${site.name}`}
                 src={`https://www.google.com/maps?q=${mapQuery}&output=embed`}
@@ -118,7 +118,7 @@ export default function ContactPage() {
           />
           <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {site.contacts.map((c) => (
-              <li key={c.name} className="flex flex-col gap-2 rounded-2xl border border-border bg-card p-7">
+              <li key={c.name} className="ssc-card flex flex-col gap-2 p-7">
                 <h3 className="font-display text-lg font-semibold">{c.name}</h3>
                 <p className="text-sm font-medium text-accent">{c.role}</p>
                 <p className="text-sm leading-relaxed text-muted-foreground">{c.topic}</p>

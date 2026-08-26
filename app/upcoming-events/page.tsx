@@ -71,7 +71,7 @@ export default function UpcomingEventsPage() {
           />
           <ul className="mt-12 grid gap-6 sm:grid-cols-2">
             {events.calendars.items.map((c) => (
-              <li key={c.title} className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-8">
+              <li key={c.title} className="ssc-card flex flex-col gap-3 p-8">
                 <p className="font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                   {c.household}
                 </p>

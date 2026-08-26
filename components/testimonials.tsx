@@ -1,7 +1,8 @@
-import site from "@/content/site.json"
+import siteFallback from "@/content/site.json"
 import { SectionHeading } from "@/components/section-heading"
+import { getContent } from "@/lib/cms/content"
 
-export function Testimonials({
+export async function Testimonials({
   eyebrow = "What the community has to say",
   title = "Client Testimonials",
   intro,
@@ -10,6 +11,8 @@ export function Testimonials({
   title?: string
   intro?: string
 }) {
+  const site = await getContent("site", siteFallback)
+
   return (
     <section className="mx-auto max-w-7xl px-6 py-20">
       <SectionHeading eyebrow={eyebrow} title={title} intro={intro} align="center" />

@@ -1,12 +1,16 @@
 import type { Metadata } from "next"
 
-import services from "@/content/services.json"
+import servicesFallback from "@/content/services.json"
 import { ServicePage } from "@/components/service-page"
+import { getContent } from "@/lib/cms/content"
 
-export const metadata: Metadata = {
-  title: services["skilled-nursing"].seo.title,
-  description: services["skilled-nursing"].seo.description,
-  alternates: { canonical: "/skilled-nursing" },
+export async function generateMetadata(): Promise<Metadata> {
+  const services = await getContent("services", servicesFallback)
+  return {
+    title: services["skilled-nursing"].seo.title,
+    description: services["skilled-nursing"].seo.description,
+    alternates: { canonical: "/skilled-nursing" },
+  }
 }
 
 export default function SkilledNursingPage() {

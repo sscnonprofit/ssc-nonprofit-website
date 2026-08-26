@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { MapPin, Phone } from "lucide-react"
 
-import site from "@/content/site.json"
+import type siteFallback from "@/content/site.json"
 import { BrandRule } from "@/components/brand-rule"
 import { NewsletterForm } from "@/components/newsletter-form"
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/social-icons"
@@ -13,7 +13,7 @@ const socialIcons = {
   YouTube: YoutubeIcon,
 } as const
 
-export function SiteFooter() {
+export function SiteFooter({ site }: { site: typeof siteFallback }) {
   return (
     <footer className="mt-24 bg-primary text-primary-foreground">
       <BrandRule className="h-1.5 w-full rounded-none" />

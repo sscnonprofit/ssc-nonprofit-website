@@ -3,10 +3,11 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Check } from "lucide-react"
 
-import challenge from "@/content/challenge.json"
+import challengeFallback from "@/content/challenge.json"
 import { BrandRule } from "@/components/brand-rule"
 import { PageHero } from "@/components/page-hero"
 import { SectionHeading } from "@/components/section-heading"
+import { getContent } from "@/lib/cms/content"
 
 export const metadata: Metadata = {
   title: "The Challenge",
@@ -14,7 +15,9 @@ export const metadata: Metadata = {
     "Sheboygan County faces a growing senior living crisis. Learn how SSC's Next Chapter Campaign expands care, housing, and community spaces.",
 }
 
-export default function TheChallengePage() {
+export default async function TheChallengePage() {
+  const challenge = await getContent("challenge", challengeFallback)
+
   return (
     <>
       <PageHero

@@ -3,9 +3,10 @@ import type { Metadata, Viewport } from "next"
 import { Inter, Bricolage_Grotesque } from "next/font/google"
 
 import "./globals.css"
-import site from "@/content/site.json"
+import siteFallback from "@/content/site.json"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
+import { getContent } from "@/lib/cms/content"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,29 +20,32 @@ const bricolage = Bricolage_Grotesque({
   display: "swap",
 })
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://sscnonprofit.org"),
-  title: {
-    default: `${site.name} – ${site.tagline}`,
-    template: `%s – ${site.name}`,
-  },
-  description: site.description,
-  keywords: [
-    "Sheboygan Senior Community",
-    "senior living Sheboygan",
-    "assisted living Wisconsin",
-    "skilled nursing Sheboygan",
-    "short term rehab",
-    "nonprofit senior care",
-  ],
-  openGraph: {
-    type: "website",
-    siteName: site.name,
-    title: `${site.name} – ${site.tagline}`,
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getContent("site", siteFallback)
+  return {
+    metadataBase: new URL("https://sscnonprofit.org"),
+    title: {
+      default: `${site.name} – ${site.tagline}`,
+      template: `%s – ${site.name}`,
+    },
     description: site.description,
-    locale: "en_US",
-  },
-  robots: { index: true, follow: true },
+    keywords: [
+      "Sheboygan Senior Community",
+      "senior living Sheboygan",
+      "assisted living Wisconsin",
+      "skilled nursing Sheboygan",
+      "short term rehab",
+      "nonprofit senior care",
+    ],
+    openGraph: {
+      type: "website",
+      siteName: site.name,
+      title: `${site.name} – ${site.tagline}`,
+      description: site.description,
+      locale: "en_US",
+    },
+    robots: { index: true, follow: true },
+  }
 }
 
 export const viewport: Viewport = {
@@ -52,11 +56,13 @@ export const viewport: Viewport = {
   userScalable: true,
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const site = await getContent("site", siteFallback)
+
   return (
     <html lang="en" className={`bg-background ${inter.variable} ${bricolage.variable}`}>
       <body className="antialiased">
@@ -90,9 +96,9 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <SiteHeader />
+        <SiteHeader site={site} />
         <main id="main">{children}</main>
-        <SiteFooter />
+        <SiteFooter site={site} />
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>

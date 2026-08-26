@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 
-import company from "@/content/company.json"
+import companyFallback from "@/content/company.json"
 import { BrandRule } from "@/components/brand-rule"
 import { CtaBand } from "@/components/cta-band"
 import { HistoryTimeline } from "@/components/history-timeline"
 import { PageHero } from "@/components/page-hero"
 import { SectionHeading } from "@/components/section-heading"
 import { TeamGrid } from "@/components/team-grid"
+import { getContent } from "@/lib/cms/content"
 
 export const metadata: Metadata = {
   title: "Our Company",
@@ -15,7 +16,8 @@ export const metadata: Metadata = {
     "Sheboygan Senior Community is a faith-based nonprofit serving Sheboygan area seniors since 1962. Learn our history, mission, and meet our team.",
 }
 
-export default function OurCompanyPage() {
+export default async function OurCompanyPage() {
+  const company = await getContent("company", companyFallback)
   const ceo = company.team.members.find((m) => m.bio)
 
   return (

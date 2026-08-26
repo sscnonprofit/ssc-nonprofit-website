@@ -30,7 +30,7 @@ type Revision = {
 type PageEditorProps = {
   slug: string
   label: string
-  route: string | null
+  routes: string[]
   initialTitle: string
   initialContent: string
   status: string
@@ -42,7 +42,7 @@ type PageEditorProps = {
 export function PageEditor({
   slug,
   label,
-  route,
+  routes,
   initialTitle,
   initialContent,
   status,
@@ -129,7 +129,9 @@ export function PageEditor({
               {status}
             </Badge>
             {hasDraft && <Badge variant="outline">Draft pending review</Badge>}
-            {route && <span className="text-sm text-muted-foreground">{route}</span>}
+            {routes.length > 0 && (
+              <span className="text-sm text-muted-foreground">{routes.join(", ")}</span>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-2">

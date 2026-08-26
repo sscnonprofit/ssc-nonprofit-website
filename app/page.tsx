@@ -3,21 +3,30 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Award, CalendarDays, Star } from "lucide-react"
 
-import home from "@/content/home.json"
-import site from "@/content/site.json"
+import homeFallback from "@/content/home.json"
+import siteFallback from "@/content/site.json"
 import { BrandRule } from "@/components/brand-rule"
 import { CtaBand } from "@/components/cta-band"
 import { SectionHeading } from "@/components/section-heading"
 import { StatCounter } from "@/components/stat-counter"
 import { Testimonials } from "@/components/testimonials"
+import { getContent } from "@/lib/cms/content"
 
-export const metadata: Metadata = {
-  title: home.seo.title,
-  description: home.seo.description,
-  alternates: { canonical: "/" },
+export async function generateMetadata(): Promise<Metadata> {
+  const home = await getContent("home", homeFallback)
+  return {
+    title: home.seo.title,
+    description: home.seo.description,
+    alternates: { canonical: "/" },
+  }
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [home, site] = await Promise.all([
+    getContent("home", homeFallback),
+    getContent("site", siteFallback),
+  ])
+
   return (
     <>
       {/* Hero */}

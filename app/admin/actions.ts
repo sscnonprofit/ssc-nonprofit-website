@@ -23,7 +23,7 @@ function parseContent(raw: string): Record<string, unknown> {
 
 function revalidateDoc(slug: string) {
   const doc = getCmsDoc(slug)
-  if (doc?.route) revalidatePath(doc.route)
+  doc?.routes.forEach((route) => revalidatePath(route))
   revalidatePath("/admin/pages")
   revalidatePath(`/admin/pages/${slug}`)
 }

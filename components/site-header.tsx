@@ -5,16 +5,15 @@ import Image from "next/image"
 import Link from "next/link"
 import { ChevronDown, Menu, Phone, X } from "lucide-react"
 
-import site from "@/content/site.json"
+import type siteFallback from "@/content/site.json"
 import { cn } from "@/lib/utils"
 import { BrandRule } from "@/components/brand-rule"
 
 type NavChild = { label: string; href: string; external?: boolean }
 type NavItem = { label: string; href?: string; children?: NavChild[] }
 
-const nav = site.nav as NavItem[]
-
-export function SiteHeader() {
+export function SiteHeader({ site }: { site: typeof siteFallback }) {
+  const nav = site.nav as NavItem[]
   const [open, setOpen] = useState(false)
   const [expanded, setExpanded] = useState<string | null>(null)
   /** Label of the open desktop dropdown, driven by both hover and click/keyboard. */

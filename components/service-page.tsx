@@ -2,17 +2,22 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Phone } from "lucide-react"
 
-import services from "@/content/services.json"
-import site from "@/content/site.json"
+import servicesFallback from "@/content/services.json"
+import siteFallback from "@/content/site.json"
 import { BrandRule } from "@/components/brand-rule"
 import { CtaBand } from "@/components/cta-band"
 import { FaqAccordion } from "@/components/faq-accordion"
 import { PageHero } from "@/components/page-hero"
 import { SectionHeading } from "@/components/section-heading"
+import { getContent } from "@/lib/cms/content"
 
-type ServiceSlug = keyof typeof services
+type ServiceSlug = keyof typeof servicesFallback
 
-export function ServicePage({ slug }: { slug: ServiceSlug }) {
+export async function ServicePage({ slug }: { slug: ServiceSlug }) {
+  const [services, site] = await Promise.all([
+    getContent("services", servicesFallback),
+    getContent("site", siteFallback),
+  ])
   const service = services[slug]
   const related = service.related.map((r) => services[r as ServiceSlug])
 

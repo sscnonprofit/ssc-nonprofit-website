@@ -2,17 +2,19 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
-import pillars from "@/content/pillars.json"
+import pillarsFallback from "@/content/pillars.json"
 import { BrandRule } from "@/components/brand-rule"
 import { CtaBand } from "@/components/cta-band"
 import { PageHero } from "@/components/page-hero"
 import { SectionHeading } from "@/components/section-heading"
 import { StatCounter } from "@/components/stat-counter"
 import { Testimonials } from "@/components/testimonials"
+import { getContent } from "@/lib/cms/content"
 
-type PillarKey = keyof typeof pillars
+type PillarKey = keyof typeof pillarsFallback
 
-export function PillarPage({ slug }: { slug: PillarKey }) {
+export async function PillarPage({ slug }: { slug: PillarKey }) {
+  const pillars = await getContent("pillars", pillarsFallback)
   const p = pillars[slug]
   const others = (Object.keys(pillars) as PillarKey[]).filter((k) => k !== slug)
   const stats = "stats" in p ? p.stats : undefined

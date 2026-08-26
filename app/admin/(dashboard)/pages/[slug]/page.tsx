@@ -24,7 +24,7 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
     <PageEditor
       slug={slug}
       label={doc.label}
-      route={doc.route}
+      routes={doc.routes}
       initialTitle={row?.title ?? doc.label}
       initialContent={JSON.stringify(activeContent, null, 2)}
       status={row?.status ?? "draft"}

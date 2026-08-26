@@ -28,7 +28,7 @@ export default async function AdminPagesDashboard() {
         <div className="grid gap-3 sm:grid-cols-2">
           {settings.map((doc) => {
             const row = bySlug.get(doc.slug)
-            return <PageCard key={doc.slug} slug={doc.slug} label={doc.label} description={doc.description} route={doc.route} hasDraft={Boolean(row?.draftContent)} />
+            return <PageCard key={doc.slug} slug={doc.slug} label={doc.label} description={doc.description} routes={doc.routes} hasDraft={Boolean(row?.draftContent)} />
           })}
         </div>
       </section>
@@ -38,7 +38,7 @@ export default async function AdminPagesDashboard() {
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {pages.map((doc) => {
             const row = bySlug.get(doc.slug)
-            return <PageCard key={doc.slug} slug={doc.slug} label={doc.label} description={doc.description} route={doc.route} hasDraft={Boolean(row?.draftContent)} />
+            return <PageCard key={doc.slug} slug={doc.slug} label={doc.label} description={doc.description} routes={doc.routes} hasDraft={Boolean(row?.draftContent)} />
           })}
         </div>
       </section>
@@ -50,13 +50,13 @@ function PageCard({
   slug,
   label,
   description,
-  route,
+  routes,
   hasDraft,
 }: {
   slug: string
   label: string
   description: string
-  route: string | null
+  routes: string[]
   hasDraft: boolean
 }) {
   return (
@@ -72,21 +72,21 @@ function PageCard({
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <p className="text-sm text-muted-foreground">{description}</p>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Button asChild size="sm">
             <Link href={`/admin/pages/${slug}`}>
               <Pencil data-icon="inline-start" />
               Edit
             </Link>
           </Button>
-          {route && (
-            <Button asChild size="sm" variant="ghost">
+          {routes.map((route) => (
+            <Button key={route} asChild size="sm" variant="ghost">
               <Link href={route} target="_blank" rel="noopener noreferrer">
                 <ExternalLink data-icon="inline-start" />
-                View live
+                {routes.length > 1 ? route : "View live"}
               </Link>
             </Button>
-          )}
+          ))}
         </div>
       </CardContent>
     </Card>

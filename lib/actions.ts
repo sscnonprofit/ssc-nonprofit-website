@@ -6,6 +6,8 @@ export type FormState = {
   status: "idle" | "success" | "error"
   message: string
   fieldErrors?: Record<string, string>
+  /** Echoed back on error so the form repopulates instead of losing input. */
+  values?: Record<string, string>
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -73,6 +75,8 @@ export async function submitContactForm(_prev: FormState, formData: FormData): P
   const topic = clean(formData.get("topic"), 80)
   const message = clean(formData.get("message"), 4000)
 
+  const values = { name, email, phone, topic, message }
+
   const fieldErrors: Record<string, string> = {}
   if (!name) fieldErrors.name = "Please tell us your name."
   if (!email) fieldErrors.email = "Please enter your email address."
@@ -80,7 +84,7 @@ export async function submitContactForm(_prev: FormState, formData: FormData): P
   if (!message) fieldErrors.message = "Please enter a message."
 
   if (Object.keys(fieldErrors).length > 0) {
-    return { status: "error", message: "Please check the highlighted fields.", fieldErrors }
+    return { status: "error", message: "Please check the highlighted fields.", fieldErrors, values }
   }
 
   try {
@@ -99,7 +103,7 @@ export async function submitContactForm(_prev: FormState, formData: FormData): P
     })
 
     if (!sent) {
-      return { status: "error", message: UNCONFIGURED_MESSAGE }
+      return { status: "error", message: UNCONFIGURED_MESSAGE, values }
     }
 
     return {
@@ -107,7 +111,7 @@ export async function submitContactForm(_prev: FormState, formData: FormData): P
       message: "Thank you. We've received your message and someone from our team will be in touch shortly.",
     }
   } catch {
-    return { status: "error", message: UNCONFIGURED_MESSAGE }
+    return { status: "error", message: UNCONFIGURED_MESSAGE, values }
   }
 }
 

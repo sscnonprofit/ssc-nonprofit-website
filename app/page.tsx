@@ -164,7 +164,7 @@ export default function HomePage() {
         title="Come see the SSC difference for yourself"
         body="Schedule a personalized tour of our 40-acre campus, or reach out to talk through the care options available for your loved one."
         primary={{ label: "Schedule A Visit", href: "/contact" }}
-        secondary={{ label: "Explore Careers", href: "/careers" }}
+        secondary={{ label: "Explore Careers", href: "/employment" }}
       />
     </>
   )

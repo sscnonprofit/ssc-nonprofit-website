@@ -47,6 +47,7 @@ export function ContactForm() {
             id="name"
             name="name"
             autoComplete="name"
+            defaultValue={state.values?.name ?? ""}
             required
             aria-invalid={Boolean(state.fieldErrors?.name)}
             aria-describedby={state.fieldErrors?.name ? "name-error" : undefined}
@@ -67,6 +68,7 @@ export function ContactForm() {
             name="email"
             type="email"
             autoComplete="email"
+            defaultValue={state.values?.email ?? ""}
             required
             aria-invalid={Boolean(state.fieldErrors?.email)}
             aria-describedby={state.fieldErrors?.email ? "email-error" : undefined}
@@ -80,7 +82,7 @@ export function ContactForm() {
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="phone">Phone</Label>
-          <Input id="phone" name="phone" type="tel" autoComplete="tel" />
+          <Input id="phone" name="phone" type="tel" autoComplete="tel" defaultValue={state.values?.phone ?? ""} />
         </div>
 
         <div className="flex flex-col gap-2">
@@ -88,7 +90,7 @@ export function ContactForm() {
           <select
             id="topic"
             name="topic"
-            defaultValue=""
+            defaultValue={state.values?.topic ?? ""}
             className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-sm"
           >
             <option value="">Select a topic</option>
@@ -109,6 +111,7 @@ export function ContactForm() {
           id="message"
           name="message"
           rows={6}
+          defaultValue={state.values?.message ?? ""}
           required
           aria-invalid={Boolean(state.fieldErrors?.message)}
           aria-describedby={state.fieldErrors?.message ? "message-error" : undefined}

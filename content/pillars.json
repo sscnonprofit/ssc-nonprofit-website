@@ -58,7 +58,7 @@
       "eyebrow": "Benefits & Culture",
       "title": "We Value Our Team",
       "body": "We offer a comprehensive benefits package designed to support your physical, financial, and personal well-being.",
-      "cta": { "label": "Apply Now", "href": "/careers" },
+      "cta": { "label": "Apply Now", "href": "https://sscnonprofit.apscareerportal.com/jobs?locale=en-US" },
       "items": [
         {
           "title": "Competitive Compensation & Financial Security",
@@ -81,7 +81,7 @@
     "callout": {
       "title": "Why It Matters",
       "body": "By investing in our team, we ensure seniors receive consistent, compassionate, and resident-centered care. Every caregiver becomes a trusted member of our residents' extended family, strengthening both our community and the quality of life for all who call SSC home.",
-      "cta": { "label": "See open positions", "href": "/careers" }
+      "cta": { "label": "See open positions", "href": "https://sscnonprofit.apscareerportal.com/jobs?locale=en-US" }
     },
     "gallery": [
       { "src": "/images/Sheboygan-Senior-Community-_Employment_Gallery-2.jpg", "alt": "SSC team members at work" },

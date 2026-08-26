@@ -50,13 +50,13 @@ export function PillarPage({ slug }: { slug: PillarKey }) {
       <section className="mx-auto max-w-7xl px-6 py-20 sm:py-24">
         <SectionHeading eyebrow={p.benefits.eyebrow} title={p.benefits.title} body={p.benefits.body} />
         {benefitsCta ? (
-          <Link
+          <CtaLink
             href={benefitsCta.href}
             className="group mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 font-display font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
           >
             {benefitsCta.label}
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-          </Link>
+          </CtaLink>
         ) : null}
 
         <ul className="mt-12 grid gap-6 md:grid-cols-2">
@@ -78,13 +78,13 @@ export function PillarPage({ slug }: { slug: PillarKey }) {
               <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">{callout.body}</p>
             </div>
             {callout.cta ? (
-              <Link
+              <CtaLink
                 href={callout.cta.href}
                 className="group inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3.5 font-display font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
               >
                 {callout.cta.label}
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-              </Link>
+              </CtaLink>
             ) : null}
           </div>
         </section>
@@ -168,5 +168,32 @@ export function PillarPage({ slug }: { slug: PillarKey }) {
         body="Schedule a visit and see how our pillars shape daily life on campus."
       />
     </>
+  )
+}
+
+/**
+ * Renders an absolute URL as a plain anchor (opening in a new tab) and an
+ * in-app path through next/link, so content JSON can mix the two freely.
+ */
+function CtaLink({
+  href,
+  className,
+  children,
+}: {
+  href: string
+  className?: string
+  children: React.ReactNode
+}) {
+  if (/^https?:\/\//.test(href)) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+        {children}
+      </a>
+    )
+  }
+  return (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
   )
 }

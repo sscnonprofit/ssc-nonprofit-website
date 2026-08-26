@@ -1,0 +1,89 @@
+{
+  "hero": {
+    "badge": "Artists Gallery",
+    "title": "Inspired by Nature",
+    "body": "A gallery art exhibition hosted by Sheboygan Senior Community. We're inviting artists of all ages and abilities to share work — no jury, no experience required.",
+    "image": "/images/Art-Piece-Highlight-scaled.jpg",
+    "imageAlt": "A framed artwork on display in the Sheboygan Senior Community gallery space"
+  },
+  "intro": {
+    "eyebrow": "The invitation",
+    "title": "Show us nature as you see it",
+    "paragraphs": [
+      "We're inviting artists of all ages and abilities to share work for our upcoming gallery exhibition, Inspired by Nature. We invite artists to interpret this theme in their own way.",
+      "Whether your inspiration comes from a favorite hiking trail, native plants, changing seasons, natural materials, or the colors and patterns found in nature, we'd love to see your perspective."
+    ],
+    "opening": {
+      "label": "Public viewing",
+      "date": "Friday, September 25",
+      "time": "4:00 PM – 6:00 PM",
+      "note": "Resident & public viewing"
+    }
+  },
+  "theme": {
+    "eyebrow": "Art show details",
+    "title": "Theme",
+    "body": "Nature surrounds us in countless forms — from sweeping landscapes and quiet woodlands to blooming gardens, winding shorelines, mushrooms, and wildlife. Interpret this theme in your own way. All artistic mediums are welcome.",
+    "inspirationTitle": "Looking for inspiration?",
+    "inspiration": [
+      "Landscapes and scenic views",
+      "Abstract patterns and colors inspired by nature",
+      "Wool, fiber and natural materials",
+      "Memories of a favorite place in nature",
+      "Changing of the seasons",
+      "Rainfall"
+    ],
+    "examplesTitle": "Some examples of what your artwork could be inspired by",
+    "examples": [
+      "Photographs or paintings of mountain ranges, bodies of water, volcanos, sunsets.",
+      "Sculptures made of natural materials like stone, clay, and wood.",
+      "Kinetic sculptures that move with airflow, such as mobiles or fabric installations."
+    ]
+  },
+  "guidelines": {
+    "eyebrow": "How to enter",
+    "title": "Submission guidelines",
+    "items": [
+      "Artists may submit up to two pieces of artwork for consideration.",
+      "Please submit your original artwork no later than September 16, 2026.",
+      "All artwork must be original and ready for display.",
+      "A brief artist statement highlighting the connection to the exhibition theme.",
+      "The price of your artwork, if you wish to sell it.",
+      "A signed Exhibition Agreement."
+    ],
+    "agreement": {
+      "label": "Exhibition Agreement (PDF)",
+      "href": "https://sscnonprofit.org/wp-content/uploads/2025/04/Exhibition-Agreement.pdf"
+    }
+  },
+  "dropoff": {
+    "eyebrow": "Drop-off",
+    "title": "Submission period",
+    "body": "Bring your work to the gallery during any of the windows below. Need a different time? Email Melissa and we'll arrange it.",
+    "dates": [
+      { "day": "Thursday, September 3", "time": "12:00 PM – 4:30 PM" },
+      { "day": "Friday, September 4", "time": "9:00 AM – 12:00 PM" },
+      { "day": "Wednesday, September 9", "time": "12:00 PM – 4:30 PM" },
+      { "day": "Wednesday, September 16", "time": "12:00 PM – 4:30 PM" }
+    ],
+    "options": [
+      "Email a photo of your completed artwork to Melissa Thiel.",
+      "Arrange a drop-off time for your completed artwork with Melissa.",
+      "Send your completed artwork via mail to the gallery address."
+    ],
+    "contact": {
+      "name": "Melissa Thiel",
+      "role": "Life Enrichment Director",
+      "email": "mthiel@sscnonprofit.org"
+    }
+  },
+  "display": {
+    "eyebrow": "On display",
+    "title": "Artwork display details",
+    "items": [
+      { "label": "Display period", "value": "September 2026 – March 2027" },
+      { "label": "Location", "value": "Sheboygan Senior Community Gallery Space" }
+    ],
+    "body": "The exhibit will be open to SSC residents, staff, families, and the wider community — creating a shared space for connection, reflection, and creativity."
+  }
+}

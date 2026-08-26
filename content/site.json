@@ -49,9 +49,9 @@
   "impactReport": "https://sscnonprofit.org/wp-content/uploads/2026/05/2025SSCImpactReportWeb.pdf",
   "shopUrl": "https://customcrafttrophy.chipply.com/SSC/store.aspx?action=viewall",
   "social": [
-    { "label": "Facebook", "href": "https://www.facebook.com/sheboyganseniorcommunity" },
-    { "label": "Instagram", "href": "https://www.instagram.com/sheboyganseniorcommunity" },
-    { "label": "YouTube", "href": "https://www.youtube.com/@sheboyganseniorcommunity" }
+    { "label": "Facebook", "href": "https://www.facebook.com/SheboyganSeniorCommunity/" },
+    { "label": "Instagram", "href": "https://www.instagram.com/shebseniorcommunity/" },
+    { "label": "YouTube", "href": "https://www.youtube.com/channel/UChYFMAqiBZ8UaSz0C_mV3yw" }
   ],
   "nav": [
     {
@@ -120,7 +120,7 @@
       "heading": "Company",
       "links": [
         { "label": "About us", "href": "/our-company" },
-        { "label": "Careers", "href": "/careers" },
+        { "label": "Careers", "href": "https://sscnonprofit.apscareerportal.com/jobs?locale=en-US", "external": true },
         { "label": "Impact Report", "href": "https://sscnonprofit.org/wp-content/uploads/2026/05/2025SSCImpactReportWeb.pdf", "external": true },
         { "label": "Shop SSC Gear", "href": "https://customcrafttrophy.chipply.com/SSC/store.aspx?action=viewall", "external": true }
       ]

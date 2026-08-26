@@ -1,0 +1,51 @@
+{
+  "hero": {
+    "badge": "Events",
+    "title": "What's happening at SSC",
+    "body": "Our campus is busiest when the wider community is in it. Craft fairs, art openings, and monthly activity calendars for both households — all in one place.",
+    "image": "/images/Sheboygan-Senior-Community_Community_1.jpg",
+    "imageAlt": "Residents and neighbors gathered at a Sheboygan Senior Community event"
+  },
+  "featured": {
+    "eyebrow": "Featured event",
+    "title": "The Local Collective Craft Fair",
+    "paragraphs": [
+      "Share your creativity with the community at The Local Collective Craft Fair hosted by Sheboygan Senior Community! We're looking for talented artisans, makers, crafters, and local small businesses to showcase their unique, handcrafted products while connecting with shoppers of all ages.",
+      "Whether you create home décor, jewelry, artwork, specialty foods, gifts, or other handmade goods, we'd love to have you join us for this exciting community event.",
+      "Ready to be a vendor? Complete the vendor application today and reserve your space before spots fill up. We can't wait to help you share your craft with the community!"
+    ],
+    "cta": {
+      "label": "Vendor Application",
+      "href": "https://sscnonprofit.org/wp-content/uploads/2026/07/Vendor-Application.pdf"
+    },
+    "image": "/images/craft-fair.png",
+    "imageAlt": "Handmade pottery, knitwear, artwork and jewelry displayed on vendor tables at a community craft fair"
+  },
+  "calendars": {
+    "eyebrow": "Monthly calendars",
+    "title": "Activity calendars",
+    "body": "Each household publishes its own monthly schedule of activities, outings, and programming. Download the current month below.",
+    "items": [
+      {
+        "title": "Willow Calendar",
+        "household": "Willow Lane — Assisted Living",
+        "description": "Life enrichment activities, outings, and social programming for our assisted living household.",
+        "href": "https://sscnonprofit.org/wp-content/uploads/2026/07/August-2026-Willow-Activity-Calendar.pdf"
+      },
+      {
+        "title": "Healthcare Calendar",
+        "household": "Maple Creek, Oak Drive & Hickory Hills",
+        "description": "Activities and programming across our skilled nursing and short-term rehab households.",
+        "href": "https://sscnonprofit.org/wp-content/uploads/2026/07/Aug26-healthcare.pdf"
+      }
+    ]
+  },
+  "gallery": {
+    "eyebrow": "Artists Gallery",
+    "title": "Inspired by Nature",
+    "body": "Our gallery space hosts a rotating exhibition open to artists of all ages and abilities. See the current call for submissions and how to enter.",
+    "href": "/artists-gallery",
+    "image": "/images/Art-Piece-Highlight-scaled.jpg",
+    "imageAlt": "A framed artwork on display in the Sheboygan Senior Community gallery space"
+  }
+}

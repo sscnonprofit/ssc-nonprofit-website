@@ -31,9 +31,14 @@ export function SiteHeader() {
             {site.phone}
           </a>
           <div className="flex items-center gap-6">
-            <Link href="/careers" className="transition-opacity hover:opacity-80">
+            <a
+              href={site.careersUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="transition-opacity hover:opacity-80"
+            >
               Careers
-            </Link>
+            </a>
             <Link href="/contact" className="transition-opacity hover:opacity-80">
               Schedule A Visit
             </Link>
@@ -167,6 +172,17 @@ export function SiteHeader() {
                 </li>
               ),
             )}
+            <li className="border-b border-border/60 py-1 last:border-0">
+              <a
+                href={site.careersUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                className="block py-2 font-display font-semibold"
+              >
+                Careers
+              </a>
+            </li>
           </ul>
         </nav>
 

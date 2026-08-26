@@ -1,0 +1,105 @@
+{
+  "hero": {
+    "eyebrow": "Our Story",
+    "title": "Sheboygan Senior Community",
+    "body": "A faith-based nonprofit serving Sheboygan area seniors since 1962.",
+    "image": "/images/DSC4141_B2-Copy-scaled-1.webp",
+    "imageAlt": "The Sheboygan Senior Community campus"
+  },
+  "story": {
+    "title": "Sheboygan Senior Community",
+    "paragraphs": [
+      "Sheboygan Senior Community is a faith-based nonprofit serving Sheboygan area seniors since 1962. Founded by Dr. T. Parry Jones and dedicated members of St. Luke United Methodist Church, Sheboygan Senior Community is proud of its faith-based heritage.",
+      "Since then, SSC expanded services and has grown into our current location on 40 acres of land off County Road Y in the Town of Sheboygan. Our move was made possible in large part to the SSC Foundation and a few generous donors.",
+      "We look forward to continuous growth to meet and exceed the needs of our community's seniors."
+    ],
+    "mission": {
+      "label": "Our Mission",
+      "text": "Sheboygan Senior Community is dedicated to providing compassionate care promoting dignity, safety, and comfort in a faith-based community."
+    }
+  },
+  "history": {
+    "title": "Our History",
+    "body": "Eight decades of caring for Sheboygan County seniors, from a single rented house to a 40-acre campus.",
+    "milestones": [
+      {
+        "years": "1945",
+        "title": "First Methodist Church",
+        "body": "Our roots date back to 1945. First Methodist Church (now St. Luke United Methodist) purchased an adjacent house and lot for future use, and soon after rented it to a church couple in need of low cost housing. They purchased a 2-apartment house on the adjoining street and bought another smaller house, all rented to needy church members at low cost. The church already owned two lots on the block, so they bought one more to begin what would become SSC.",
+        "image": "/images/History_SmallerImages660x404_3.webp"
+      },
+      {
+        "years": "1962 – 1966",
+        "title": "Dr. T. Parry Jones",
+        "body": "Established in 1962 by Dr. T. Parry Jones of First Methodist Church, the Sheboygan Retirement Home began as a nonprofit for seniors. Expanding in 1966 with four more apartments, it also changed its name from Sheboygan Methodist Home for the Aged to Sheboygan Retirement Home, Inc.",
+        "image": "/images/History_SmallerImages660x404_4.webp"
+      },
+      {
+        "years": "1968 – 1981",
+        "title": "First Expansion",
+        "body": "In 1968, the facility expanded by relocating and connecting apartment buildings, later demolished for a health center addition in 1980. By July 1, 1970, the Sheboygan Retirement Home became the sole nonprofit in the area offering both independent living and nursing care. Anticipating increased demand, the state approved 84 skilled nursing care beds by 1978. Finally, the Beach Health Care Center nursing home was added, facilitated by a generous donation from the Beach family.",
+        "image": "/images/History_SmallerImages660x404_2.webp"
+      },
+      {
+        "years": "1996",
+        "title": "Major Renovations",
+        "body": "Major renovations to the old 6th Street building include expanded dining rooms and kitchens and an outside deck on the east side of the Sheboygan Senior Community nursing home.",
+        "image": "/images/History_SmallerImages660x404_7.webp"
+      },
+      {
+        "years": "2004",
+        "title": "Name Change",
+        "body": "In May 2004, our name officially changed one final time to Sheboygan Senior Community.",
+        "image": "/images/scc-logo-name-chang.png"
+      },
+      {
+        "years": "2006 – 2008",
+        "title": "Tragedy Struck",
+        "body": "Construction of Landmark Square, an independent living condo association, began in May 2006. In 2007, an arson fire tragically damaged the nearly completed building. Despite this setback, Landmark was completed and opened on May 1, 2008, as Sheboygan's newest independent living facility for seniors.",
+        "image": "/images/History_SmallerImages660x404_building.webp"
+      },
+      {
+        "years": "2010 – 2015",
+        "title": "Moved",
+        "body": "In winter 2010, Sheboygan Senior Community initiated strategic planning for a new facility to replace its aging building on 6th Street. Construction of the current building commenced in late June 2014, and in September 2015, Lighthouse Commons, Maple Creek, Oak Drive, and Willow Lane relocated to the new location off County Road Y and Mueller Road.",
+        "image": "/images/SSC_wide-angle-shot-of-new-building.jpg"
+      },
+      {
+        "years": "2018 – 2019",
+        "title": "SSC",
+        "body": "In Spring 2018, strategic planning began for future expansions and a fully developed campus. Then, in May 2019, the organization rebranded, officially adopting the shortened form SSC while retaining the full name Sheboygan Senior Community.",
+        "image": "/images/DJI_0072-scaled-1.webp"
+      }
+    ]
+  },
+  "team": {
+    "title": "Meet the Team",
+    "body": "Below are the Department Heads for Sheboygan Senior Community. If you wish to contact anyone directly, please call our main line at (920) 458-2137. We look forward to hearing from you and helping you out in any way possible.",
+    "members": [
+      {
+        "name": "Paul Treffert",
+        "role": "CEO",
+        "image": "/images/SeniorCenterHeadshots_79.webp",
+        "bio": {
+          "tenure": "Paul Treffert has been part of the SSC team since February 2016.",
+          "why": "SSC represents everything that I have always thought was possible in long-term care but had never found anywhere else: a beautiful setting, a 'state of the art' facility, all private rooms, and most importantly, the very best senior care and services provided by an outstanding team of dedicated caregivers. What else could you ask for?",
+          "family": "Rachel, Emily, Dagan, Ali, and Buddy the dog.",
+          "favorite": "My favorite thing about Sheboygan County is that it is big and dynamic enough to have great quality of life (restaurants, entertainment, parks, etc) but still feels like a small town where everyone knows and looks out for each other."
+        }
+      },
+      { "name": "Tara Holzem", "role": "Business Office Manager", "image": "/images/SeniorCenterHeadshots_39.webp" },
+      { "name": "Ashley Allard", "role": "Director of Human Resources, SHRM-SCP", "image": "/images/SeniorCenterHeadshots_90.jpg" },
+      { "name": "Shane Ley", "role": "Director of Nursing, BSN, RN, DON-C", "image": "/images/Shane-Large.webp" },
+      { "name": "Heather K. Sunagel", "role": "Director of Social Services, BSW", "image": "/images/SeniorCenterHeadshots_64.webp" },
+      { "name": "Val Dittrich", "role": "Dining Services Manager", "image": "/images/SeniorCenterHeadshots_30.jpg" },
+      { "name": "Joan Harder", "role": "Director of Facilities and Purchasing", "image": "/images/SeniorCenterHeadshots_67.jpg" },
+      { "name": "Vanessa Depies", "role": "Community Outreach Coordinator", "image": "/images/DSC00130-scaled.jpg" },
+      { "name": "Thomas Lawry", "role": "Director of Admissions", "image": "/images/SeniorCenterHeadshots_60.jpg" },
+      { "name": "Melissa Thiel", "role": "Director of Life Enrichment", "image": "/images/SeniorCenterHeadshots_28.jpg" },
+      { "name": "Shawn Richards", "role": "Assisted Living Nurse Manager", "image": "/images/SeniorCenterHeadshots_53.jpg" },
+      { "name": "Bridget Boy", "role": "Director of Therapy", "image": "/images/Bridget-Boy.jpg" },
+      { "name": "Sue Black", "role": "Director of Development", "image": "/images/DSC00142-scaled.jpg" },
+      { "name": "Stephanie Goetz", "role": "Director of Operations", "image": "/images/SeniorCenterHeadshots_38.webp" }
+    ]
+  }
+}

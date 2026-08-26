@@ -59,6 +59,9 @@ export function StatCounter({ stats, tone = "light" }: { stats: Stat[]; tone?: "
 
 function Counter({ target, active }: { target: number; active: boolean }) {
   const [value, setValue] = useState(0)
+  // Preserve decimals like 1.5 instead of rounding them away.
+  const decimals = (String(target).split(".")[1] ?? "").length
+  const round = (n: number) => Number(n.toFixed(decimals))
 
   useEffect(() => {
     if (!active) return
@@ -74,12 +77,12 @@ function Counter({ target, active }: { target: number; active: boolean }) {
       const progress = Math.min((now - start) / duration, 1)
       // ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3)
-      setValue(Math.round(target * eased))
+      setValue(round(target * eased))
       if (progress < 1) frame = requestAnimationFrame(tick)
     }
     frame = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frame)
   }, [active, target])
 
-  return <>{value}</>
+  return <>{value.toFixed(decimals)}</>
 }

@@ -15,6 +15,37 @@
   "phoneHref": "tel:+19204582137",
   "salonPhone": "(920) 458-2137 x712",
   "developmentPhone": "(920) 458-2137 ext. 826",
+  "careersUrl": "https://sscnonprofit.apscareerportal.com/jobs?locale=en-US",
+  "onlineGiving": "https://secure.qgiv.com/for/sheboyganseniorcommunity",
+  "donorForm": "https://sscnonprofit.org/wp-content/uploads/2026/08/Donor-Recognition-Form-2026.pdf",
+  "contacts": [
+    {
+      "name": "Sue Black",
+      "role": "Director of Philanthropy",
+      "email": "sblack@sscnonprofit.org",
+      "phone": "(920) 458-2137 ext. 826",
+      "topic": "Donations, legacy giving, and gifts of stock"
+    },
+    {
+      "name": "Sally Bork",
+      "role": "Volunteer Coordinator",
+      "email": "sbork@sscnonprofit.org",
+      "phone": "(920) 458-2137",
+      "topic": "Volunteering and community programs"
+    },
+    {
+      "name": "Vanessa Depies",
+      "role": "Community Outreach Coordinator",
+      "phone": "(920) 458-2137",
+      "topic": "Outreach partnerships and local collaboration"
+    },
+    {
+      "name": "Thomas Lawry",
+      "role": "Director of Admissions",
+      "phone": "(920) 458-2137",
+      "topic": "Tours, availability, and admissions"
+    }
+  ],
   "impactReport": "https://sscnonprofit.org/wp-content/uploads/2026/05/2025SSCImpactReportWeb.pdf",
   "shopUrl": "https://customcrafttrophy.chipply.com/SSC/store.aspx?action=viewall",
   "social": [

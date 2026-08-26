@@ -1,0 +1,201 @@
+{
+  "community": {
+    "slug": "community",
+    "navLabel": "Community",
+    "eyebrow": "Our Community",
+    "title": "Building a Foundation of Compassionate Care",
+    "metaDescription": "At Sheboygan Senior Community we are more than a care provider, we are a family. Explore how we foster connection, growth, and shared experiences.",
+    "heroImage": "/images/Sheboygan-Senior-Community-_Community-Gallery_2.jpg",
+    "heroImageAlt": "Residents and caregivers together at Sheboygan Senior Community",
+    "intro": "At Sheboygan Senior Community, we are more than a care provider; we are a family. Guided by our mission to provide compassionate care, dignity, safety, and joy, we cultivate a welcoming, supportive environment where seniors can thrive. Our dedicated in-house caregivers and stable management team ensure every resident experiences consistent, personalized care, while our intentional campus design promotes wellness, connection, and belonging.",
+    "benefits": {
+      "eyebrow": "The Heart of SSC",
+      "title": "Our Community's Impact",
+      "body": "Our commitment to community extends beyond our residents, enriching the lives of everyone involved.",
+      "items": [
+        {
+          "title": "Meaningful Connections",
+          "body": "We foster deep, lasting connections between residents, families, and volunteers, creating a supportive network that enhances well-being and belonging."
+        },
+        {
+          "title": "Personal Growth & Fulfillment",
+          "body": "Volunteering and engaging with SSC provides opportunities for personal growth, skill development, and the satisfaction of making a tangible impact on seniors' lives."
+        },
+        {
+          "title": "Shared Experiences",
+          "body": "Residents and community members come together through arts programming, live music, gardening, games, and personal visits, creating joyful moments and lasting memories."
+        },
+        {
+          "title": "Valued Contributions",
+          "body": "Every act of support, whether sharing a talent, volunteering, or donating, is valued and celebrated. These contributions strengthen our community and directly support resident-centered care."
+        }
+      ]
+    },
+    "callout": {
+      "title": "Interested in volunteering?",
+      "body": "Get in touch with our Volunteer Coordinator, Sally Bork, and we will help you find a role that fits your talents and schedule.",
+      "cta": { "label": "Contact our Volunteer Coordinator", "href": "/contact" }
+    },
+    "gallery": [
+      { "src": "/images/Sheboygan-Senior-Community-_Community-Gallery_3.jpg", "alt": "Residents enjoying an activity together" },
+      { "src": "/images/Sheboygan-Senior-Community-_Community-Gallery_4.jpg", "alt": "A caregiver sharing a moment with a resident" },
+      { "src": "/images/DSC03455-scaled.jpg", "alt": "Community gathering on the SSC campus" },
+      { "src": "/images/DSC03879-scaled.jpg", "alt": "Residents and volunteers in a shared space" },
+      { "src": "/images/DSC03945-scaled.jpg", "alt": "Live music performance for residents" },
+      { "src": "/images/DSC08064-scaled.jpg", "alt": "Residents socializing in a common area" }
+    ]
+  },
+  "employment": {
+    "slug": "employment",
+    "navLabel": "Employment",
+    "eyebrow": "Our Team",
+    "title": "The Heart of Sheboygan Senior Community",
+    "metaDescription": "Investing in our caregivers creates a workplace culture of growth and belonging, so residents receive consistent care from familiar, trusted faces.",
+    "heroImage": "/images/senior-woman-talking-to-caring-nurse-at-waiting-room.jpg",
+    "heroImageAlt": "A nurse talking with a senior resident",
+    "intro": "At Sheboygan Senior Community, the quality of care our residents receive depends on the strength, dedication, and stability of our in-house team. By investing in our caregivers and staff, we create a workplace culture that fosters professional growth, belonging, and long-term commitment. Our low staff turnover and zero-agency approach ensure residents experience consistent, personalized care from familiar, trusted caregivers every day.",
+    "benefits": {
+      "eyebrow": "Benefits & Culture",
+      "title": "We Value Our Team",
+      "body": "We offer a comprehensive benefits package designed to support your physical, financial, and personal well-being.",
+      "cta": { "label": "Apply Now", "href": "/careers" },
+      "items": [
+        {
+          "title": "Competitive Compensation & Financial Security",
+          "body": "We provide fair, mission-driven wages, shift premiums, holiday pay, performance bonuses, and a 403B retirement plan with employer matching, reflecting our commitment to sustaining a skilled, permanent team."
+        },
+        {
+          "title": "Comprehensive Health & Wellness",
+          "body": "Our employees enjoy affordable health, dental, and vision insurance, life coverage, and wellness reimbursements, supporting both their physical and financial well-being."
+        },
+        {
+          "title": "Professional Development & Work-Life Balance",
+          "body": "Through tuition reimbursement, generous paid time off, paid holidays, and paid parental leave, we empower our staff to grow professionally while maintaining a healthy work-life balance."
+        },
+        {
+          "title": "Supportive & Inclusive Culture",
+          "body": "Childcare reimbursement, free daily meals, EAP services, and a dog-friendly environment create a welcoming and inclusive workplace where every team member feels valued and supported."
+        }
+      ]
+    },
+    "callout": {
+      "title": "Why It Matters",
+      "body": "By investing in our team, we ensure seniors receive consistent, compassionate, and resident-centered care. Every caregiver becomes a trusted member of our residents' extended family, strengthening both our community and the quality of life for all who call SSC home.",
+      "cta": { "label": "See open positions", "href": "/careers" }
+    },
+    "gallery": [
+      { "src": "/images/Sheboygan-Senior-Community-_Employment_Gallery-2.jpg", "alt": "SSC team members at work" },
+      { "src": "/images/Sheboygan-Senior-Community-_Employment_Gallery-4.jpg", "alt": "Caregivers collaborating on the floor" },
+      { "src": "/images/Sheboygan-Senior-Community-_Employment_Gallery-5.jpg", "alt": "A staff member assisting a resident" },
+      { "src": "/images/DSC03562-scaled.jpg", "alt": "Nursing team at Sheboygan Senior Community" },
+      { "src": "/images/DSC03610-scaled.jpg", "alt": "Staff members sharing a laugh" },
+      { "src": "/images/DSC07610-scaled.jpg", "alt": "A caregiver supporting a resident" }
+    ]
+  },
+  "environment": {
+    "slug": "environment",
+    "navLabel": "Environment",
+    "eyebrow": "Our Green Commitment",
+    "title": "Cultivating a Sustainable Future",
+    "metaDescription": "From our solar array to rain gardens and pollinator-friendly plantings, SSC is creating a greener, healthier campus for residents and staff.",
+    "heroImage": "/images/Sheboygan-Senior-Community_Buildings-with-solar-panels-and-pond.jpg",
+    "heroImageAlt": "The SSC campus with solar panels and pond",
+    "intro": "At Sheboygan Senior Community, we understand that a healthy environment contributes directly to the well-being of our residents and staff. Our campus is designed to support both people and nature, integrating sustainability into daily life. From our solar array to rain gardens and pollinator-friendly plantings, we are actively creating a greener, healthier environment that enhances resident experience and community impact.",
+    "stats": [
+      { "value": 28, "suffix": "%", "label": "Projected to offset over 28% of our current energy consumption with our solar array." },
+      { "value": 50, "suffix": "%", "label": "Reduced irrigation by half since introducing White Dutch Clover." },
+      { "value": 1.5, "suffix": " acres", "label": "1.5 acres dedicated to our ground-mounted solar array." },
+      { "value": 60, "suffix": "+", "label": "Planning to add 60 native trees as part of our Pollinator and People Friendly Project." }
+    ],
+    "benefits": {
+      "eyebrow": "Growing Greener",
+      "title": "Why It Matters",
+      "body": "Sustainable practices at SSC go beyond environmental stewardship. They directly support our mission to provide a holistic, enriching environment for seniors. By investing in the health of our campus and community, we are creating spaces where residents can thrive, connect, and live with dignity, safety, and joy.",
+      "items": [
+        {
+          "title": "Renewable Energy Generation",
+          "body": "Our ground-mounted solar array offsets over 28 percent of our annual electricity use, reducing reliance on traditional energy sources."
+        },
+        {
+          "title": "Water Conservation",
+          "body": "The introduction of White Dutch Clover has reduced irrigation needs by 50 percent, conserving water while enriching outdoor spaces."
+        },
+        {
+          "title": "Biodiversity and Pollinator Support",
+          "body": "Native plants, rain gardens, and planned tree plantings attract pollinators and wildlife, creating vibrant outdoor spaces for residents to enjoy."
+        },
+        {
+          "title": "Functional, Beautiful Spaces",
+          "body": "Accessible garden beds, scenic trails, and our Pollinator and People Friendly Project enhance the beauty and usability of our campus, supporting wellness, social engagement, and connection to nature."
+        }
+      ]
+    },
+    "gallery": [
+      { "src": "/images/Sheboygan-Senior-Community_honey-bee-on-wildflower-at-senior-community.jpg", "alt": "A honey bee on a wildflower on the SSC campus" },
+      { "src": "/images/Sheboygan-Senior-Community_wildflowers-and-pond.jpg", "alt": "Wildflowers beside the campus pond" },
+      { "src": "/images/Sheboygan-Senior-Community_Buildings-pond_3.jpg", "alt": "SSC buildings reflected in the pond" },
+      { "src": "/images/Sheboygan-Senior-Community_Buildings-with-solar-panels-2.jpg", "alt": "Ground-mounted solar array on the SSC campus" },
+      { "src": "/images/IMG_0880-scaled.jpeg", "alt": "Native plantings on the campus grounds" },
+      { "src": "/images/DSC08027-scaled.jpg", "alt": "Outdoor space for residents to enjoy" }
+    ]
+  },
+  "community-outreach": {
+    "slug": "community-outreach",
+    "navLabel": "Community Outreach",
+    "eyebrow": "Outreach Efforts",
+    "title": "Rooted in Connection & Purpose",
+    "metaDescription": "SSC supports charitable causes and nonprofit partners across Sheboygan County through time, compassion, and shared talents.",
+    "heroImage": "/images/AW5I9285_Original-scaled.jpg",
+    "heroImageAlt": "SSC team members at a community outreach event",
+    "intro": "At Sheboygan Senior Community, giving back isn't just something we do. It's who we are. Through our time, compassion, and shared talents, we are committed to enriching not only the lives of those within our community, but also the neighbors and organizations around us.",
+    "intro2": "Each year, we proudly support a variety of charitable causes and nonprofit partners. Whether collaborating with local organizations or engaging with educational partners, our outreach efforts are rooted in connection, purpose, and the belief that together, we can make a meaningful difference.",
+    "benefits": {
+      "eyebrow": "Our Impact",
+      "title": "We Love Our Community",
+      "body": "Outreach at SSC takes many forms, from volunteer hours and fundraising drives to partnerships that bring generations together on our campus.",
+      "items": [
+        {
+          "title": "Charitable Giving & Drives",
+          "body": "Our team organizes and supports annual fundraising and collection drives for local causes, including the Sheboygan County Food Bank, the county Warming Shelter, and the Walk to End Alzheimer's."
+        },
+        {
+          "title": "Educational Partnerships",
+          "body": "We work with area schools, colleges, and nursing programs to host clinicals, job shadows, and student volunteers, helping build the next generation of caregivers right here in Sheboygan County."
+        },
+        {
+          "title": "Intergenerational Programs",
+          "body": "Students, scout troops, and youth groups visit our campus throughout the year for shared meals, music, crafts, and conversation that benefit residents and young people alike."
+        },
+        {
+          "title": "Local Collaboration",
+          "body": "From the Chamber of Commerce to community cafes, film festivals, and neighborhood nonprofits, we partner with organizations across the county to strengthen the community that has supported us for decades."
+        }
+      ]
+    },
+    "callout": {
+      "title": "Partner With Us",
+      "body": "Building lasting relationships across Sheboygan County provides the opportunity for our team, residents, and community to come together and give back to a community that has impacted so many. If interested in partnering, we would love to hear from you. Please contact Vanessa Depies, Community Outreach Coordinator.",
+      "cta": { "label": "Contact Vanessa Depies", "href": "/contact" }
+    },
+    "partners": [
+      { "name": "Sheboygan County Chamber of Commerce", "logo": "/images/Chamber_Logo-Navy.png" },
+      { "name": "Community Cafe", "logo": "/images/Community-Cafe-Logo.png" },
+      { "name": "Sheboygan County Food Bank", "logo": "/images/SCFB_Primary_Logo_RGB.png" },
+      { "name": "HSHS St. Nicholas Hospital", "logo": "/images/HSHS_SNS_4C_H.jpg" },
+      { "name": "Sheboygan County Warming Shelter", "logo": "/images/Sheboygan-County-Warming-Shelter.png" },
+      { "name": "Sheboygan Film Festival", "logo": "/images/Sheboygan-Film-Festival.png" },
+      { "name": "St. Luke United Methodist Church", "logo": "/images/St.Luke-Vertical-Color.jpg" },
+      { "name": "Stephen Siller Tunnel to Towers Foundation", "logo": "/images/StephenSillerLogo.png" },
+      { "name": "Uptown Social", "logo": "/images/Uptown-Social-Logo.png" },
+      { "name": "Velvet Sheep Farms", "logo": "/images/Velvet-Sheep-Farms.png" },
+      { "name": "Sheboygan Visual Artists", "logo": "/images/SVA-Logo-semi-bold.Blue_.300-dpi-scaled.png" },
+      { "name": "Walk to End Alzheimer's", "logo": "/images/Black-Walk-to-End-Alz.jpg" }
+    ],
+    "gallery": [
+      { "src": "/images/IMG_0850-scaled.jpeg", "alt": "SSC team volunteering in the community" },
+      { "src": "/images/IMG_0890-scaled.jpeg", "alt": "Outreach event on the SSC campus" },
+      { "src": "/images/IMG_3601-scaled.jpg", "alt": "Staff participating in a community fundraiser" },
+      { "src": "/images/IMG_6538-scaled.jpeg", "alt": "Community partners visiting SSC" }
+    ]
+  }
+}

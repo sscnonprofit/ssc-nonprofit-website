@@ -1,0 +1,123 @@
+{
+  "hero": {
+    "eyebrow": "A Call to Action",
+    "title": "The Challenge",
+    "body": "Sheboygan County faces a growing senior living crisis. The Next Chapter Campaign is our response.",
+    "image": "/images/Sheboygan-Senior-Community-Senior-living-crisis_Intro.jpg",
+    "imageAlt": "A caregiver supporting a senior resident at Sheboygan Senior Community"
+  },
+  "crisis": {
+    "eyebrow": "The Challenge",
+    "title": "Senior Living Crisis",
+    "body": "Sheboygan County, like many communities, faces a critical challenge: the growing senior living crisis. With an aging population and increasing demand for care, we must act to ensure our seniors receive the support, safety, and connection they deserve. The Next Chapter Campaign is our proactive response, designed to expand facilities and services to meet this urgent need."
+  },
+  "keyChallenges": {
+    "eyebrow": "By the numbers",
+    "title": "Key Challenges Facing Senior Living",
+    "body": "The senior living crisis is multifaceted, presenting several significant challenges that we must address to provide adequate care for our aging population.",
+    "items": [
+      {
+        "stat": "19.8%",
+        "title": "Retirement Increasing",
+        "body": "Approximately 19.8 percent of Sheboygan County residents are aged 65 and older. Projections suggest this will rise to 23.3 percent within five years.",
+        "image": "/images/Sheboygan-Senior-Community-_Retirement-Increasing.jpg"
+      },
+      {
+        "stat": "94%",
+        "title": "SSC Maxing Occupancy",
+        "body": "With a 94 percent occupancy rate annually, SSC is at capacity, highlighting the need to expand and serve more seniors in the community.",
+        "image": "/images/Sheboygan-Senior-Community-_Maxing-Occupancy.jpg"
+      },
+      {
+        "title": "Evolving Care Needs",
+        "body": "Today's seniors require a full spectrum of services, from independent living to advanced care, necessitating adaptable, comprehensive facilities.",
+        "image": "/images/Sheboygan-Senior-Community-_Evolving-Care-Needs.jpg"
+      }
+    ]
+  },
+  "solution": {
+    "eyebrow": "Our Vision",
+    "title": "The Next Chapter Campaign",
+    "body": "Sheboygan Senior Community is committed to addressing the senior living crisis with intentional, resident-centered solutions. The Next Chapter Campaign is designed to expand care, housing, and community spaces, ensuring seniors receive support at every stage of life. We are building not just apartments, but a thriving, connected community."
+  },
+  "phases": [
+    {
+      "label": "Phase I",
+      "title": "Enhancing Assisted Living Care",
+      "body": "Phase I focuses on expanding and upgrading our assisted living facilities to provide enhanced care and comfort for our residents.",
+      "items": [
+        {
+          "title": "Expand Residential Apartments",
+          "body": "Up to 35 new studio and one-bedroom apartments designed for diverse needs and future memory care."
+        },
+        {
+          "title": "Upgrade Residential Facility",
+          "body": "Enhanced community-based residential facility with 24-hour nursing care, spa-like bathing, and a salon, all on a single accessible floor."
+        },
+        {
+          "title": "New Entertainment & Performance Space",
+          "body": "Dedicated gathering space with a stage and sound system to support resident and community events."
+        },
+        {
+          "title": "Open-Roof Courtyards",
+          "body": "Three new courtyards with gardens and a welcoming pavilion to encourage outdoor connection."
+        }
+      ]
+    },
+    {
+      "label": "Phase II",
+      "title": "Independent Living Community",
+      "body": "Phase II focuses on creating a vibrant independent living community, offering new homes and recreational spaces for active seniors.",
+      "items": [
+        {
+          "title": "New Independent Living Homes",
+          "body": "58 duplex and single-family homes with barrier-free design for comfortable and accessible living."
+        },
+        {
+          "title": "Generational Gathering Clubhouse",
+          "body": "Clubhouse with gardens, pickleball courts, and event spaces to foster social engagement and active lifestyles."
+        },
+        {
+          "title": "Community Connections Walking Paths",
+          "body": "Paths linking residents to the broader community to promote wellness."
+        },
+        {
+          "title": "Peaceful Pathways Scenic Trails",
+          "body": "Scenic trails for residents to enjoy nature and peaceful walks."
+        }
+      ]
+    }
+  ],
+  "progress": {
+    "eyebrow": "Join the Mission",
+    "title": "Where We Are In The Mission",
+    "body": "Planning ahead for the next chapter of senior living in Sheboygan County.",
+    "steps": [
+      {
+        "step": "01",
+        "title": "Campaign Planning and Design",
+        "body": "We began by listening to our community, residents, and staff to ensure our expansion meets the evolving needs of Sheboygan County seniors. Every decision, from architectural design to program planning, reflects our mission to provide resident-centered care, connection, and wellness.",
+        "status": "complete"
+      },
+      {
+        "step": "02",
+        "title": "Phase I: Assisted Living Expansion",
+        "body": "We are now in Phase I, focused on expanding and upgrading our assisted living apartments and care facilities. This phase will enhance comfort, community, and care for our residents while providing additional housing for seniors in need.",
+        "status": "current"
+      },
+      {
+        "step": "03",
+        "title": "Fundraising Milestone and Groundbreaking",
+        "body": "Thanks to the generosity of our supporters, we have raised $3 million and are ready to break ground to move the project forward. Each contribution brings us closer to creating a thriving, connected campus where seniors can live with dignity, safety, and joy.",
+        "status": "upcoming"
+      }
+    ]
+  },
+  "join": {
+    "eyebrow": "Join Our Mission",
+    "title": "Shape the Future of Senior Living",
+    "body": "The Next Chapter Campaign ensures that Sheboygan seniors can live with dignity, connection, and joy. Every gift directly supports resident-centered care, community spaces, and a campus designed to enhance wellness and belonging.",
+    "image": "/images/Sheboygan-Senior-Community_Shape-the-Future_Interview_1.jpg",
+    "imageAlt": "An SSC resident sharing their story"
+  }
+}

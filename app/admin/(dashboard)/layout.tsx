@@ -2,6 +2,7 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
 import { AdminShell } from "@/components/admin/admin-shell"
+import { Toaster } from "@/components/ui/sonner"
 import { auth } from "@/lib/auth"
 
 export default async function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
@@ -13,6 +14,7 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
   return (
     <AdminShell userName={session.user.name} userEmail={session.user.email} role={role}>
       {children}
+      <Toaster />
     </AdminShell>
   )
 }

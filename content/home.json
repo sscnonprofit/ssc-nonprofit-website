@@ -1,0 +1,58 @@
+{
+  "seo": {
+    "title": "Sheboygan Senior Community – Short Term Rehab | Assisted Living | Skilled Nursing Care",
+    "description": "Since 1962, Sheboygan Senior Community has provided a continuum of care where aging is honored and dignity is upheld. Skilled nursing, short-term rehab, and assisted living under one roof."
+  },
+  "hero": {
+    "title": "Sheboygan Senior Community: Redefining Senior Living",
+    "body": "Since 1962, Sheboygan Senior Community (SSC) has been more than a care facility. We are a nonprofit, mission-driven home rooted in Sheboygan values. SSC provides a continuum of care where aging is honored, dignity is upheld, and residents are surrounded by a team that feels like family. Here, every person deserves to age with safety, joy, and connection. As Sheboygan County's only award-winning nonprofit senior care provider, we reinvest every dollar back into resident care and community well-being. We are proud to combine compassion with excellence, offering skilled nursing, short-term rehab, and assisted living under one roof.",
+    "image": "/images/SSC_wide-angle-shot-of-new-building.jpg",
+    "imageAlt": "Wide angle exterior view of the Sheboygan Senior Community building on its 40-acre campus"
+  },
+  "stats": [
+    { "value": 96, "suffix": "+", "label": "Resident Occupancy Rate" },
+    { "value": 100, "suffix": "%", "label": "Agency Free" },
+    { "value": 31, "suffix": "+", "label": "Nonprofit & Community Partners" }
+  ],
+  "pillarsSection": {
+    "eyebrow": "Our Pillars of Excellence",
+    "title": "Our Commitment: Meeting the Challenge with Excellence",
+    "intro": "Sheboygan Senior Community is uniquely positioned to meet Sheboygan County's growing senior living needs with compassion and excellence. Our facility has earned its reputation as the gold standard of care in our region. Recognized by U.S. News & World Report as a \"Best Nursing Home\" and consistently ranked a 5-Star facility, SSC offers an approach that goes beyond industry standards.",
+    "closing": "At SSC, we do not just provide care, we create community. By investing in our people and our place, we are redefining what senior living looks like in Sheboygan County.",
+    "items": [
+      {
+        "label": "Community",
+        "href": "/community",
+        "heading": "Continuum of Care",
+        "body": "From short-term rehab to skilled nursing to assisted living, residents can stay under one roof as their needs change without the stress of moving facilities."
+      },
+      {
+        "label": "Employment",
+        "href": "/employment",
+        "heading": "Zero-Agency Staffing",
+        "body": "Unlike most facilities, SSC does not rely on temporary contract staff. Our caregivers are permanent team members who know our residents by name, history, and heart. This means faster response times, more consistent care, and deeper relationships."
+      },
+      {
+        "label": "Environment",
+        "href": "/environment",
+        "heading": "Resident Experience",
+        "body": "Our 40-acre campus was designed for wellness and joy with art shows, live music, gardening, fishing off our ADA-accessible pier, and community spaces filled with natural light."
+      },
+      {
+        "label": "Community Outreach",
+        "href": "/community-outreach",
+        "heading": "Community Enrichment",
+        "body": "Giving back isn't something we do, It's who we are. We proudly support a variety of charitable causes and nonprofit partners."
+      }
+    ]
+  },
+  "whyUs": {
+    "eyebrow": "Why choose us",
+    "title": "Compassion Is At The Heart Of Our Care",
+    "intro": "From assisted living & rehabilitation to long-term skilled nursing care, our focus is meeting each resident's individual needs. Every individual is unique, and our care reflects that."
+  },
+  "newsletter": {
+    "title": "Sign Up For Our Newsletter",
+    "body": "Stay up to date on all of our upcoming events, by signing up for our newsletter."
+  }
+}

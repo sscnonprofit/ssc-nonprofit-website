@@ -1,0 +1,161 @@
+{
+  "name": "Sheboygan Senior Community",
+  "shortName": "SSC",
+  "tagline": "Short Term Rehab | Assisted Living | Skilled Nursing Care",
+  "description": "Sheboygan Senior Community offers compassionate, high-quality senior care services, ensuring your loved ones' well-being.",
+  "mission": "Sheboygan Senior Community is dedicated to providing compassionate care promoting dignity, safety, and comfort in a faith-based community.",
+  "founded": 1962,
+  "address": {
+    "street": "3505 County Road Y",
+    "city": "Sheboygan",
+    "state": "WI",
+    "zip": "53083"
+  },
+  "phone": "(920) 458-2137",
+  "phoneHref": "tel:+19204582137",
+  "salonPhone": "(920) 458-2137 x712",
+  "developmentPhone": "(920) 458-2137 ext. 826",
+  "impactReport": "https://sscnonprofit.org/wp-content/uploads/2026/05/2025SSCImpactReportWeb.pdf",
+  "shopUrl": "https://customcrafttrophy.chipply.com/SSC/store.aspx?action=viewall",
+  "social": [
+    { "label": "Facebook", "href": "https://www.facebook.com/sheboyganseniorcommunity" },
+    { "label": "Instagram", "href": "https://www.instagram.com/sheboyganseniorcommunity" },
+    { "label": "YouTube", "href": "https://www.youtube.com/@sheboyganseniorcommunity" }
+  ],
+  "nav": [
+    {
+      "label": "Pillars",
+      "children": [
+        { "label": "Community", "href": "/community" },
+        { "label": "Employment", "href": "/employment" },
+        { "label": "Environment", "href": "/environment" },
+        { "label": "Community Outreach", "href": "/community-outreach" }
+      ]
+    },
+    {
+      "label": "Our Company",
+      "children": [
+        { "label": "History", "href": "/our-company" },
+        { "label": "Leadership", "href": "/our-company#leadership" },
+        { "label": "The Challenge", "href": "/the-challenge" },
+        { "label": "Impact Report", "href": "https://sscnonprofit.org/wp-content/uploads/2026/05/2025SSCImpactReportWeb.pdf", "external": true },
+        { "label": "Shop SSC Gear", "href": "https://customcrafttrophy.chipply.com/SSC/store.aspx?action=viewall", "external": true }
+      ]
+    },
+    {
+      "label": "Care & Services",
+      "children": [
+        { "label": "Assisted Living", "href": "/assisted-living" },
+        { "label": "Short-Term Rehab", "href": "/short-term-rehab" },
+        { "label": "Skilled Nursing", "href": "/skilled-nursing" }
+      ]
+    },
+    {
+      "label": "Events",
+      "children": [
+        { "label": "Artists Gallery", "href": "/artists-gallery" },
+        { "label": "Calendar", "href": "/upcoming-events" }
+      ]
+    },
+    { "label": "Contact", "href": "/contact" }
+  ],
+  "footer": [
+    {
+      "heading": "Mission",
+      "links": [
+        { "label": "The Challenge", "href": "/the-challenge" },
+        { "label": "The Solution", "href": "/the-challenge#the-solution" },
+        { "label": "Join the Story", "href": "/donate" }
+      ]
+    },
+    {
+      "heading": "Services",
+      "links": [
+        { "label": "Assisted Living", "href": "/assisted-living" },
+        { "label": "Short Term Rehab", "href": "/short-term-rehab" },
+        { "label": "Skilled Nursing", "href": "/skilled-nursing" }
+      ]
+    },
+    {
+      "heading": "Pillars",
+      "links": [
+        { "label": "Community", "href": "/community" },
+        { "label": "Employment", "href": "/employment" },
+        { "label": "Environment", "href": "/environment" },
+        { "label": "Community Outreach", "href": "/community-outreach" }
+      ]
+    },
+    {
+      "heading": "Company",
+      "links": [
+        { "label": "About us", "href": "/our-company" },
+        { "label": "Careers", "href": "/careers" },
+        { "label": "Impact Report", "href": "https://sscnonprofit.org/wp-content/uploads/2026/05/2025SSCImpactReportWeb.pdf", "external": true },
+        { "label": "Shop SSC Gear", "href": "https://customcrafttrophy.chipply.com/SSC/store.aspx?action=viewall", "external": true }
+      ]
+    }
+  ],
+  "testimonials": [
+    {
+      "quote": "Sheboygan Senior Center has been a blessing for our family. Their compassionate and professional staff have made a significant difference in my mother's quality of life. We couldn't be happier with the care she receives.",
+      "name": "John Anderson"
+    },
+    {
+      "quote": "I am incredibly grateful for the personalized attention my father receives from Sheboygan Senior Center. Their team is always responsive and attentive to his needs, providing us with peace of mind knowing he's in good hands.",
+      "name": "Emily Roberts"
+    },
+    {
+      "quote": "The staff at Sheboygan Senior Center goes above and beyond to ensure my aunt feels comfortable and supported. Their dedication and kindness have truly made a positive impact on her overall well-being.",
+      "name": "Michael Thompson"
+    }
+  ],
+  "pillars": [
+    {
+      "slug": "community",
+      "label": "Community",
+      "blurb": "We believe in building a strong, connected community, where residents truly thrive and feel at home.",
+      "image": "/images/Sheboygan-Senior-Community_Community_1.jpg"
+    },
+    {
+      "slug": "employment",
+      "label": "Employment",
+      "blurb": "Cultivating a supportive, uplifting workplace, where our team members flourish and grow.",
+      "image": "/images/Sheboygan-Senior-Community_Employment_1.jpg"
+    },
+    {
+      "slug": "environment",
+      "label": "Environment",
+      "blurb": "We're dedicated to a vibrant, eco-friendly campus, creating a healthy and beautiful space for all.",
+      "image": "/images/Sheboygan-Senior-Community_Enviroment_1.jpg"
+    },
+    {
+      "slug": "community-outreach",
+      "label": "Community Outreach",
+      "blurb": "Giving back isn't something we do, it's who we are. We proudly support a variety of charitable causes and nonprofit partners.",
+      "image": "/images/Sheboygan-Senior-Community_wildflowers-and-pond.jpg"
+    }
+  ],
+  "services": [
+    {
+      "slug": "assisted-living",
+      "label": "Assisted Living",
+      "household": "Willow Lane",
+      "blurb": "Willow Lane is our community-based residential facility (CBRF) designed to support seniors in living with dignity, safety, and joy.",
+      "image": "/images/Sheboygan-Senior-Community-_assisted-living.jpg"
+    },
+    {
+      "slug": "short-term-rehab",
+      "label": "Short-Term Rehab",
+      "household": "Hickory Hills",
+      "blurb": "Sheboygan Senior Community provides highly trained physical, occupational, and speech therapists who work closely with each resident to set and exceed personalized rehabilitation goals, whether inpatient or outpatient.",
+      "image": "/images/Sheboygan-Senior-Community-_services_short-term-rehab.jpg"
+    },
+    {
+      "slug": "skilled-nursing",
+      "label": "Skilled Nursing",
+      "household": "Maple Creek & Oak Drive",
+      "blurb": "Maple Creek and Oak Drive are our mirrored skilled nursing households, thoughtfully designed for seniors who require 24-hour professional care.",
+      "image": "/images/Sheboygan-Senior-Community-_long-term-nursing_room_.jpg"
+    }
+  ]
+}

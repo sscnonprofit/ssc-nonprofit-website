@@ -1,0 +1,122 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-inter), ui-sans-serif, sans-serif;
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-3xl: calc(var(--radius) * 3);
+}
+
+:root {
+  color-scheme: light;
+
+  /* Warm paper white */
+  --background: oklch(0.986 0.003 60);
+  --foreground: oklch(0.24 0.012 20);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.24 0.012 20);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.012 20);
+
+  /* SSC wine — #7c1231 */
+  --primary: oklch(0.355 0.128 12.5);
+  --primary-foreground: oklch(0.986 0.003 60);
+
+  /* Warm gold from the SSC mark */
+  --accent: oklch(0.7 0.108 62);
+  --accent-foreground: oklch(0.24 0.012 20);
+
+  --secondary: oklch(0.951 0.008 60);
+  --secondary-foreground: oklch(0.29 0.012 20);
+  --muted: oklch(0.951 0.008 60);
+  --muted-foreground: oklch(0.475 0.014 30);
+
+  --destructive: oklch(0.51 0.19 27);
+  --border: oklch(0.892 0.009 60);
+  --input: oklch(0.892 0.009 60);
+  --ring: oklch(0.355 0.128 12.5);
+
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+}
+
+@layer components {
+  /* Signature element: the four-band rule drawn from the SSC logo mark. */
+  .ssc-rule {
+    display: flex;
+    height: 0.3125rem;
+    width: 4.5rem;
+    overflow: hidden;
+    border-radius: 9999px;
+  }
+  .ssc-rule > span {
+    flex: 1 1 0%;
+  }
+
+  .eyebrow {
+    @apply font-display text-xs font-semibold uppercase tracking-[0.18em] text-primary;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

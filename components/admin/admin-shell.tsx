@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -110,17 +111,21 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-56">
-              <DropdownMenuLabel className="flex items-center gap-2 font-normal">
-                <span className="text-sm text-muted-foreground">Signed in as</span>
-                <Badge variant={role === "admin" ? "default" : "secondary"} className="capitalize">
-                  {role}
-                </Badge>
-              </DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel className="flex items-center gap-2 font-normal">
+                  <span className="text-sm text-muted-foreground">Signed in as</span>
+                  <Badge variant={role === "admin" ? "default" : "secondary"} className="capitalize">
+                    {role}
+                  </Badge>
+                </DropdownMenuLabel>
+              </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
-                <LogOutIcon />
-                Sign out
-              </DropdownMenuItem>
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+                  <LogOutIcon />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useId, useState } from "react"
 import {
   DndContext,
   KeyboardSensor,
@@ -47,6 +47,8 @@ export function ArrayField({
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   )
+
+  const dndId = useId()
 
   function commit(next: Row[]) {
     setRows(next)
@@ -95,7 +97,7 @@ export function ArrayField({
           No items yet. Click Add to create one.
         </p>
       ) : (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={rows.map((r) => r.id)} strategy={verticalListSortingStrategy}>
             <div className="space-y-2">
               {rows.map((row, index) =>

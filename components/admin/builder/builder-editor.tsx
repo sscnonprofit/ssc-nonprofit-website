@@ -192,7 +192,7 @@ export function BuilderEditor({
   return (
     <div className="flex h-dvh flex-col bg-background text-foreground">
       <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border px-3">
-        <Button variant="ghost" size="icon" className="size-8" render={<Link href="/admin" />}>
+        <Button variant="ghost" size="icon" className="size-8" nativeButton={false} render={<Link href="/admin" />}>
           <ArrowLeftIcon className="size-4" />
           <span className="sr-only">Back to pages</span>
         </Button>

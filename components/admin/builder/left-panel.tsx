@@ -159,7 +159,7 @@ function LayersPanel({ builder, onAdd }: { builder: Builder; onAdd: () => void }
   return (
     <div className="flex flex-col gap-3 p-3">
       <p className="px-1 text-xs text-muted-foreground">Drag to reorder. Top of the list is the top of the page.</p>
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+      <DndContext id="builder-layers" sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
         <SortableContext items={builder.doc.sections.map((s) => s.id)} strategy={verticalListSortingStrategy}>
           <ul className="flex flex-col gap-1">
             {builder.doc.sections.map((section) => (

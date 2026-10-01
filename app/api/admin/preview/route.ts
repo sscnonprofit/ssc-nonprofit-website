@@ -22,5 +22,6 @@ export async function GET(request: NextRequest) {
     draft.enable()
   }
 
-  return NextResponse.redirect(new URL(path, request.nextUrl.origin))
+  // Relative Location: behind proxies nextUrl.origin can report the wrong scheme/host.
+  return new NextResponse(null, { status: 307, headers: { Location: path } })
 }

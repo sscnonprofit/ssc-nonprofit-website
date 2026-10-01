@@ -3,8 +3,13 @@
 @import 'shadcn/tailwind.css';
 
 @theme inline {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-bricolage), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-sans: var(--ssc-font-body);
+  --font-display: var(--ssc-font-heading);
+
+  --color-brand-1: var(--brand-1);
+  --color-brand-2: var(--brand-2);
+  --color-brand-3: var(--brand-3);
+  --color-brand-4: var(--brand-4);
 
   --color-ring: var(--ring);
   --color-input: var(--input);
@@ -64,6 +69,33 @@
   --ring: oklch(0.355 0.128 12.5);
 
   --radius: 0.5rem;
+
+  /* SSC four-band brand rule */
+  --brand-1: var(--primary);
+  --brand-2: var(--accent);
+  --brand-3: oklch(0.58 0.11 140);
+  --brand-4: oklch(0.42 0.06 150);
+
+  /* Design Studio hooks. The theme <style> on the public site overrides these. */
+  --ssc-font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --ssc-font-heading: var(--font-bricolage), var(--font-inter), ui-sans-serif, sans-serif;
+  --ssc-base-size: 1.0625rem;
+  --ssc-line-height: 1.6;
+  --ssc-heading-weight: 700;
+  --ssc-heading-tracking: -0.02em;
+  --ssc-h1: 3.5rem;
+  --ssc-h2: 2.25rem;
+  --ssc-h3: 1.375rem;
+  --ssc-eyebrow: 0.75rem;
+  --ssc-section-y: 5.5rem;
+  --ssc-card-shadow: 0 1px 2px rgba(30, 10, 16, 0.04);
+  --ssc-card-shadow-hover: 0 20px 40px -24px rgba(30, 10, 16, 0.22);
+  --ssc-btn-radius: 9999px;
+  --ssc-btn-transform: none;
+  --ssc-btn-tracking: 0;
+  --ssc-btn-bg: var(--primary);
+  --ssc-btn-fg: var(--primary-foreground);
+  --ssc-btn-border: var(--primary);
 }
 
 @layer base {
@@ -75,15 +107,16 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-size: 1.0625rem;
-    line-height: 1.6;
+    font-size: var(--ssc-base-size);
+    line-height: var(--ssc-line-height);
   }
   h1,
   h2,
   h3,
   h4 {
     @apply font-display;
-    letter-spacing: -0.02em;
+    font-weight: var(--ssc-heading-weight);
+    letter-spacing: var(--ssc-heading-tracking);
     line-height: 1.1;
   }
   ::selection {
@@ -114,11 +147,133 @@
      plus a soft, tinted shadow rather than a flat outline, for a more
      refined, corporate feel. */
   .ssc-card {
-    @apply rounded-2xl border border-border/70 bg-card shadow-[0_1px_2px_rgba(30,10,16,0.04)] transition-all duration-300;
+    @apply rounded-2xl border border-border/70 bg-card transition-all duration-300;
+    box-shadow: var(--ssc-card-shadow);
   }
   .ssc-card:hover {
-    @apply border-primary/25 shadow-[0_20px_40px_-24px_rgba(30,10,16,0.22)];
+    @apply border-primary/25;
+    box-shadow: var(--ssc-card-shadow-hover);
   }
+
+  /* Theme-driven buttons used by builder blocks and the header CTA. */
+  .ssc-btn,
+  .ssc-btn-secondary,
+  .ssc-btn-accent {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-display text-sm font-semibold transition-all duration-200;
+    border-radius: var(--ssc-btn-radius);
+    text-transform: var(--ssc-btn-transform);
+    letter-spacing: var(--ssc-btn-tracking);
+    border: 1.5px solid var(--ssc-btn-border);
+    background: var(--ssc-btn-bg);
+    color: var(--ssc-btn-fg);
+  }
+  .ssc-btn:hover,
+  .ssc-btn-secondary:hover,
+  .ssc-btn-accent:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px -12px color-mix(in oklab, var(--primary) 60%, transparent);
+  }
+  .ssc-btn-secondary {
+    background: transparent;
+    color: var(--foreground);
+    border-color: color-mix(in oklab, var(--foreground) 25%, transparent);
+  }
+  .ssc-btn-accent {
+    background: var(--accent);
+    color: var(--accent-foreground);
+    border-color: var(--accent);
+  }
+
+  /* Builder typography scale. */
+  .ssc-h1 {
+    font-size: clamp(2.25rem, 1.4rem + 3.5vw, var(--ssc-h1));
+    line-height: 1.05;
+  }
+  .ssc-h2 {
+    font-size: clamp(1.75rem, 1.2rem + 2vw, var(--ssc-h2));
+    line-height: 1.12;
+  }
+  .ssc-h3 {
+    font-size: var(--ssc-h3);
+    line-height: 1.25;
+  }
+  .ssc-eyebrow {
+    @apply font-display font-semibold uppercase tracking-[0.18em] text-primary;
+    font-size: var(--ssc-eyebrow);
+  }
+  .ssc-prose p + p,
+  .ssc-prose p + ul,
+  .ssc-prose ul + p,
+  .ssc-prose p + ol {
+    margin-top: 1em;
+  }
+  .ssc-prose ul {
+    list-style: disc;
+    padding-left: 1.25em;
+  }
+  .ssc-prose ol {
+    list-style: decimal;
+    padding-left: 1.25em;
+  }
+  .ssc-prose a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .ssc-section-light .ssc-prose a,
+  .ssc-section-light .ssc-eyebrow {
+    color: var(--accent);
+  }
+
+  /* Text on dark section backgrounds: remap the tokens nested content reads. */
+  .ssc-section-light {
+    --foreground: var(--primary-foreground);
+    --muted-foreground: color-mix(in oklab, var(--primary-foreground) 78%, transparent);
+    --border: color-mix(in oklab, var(--primary-foreground) 22%, transparent);
+    --card: color-mix(in oklab, var(--primary-foreground) 8%, transparent);
+    --ssc-btn-bg: var(--accent);
+    --ssc-btn-fg: var(--accent-foreground);
+    --ssc-btn-border: var(--accent);
+    color: var(--foreground);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ssc-anim-fade {
+      animation: ssc-fade 0.7s ease-out both;
+    }
+    .ssc-anim-slide-up {
+      animation: ssc-slide-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    @supports (animation-timeline: view()) {
+      .ssc-anim-fade,
+      .ssc-anim-slide-up {
+        animation-timeline: view();
+        animation-range: entry 0% entry 40%;
+      }
+    }
+  }
+}
+
+@keyframes ssc-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes ssc-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@layer components {
 
   /* Frosted-glass panel: header, dropdowns, and floating UI. */
   .ssc-glass {

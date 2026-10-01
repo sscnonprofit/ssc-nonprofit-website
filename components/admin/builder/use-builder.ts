@@ -1,0 +1,135 @@
+"use client"
+
+import { useCallback, useReducer } from "react"
+
+import { createSection } from "@/lib/builder/registry"
+import { newId, type BuilderDoc, type Section } from "@/lib/builder/schema"
+
+type State = { doc: BuilderDoc; past: BuilderDoc[]; future: BuilderDoc[]; selectedId: string | null }
+
+type Action =
+  | { type: "commit"; doc: BuilderDoc; select?: string | null }
+  | { type: "undo" }
+  | { type: "redo" }
+  | { type: "select"; id: string | null }
+  | { type: "reset"; doc: BuilderDoc }
+
+const HISTORY_LIMIT = 80
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "commit":
+      return {
+        doc: action.doc,
+        past: [...state.past, state.doc].slice(-HISTORY_LIMIT),
+        future: [],
+        selectedId: action.select === undefined ? state.selectedId : action.select,
+      }
+    case "undo": {
+      const prev = state.past.at(-1)
+      if (!prev) return state
+      return { ...state, doc: prev, past: state.past.slice(0, -1), future: [state.doc, ...state.future] }
+    }
+    case "redo": {
+      const [next, ...rest] = state.future
+      if (!next) return state
+      return { ...state, doc: next, past: [...state.past, state.doc], future: rest }
+    }
+    case "select":
+      return { ...state, selectedId: action.id }
+    case "reset":
+      return { doc: action.doc, past: [], future: [], selectedId: null }
+  }
+}
+
+/** Immutably sets `a.b.0.c` style paths inside section props. */
+export function setPath(target: Record<string, unknown>, path: string, value: unknown): Record<string, unknown> {
+  const [head, ...rest] = path.split(".")
+  const clone: Record<string, unknown> | unknown[] = Array.isArray(target) ? [...target] : { ...target }
+  const key = Array.isArray(clone) ? Number(head) : head
+  const current = (clone as Record<string | number, unknown>)[key]
+  ;(clone as Record<string | number, unknown>)[key] = rest.length
+    ? setPath((current ?? (/^\d+$/.test(rest[0]) ? [] : {})) as Record<string, unknown>, rest.join("."), value)
+    : value
+  return clone as Record<string, unknown>
+}
+
+export function useBuilder(initial: BuilderDoc) {
+  const [state, dispatch] = useReducer(reducer, { doc: initial, past: [], future: [], selectedId: null })
+  const { doc } = state
+
+  const commit = useCallback((next: BuilderDoc, select?: string | null) => dispatch({ type: "commit", doc: next, select }), [])
+
+  const updateSections = useCallback(
+    (fn: (sections: Section[]) => Section[], select?: string | null) => commit({ ...doc, sections: fn(doc.sections) }, select),
+    [commit, doc],
+  )
+
+  const updateSection = useCallback(
+    (id: string, fn: (section: Section) => Section) => updateSections((list) => list.map((s) => (s.id === id ? fn(s) : s))),
+    [updateSections],
+  )
+
+  const actions = {
+    commit,
+    undo: () => dispatch({ type: "undo" }),
+    redo: () => dispatch({ type: "redo" }),
+    select: (id: string | null) => dispatch({ type: "select", id }),
+    reset: (next: BuilderDoc) => dispatch({ type: "reset", doc: next }),
+    setMeta: (patch: Partial<Pick<BuilderDoc, "title" | "seo">>) => commit({ ...doc, ...patch }),
+    updateSection,
+    setText: (id: string, path: string, value: string) =>
+      updateSection(id, (s) => ({ ...s, props: setPath(s.props, path, value) })),
+    insert: (type: string, index?: number) => {
+      const section = createSection(type)
+      updateSections((list) => {
+        const at = index ?? list.length
+        return [...list.slice(0, at), section, ...list.slice(at)]
+      }, section.id)
+      return section.id
+    },
+    insertSection: (section: Section, index?: number) =>
+      updateSections((list) => {
+        const at = index ?? list.length
+        return [...list.slice(0, at), { ...section, id: newId() }, ...list.slice(at)]
+      }),
+    duplicate: (id: string) => {
+      const index = doc.sections.findIndex((s) => s.id === id)
+      if (index < 0) return
+      const copy = { ...structuredClone(doc.sections[index]), id: newId() }
+      updateSections((list) => [...list.slice(0, index + 1), copy, ...list.slice(index + 1)], copy.id)
+    },
+    remove: (id: string) => updateSections((list) => list.filter((s) => s.id !== id), null),
+    move: (id: string, delta: number) =>
+      updateSections((list) => {
+        const from = list.findIndex((s) => s.id === id)
+        const to = from + delta
+        if (from < 0 || to < 0 || to >= list.length) return list
+        const next = [...list]
+        const [item] = next.splice(from, 1)
+        next.splice(to, 0, item)
+        return next
+      }),
+    reorder: (fromId: string, toId: string) =>
+      updateSections((list) => {
+        const from = list.findIndex((s) => s.id === fromId)
+        const to = list.findIndex((s) => s.id === toId)
+        if (from < 0 || to < 0) return list
+        const next = [...list]
+        const [item] = next.splice(from, 1)
+        next.splice(to, 0, item)
+        return next
+      }),
+  }
+
+  return {
+    doc,
+    selectedId: state.selectedId,
+    selected: doc.sections.find((s) => s.id === state.selectedId) ?? null,
+    canUndo: state.past.length > 0,
+    canRedo: state.future.length > 0,
+    ...actions,
+  }
+}
+
+export type Builder = ReturnType<typeof useBuilder>

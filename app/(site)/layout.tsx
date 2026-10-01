@@ -1,17 +1,34 @@
+import Link from "next/link"
+import { draftMode } from "next/headers"
+
 import siteFallback from "@/content/site.json"
+import { SiteAnnouncement } from "@/components/site-announcement"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { getContent } from "@/lib/cms/content"
+import { themeToCss } from "@/lib/cms/theme"
+import { getTheme } from "@/lib/cms/theme-store"
+
+/** Keeps admin-authored CSS from closing the <style> element. */
+function escapeStyle(css: string) {
+  return css.replace(/</g, "\\3c ")
+}
 
 export default async function SiteLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const site = await getContent("site", siteFallback)
+  const { isEnabled: isDraft } = await draftMode()
+  const [site, theme] = await Promise.all([getContent("site", siteFallback), getTheme({ draft: isDraft })])
 
   return (
     <>
+      <style
+        id="ssc-theme"
+        // Generated from sanitized theme values; custom CSS is validated on save.
+        dangerouslySetInnerHTML={{ __html: escapeStyle(themeToCss(theme) + theme.customCss) }}
+      />
       <script
         type="application/ld+json"
         // Static, non-user-controlled organization data for search engines.
@@ -42,9 +59,18 @@ export default async function SiteLayout({
       >
         Skip to content
       </a>
-      <SiteHeader site={site} />
+      {isDraft && (
+        <div className="flex items-center justify-center gap-4 bg-foreground px-4 py-2 text-sm text-background">
+          <span className="font-medium">Draft preview — you are seeing unpublished changes.</span>
+          <Link href="/api/admin/preview?exit=1" className="underline underline-offset-4" prefetch={false}>
+            Exit preview
+          </Link>
+        </div>
+      )}
+      <SiteAnnouncement announcement={theme.announcement} />
+      <SiteHeader site={site} header={theme.header} />
       <main id="main">{children}</main>
-      <SiteFooter site={site} />
+      <SiteFooter site={site} theme={theme} />
     </>
   )
 }

@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils"
 export function BrandRule({ className }: { className?: string }) {
   return (
     <span className={cn("ssc-rule", className)} aria-hidden="true">
-      <span className="bg-primary" />
-      <span className="bg-accent" />
-      <span className="bg-[oklch(0.58_0.11_140)]" />
-      <span className="bg-[oklch(0.42_0.06_150)]" />
+      <span className="bg-brand-1" />
+      <span className="bg-brand-2" />
+      <span className="bg-brand-3" />
+      <span className="bg-brand-4" />
     </span>
   )
 }

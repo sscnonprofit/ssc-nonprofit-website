@@ -3,6 +3,8 @@ import Link from "next/link"
 import { MapPin, Phone } from "lucide-react"
 
 import type siteFallback from "@/content/site.json"
+import { DEFAULT_THEME, type ThemeSettings } from "@/lib/cms/theme"
+import { cn } from "@/lib/utils"
 import { BrandRule } from "@/components/brand-rule"
 import { NewsletterForm } from "@/components/newsletter-form"
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/social-icons"
@@ -13,14 +15,46 @@ const socialIcons = {
   YouTube: YoutubeIcon,
 } as const
 
-export function SiteFooter({ site }: { site: typeof siteFallback }) {
+/**
+ * The footer is written against the primary/accent tokens. Each background
+ * option remaps those tokens locally so every nested element follows along.
+ */
+function footerTokens(theme: ThemeSettings): React.CSSProperties {
+  const c = theme.colors
+  if (theme.footer.background === "dark") {
+    return {
+      "--primary": c.foreground,
+      "--primary-foreground": c.background,
+    } as React.CSSProperties
+  }
+  if (theme.footer.background === "light") {
+    return {
+      "--primary": c.secondary,
+      "--primary-foreground": c.secondaryForeground,
+      "--accent": c.primary,
+      "--accent-foreground": c.primaryForeground,
+    } as React.CSSProperties
+  }
+  return {}
+}
+
+export function SiteFooter({ site, theme = DEFAULT_THEME }: { site: typeof siteFallback; theme?: ThemeSettings }) {
+  const layout = theme.footer.layout
+  const centered = layout === "centered"
+  const minimal = layout === "minimal"
+
   return (
-    <footer className="mt-24 bg-primary text-primary-foreground">
+    <footer className="mt-24 bg-primary text-primary-foreground" style={footerTokens(theme)}>
       <BrandRule className="h-1.5 w-full rounded-none" />
 
       <div className="mx-auto max-w-7xl px-6 py-14">
-        <div className="flex flex-col gap-12 lg:flex-row lg:justify-between">
-          <div className="max-w-sm">
+        <div
+          className={cn(
+            "flex flex-col gap-12",
+            centered ? "items-center text-center" : "lg:flex-row lg:justify-between",
+          )}
+        >
+          <div className={cn("max-w-sm", centered && "flex flex-col items-center")}>
             <div className="inline-flex rounded-lg bg-background px-4 py-3">
               <Image
                 src="/images/ssc-logo.png"
@@ -52,7 +86,7 @@ export function SiteFooter({ site }: { site: typeof siteFallback }) {
               </a>
             </address>
 
-            <ul className="mt-6 flex gap-3">
+            <ul className={cn("mt-6 flex gap-3", centered && "justify-center")}>
               {site.social.map((s) => {
                 const Icon = socialIcons[s.label as keyof typeof socialIcons]
                 return (
@@ -72,7 +106,8 @@ export function SiteFooter({ site }: { site: typeof siteFallback }) {
             </ul>
           </div>
 
-          <div className="grid grid-cols-2 gap-10 sm:grid-cols-4 lg:gap-14">
+          {!minimal && (
+          <div className={cn("grid grid-cols-2 gap-10 sm:grid-cols-4 lg:gap-14", centered && "text-left")}>
             {site.footer.map((col) => (
               <nav key={col.heading} aria-label={col.heading}>
                 <h2 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-accent">
@@ -104,8 +139,10 @@ export function SiteFooter({ site }: { site: typeof siteFallback }) {
               </nav>
             ))}
           </div>
+          )}
         </div>
 
+        {!minimal && (
         <div className="mt-12 flex flex-col gap-6 border-t border-primary-foreground/20 pt-10 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-md">
             <h2 className="font-display text-lg font-semibold">Stay in the loop</h2>
@@ -117,6 +154,7 @@ export function SiteFooter({ site }: { site: typeof siteFallback }) {
             <NewsletterForm onDark />
           </div>
         </div>
+        )}
 
         <div className="mt-10 flex flex-col gap-2 border-t border-primary-foreground/20 pt-6 text-xs text-primary-foreground/70 sm:flex-row sm:items-center sm:justify-between">
           <p>Copyright &copy; {new Date().getFullYear()} Sheboygan Senior Community. All rights reserved.</p>

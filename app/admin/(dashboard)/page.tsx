@@ -1,14 +1,16 @@
-import { ExternalLinkIcon, FileTextIcon, PencilIcon, SettingsIcon } from "lucide-react"
+import { ExternalLinkIcon, FileTextIcon, LayoutTemplateIcon, PencilIcon, SettingsIcon } from "lucide-react"
 import Link from "next/link"
 
+import { CreatePageDialog } from "@/components/admin/builder/create-page-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { listBuilderPages } from "@/lib/builder/pages"
 import { listPageRows } from "@/lib/cms/pages"
 import { cmsRegistry } from "@/lib/cms/registry"
 
 export default async function AdminPagesDashboard() {
-  const rows = await listPageRows()
+  const [rows, builderPages] = await Promise.all([listPageRows(), listBuilderPages()])
   const bySlug = new Map(rows.map((row) => [row.slug, row]))
 
   const pages = cmsRegistry.filter((doc) => doc.group === "page")
@@ -24,12 +26,67 @@ export default async function AdminPagesDashboard() {
             Edit site content, save drafts, and publish changes. Publishing requires an admin.
           </p>
         </div>
-        {draftCount > 0 && (
-          <Badge variant="secondary" className="gap-1.5 py-1.5">
-            {draftCount} unpublished draft{draftCount === 1 ? "" : "s"}
-          </Badge>
-        )}
+        <div className="flex items-center gap-3">
+          {draftCount > 0 && (
+            <Badge variant="secondary" className="gap-1.5 py-1.5">
+              {draftCount} unpublished draft{draftCount === 1 ? "" : "s"}
+            </Badge>
+          )}
+          <CreatePageDialog />
+        </div>
       </div>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+          <LayoutTemplateIcon className="size-3.5 text-muted-foreground" />
+          Builder pages ({builderPages.length})
+        </h2>
+        {builderPages.length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center gap-2 py-10 text-center">
+              <LayoutTemplateIcon className="size-6 text-muted-foreground" />
+              <p className="text-sm font-medium text-foreground">No custom pages yet</p>
+              <p className="max-w-sm text-sm text-muted-foreground">
+                Create a page and design it visually with drag-and-drop sections.
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="overflow-hidden py-0">
+            <ul className="divide-y divide-border">
+              {builderPages.map((page) => (
+                <li key={page.slug} className="flex flex-wrap items-center gap-3 px-4 py-3">
+                  <div className="flex min-w-0 flex-1 flex-col">
+                    <span className="truncate text-sm font-medium text-foreground">{page.title}</span>
+                    <span className="truncate font-mono text-xs text-muted-foreground">
+                      /{page.slug} · {page.sectionCount} section{page.sectionCount === 1 ? "" : "s"} · updated{" "}
+                      {new Date(page.updatedAt).toLocaleDateString(undefined, { dateStyle: "medium" })}
+                    </span>
+                  </div>
+                  <Badge variant={page.status === "published" && !page.hasDraft ? "default" : "secondary"}>
+                    {page.status !== "published" ? "Draft" : page.hasDraft ? "Unpublished changes" : "Live"}
+                  </Badge>
+                  <Button render={<Link href={`/admin/builder/${page.slug}`} />} nativeButton={false} size="sm">
+                    <PencilIcon data-icon="inline-start" />
+                    Open builder
+                  </Button>
+                  {page.status === "published" && (
+                    <Button
+                      render={<Link href={`/${page.slug}`} target="_blank" rel="noopener noreferrer" />}
+                      nativeButton={false}
+                      size="sm"
+                      variant="ghost"
+                    >
+                      <ExternalLinkIcon data-icon="inline-start" />
+                      View
+                    </Button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </Card>
+        )}
+      </section>
 
       <section className="flex flex-col gap-3">
         <h2 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">

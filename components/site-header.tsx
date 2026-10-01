@@ -6,14 +6,24 @@ import Link from "next/link"
 import { ChevronDown, Menu, Phone, X } from "lucide-react"
 
 import type siteFallback from "@/content/site.json"
+import { DEFAULT_THEME, type ThemeSettings } from "@/lib/cms/theme"
 import { cn } from "@/lib/utils"
 import { BrandRule } from "@/components/brand-rule"
 
 type NavChild = { label: string; href: string; external?: boolean }
 type NavItem = { label: string; href?: string; children?: NavChild[] }
 
-export function SiteHeader({ site }: { site: typeof siteFallback }) {
+export function SiteHeader({
+  site,
+  header = DEFAULT_THEME.header,
+}: {
+  site: typeof siteFallback
+  header?: ThemeSettings["header"]
+}) {
   const nav = site.nav as NavItem[]
+  const minimal = header.style === "minimal"
+  const transparent = header.style === "transparent"
+  const showUtilityBar = header.showUtilityBar && !minimal
   const [open, setOpen] = useState(false)
   const [expanded, setExpanded] = useState<string | null>(null)
   /** Label of the open desktop dropdown, driven by both hover and click/keyboard. */
@@ -31,10 +41,15 @@ export function SiteHeader({ site }: { site: typeof siteFallback }) {
   return (
     <header
       className={cn(
-        "ssc-header-glass sticky top-0 z-40 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
+        "ssc-header-glass z-40 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
+        header.sticky ? "sticky top-0" : "relative",
         scrolled
           ? "border-border/80 bg-background/85 shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_12px_32px_-16px_rgba(30,10,16,0.18)]"
-          : "border-border/40 bg-background/55 shadow-none",
+          : transparent
+            ? "border-transparent bg-background/0 shadow-none"
+            : minimal
+              ? "border-border/60 bg-background shadow-none"
+              : "border-border/40 bg-background/55 shadow-none",
       )}
       onKeyDown={(e) => {
         if (e.key === "Escape") setMenu(null)
@@ -45,7 +60,12 @@ export function SiteHeader({ site }: { site: typeof siteFallback }) {
       }}
     >
       {/* Utility bar */}
-      <div className="hidden bg-gradient-to-r from-primary via-primary to-[oklch(0.315_0.128_12.5)] text-primary-foreground md:block">
+      <div
+        className={cn(
+          "hidden bg-gradient-to-r from-primary via-primary to-[color-mix(in_oklab,var(--primary)_70%,black)] text-primary-foreground",
+          showUtilityBar && "md:block",
+        )}
+      >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-2 text-sm">
           <a
             href={site.phoneHref}
@@ -83,7 +103,8 @@ export function SiteHeader({ site }: { site: typeof siteFallback }) {
             alt={`${site.name} logo`}
             width={188}
             height={48}
-            className="h-10 w-auto"
+            className="w-auto"
+            style={{ height: header.logoHeight }}
             priority
           />
         </Link>
@@ -153,10 +174,7 @@ export function SiteHeader({ site }: { site: typeof siteFallback }) {
         </nav>
 
         <div className="hidden shrink-0 lg:block">
-          <Link
-            href="/contact"
-            className="rounded-full bg-primary px-5 py-2.5 font-display text-sm font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-md hover:shadow-primary/25"
-          >
+          <Link href="/contact" className="ssc-btn px-5 py-2.5">
             Schedule A Visit
           </Link>
         </div>
@@ -173,7 +191,7 @@ export function SiteHeader({ site }: { site: typeof siteFallback }) {
         </button>
       </div>
 
-      <BrandRule className="h-1 w-full rounded-none" />
+      {!minimal && <BrandRule className="h-1 w-full rounded-none" />}
 
       {/* Mobile nav */}
       <div

@@ -1,22 +1,11 @@
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata, Viewport } from "next"
-import { Inter, Bricolage_Grotesque } from "next/font/google"
 
 import "./globals.css"
 import siteFallback from "@/content/site.json"
 import { getContent } from "@/lib/cms/content"
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-})
-
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--font-bricolage",
-  display: "swap",
-})
+import { fontVariables } from "@/lib/cms/theme-fonts"
+import { getTheme } from "@/lib/cms/theme-store"
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getContent("site", siteFallback)
@@ -46,12 +35,15 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export const viewport: Viewport = {
-  colorScheme: "light",
-  themeColor: "#7c1231",
-  width: "device-width",
-  initialScale: 1,
-  userScalable: true,
+export async function generateViewport(): Promise<Viewport> {
+  const theme = await getTheme()
+  return {
+    colorScheme: "light",
+    themeColor: theme.meta.themeColor,
+    width: "device-width",
+    initialScale: 1,
+    userScalable: true,
+  }
 }
 
 export default function RootLayout({
@@ -60,7 +52,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`bg-background ${inter.variable} ${bricolage.variable}`}>
+    <html lang="en" className={`bg-background ${fontVariables}`}>
       <body className="antialiased">
         {children}
         {process.env.NODE_ENV === "production" && <Analytics />}

@@ -1,6 +1,6 @@
 "use client"
 
-import { ExternalLinkIcon, ImagesIcon, LayoutDashboardIcon, LogOutIcon, PaletteIcon, UsersIcon } from "lucide-react"
+import { ExternalLinkIcon, ImagesIcon, LayoutDashboardIcon, LogOutIcon, MenuIcon, PaletteIcon, UsersIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 
@@ -45,6 +45,7 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
     { href: "/admin", label: "Pages", icon: LayoutDashboardIcon },
     { href: "/admin/design", label: "Design", icon: PaletteIcon },
     { href: "/admin/media", label: "Media", icon: ImagesIcon },
+    { href: "/admin/navigation", label: "Navigation", icon: MenuIcon },
     ...(role === "admin" ? [{ href: "/admin/users", label: "Users", icon: UsersIcon }] : []),
   ]
 

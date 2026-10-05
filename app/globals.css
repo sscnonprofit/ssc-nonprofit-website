@@ -90,7 +90,7 @@
   --ssc-section-y: 5.5rem;
   --ssc-card-shadow: 0 1px 2px rgba(30, 10, 16, 0.04);
   --ssc-card-shadow-hover: 0 20px 40px -24px rgba(30, 10, 16, 0.22);
-  --ssc-btn-radius: 9999px;
+  --ssc-btn-radius: 0px;
   --ssc-btn-transform: none;
   --ssc-btn-tracking: 0;
   --ssc-btn-bg: var(--primary);
@@ -165,27 +165,59 @@
   .ssc-btn,
   .ssc-btn-secondary,
   .ssc-btn-accent {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-display text-sm font-semibold transition-all duration-200;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-display text-sm font-semibold;
     border-radius: var(--ssc-btn-radius);
     text-transform: var(--ssc-btn-transform);
     letter-spacing: var(--ssc-btn-tracking);
-    border: 1.5px solid var(--ssc-btn-border);
+    border: 1px solid var(--ssc-btn-border);
     background: var(--ssc-btn-bg);
     color: var(--ssc-btn-fg);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
+      inset 0 -1px 0 0 rgba(0, 0, 0, 0.12),
+      0 1px 2px rgba(30, 10, 16, 0.12);
+    transition:
+      transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 200ms ease,
+      background-color 200ms ease,
+      filter 200ms ease;
   }
   .ssc-btn:hover,
   .ssc-btn-secondary:hover,
   .ssc-btn-accent:hover {
     transform: translateY(-1px);
-    box-shadow: 0 10px 24px -12px color-mix(in oklab, var(--primary) 60%, transparent);
+    filter: brightness(1.06);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
+      inset 0 -1px 0 0 rgba(0, 0, 0, 0.12),
+      0 12px 26px -14px color-mix(in oklab, var(--ssc-btn-bg) 75%, black);
+  }
+  .ssc-btn:active,
+  .ssc-btn-secondary:active,
+  .ssc-btn-accent:active {
+    transform: translateY(0);
+    filter: brightness(0.97);
+  }
+  .ssc-btn:focus-visible,
+  .ssc-btn-secondary:focus-visible,
+  .ssc-btn-accent:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
   .ssc-btn-secondary {
-    background: transparent;
+    --ssc-btn-bg: transparent;
     color: var(--foreground);
-    border-color: color-mix(in oklab, var(--foreground) 25%, transparent);
+    border-color: color-mix(in oklab, var(--foreground) 28%, transparent);
+    box-shadow: none;
+  }
+  .ssc-btn-secondary:hover {
+    background: color-mix(in oklab, var(--foreground) 6%, transparent);
+    border-color: color-mix(in oklab, var(--foreground) 45%, transparent);
+    box-shadow: none;
+    filter: none;
   }
   .ssc-btn-accent {
-    background: var(--accent);
+    --ssc-btn-bg: var(--accent);
     color: var(--accent-foreground);
     border-color: var(--accent);
   }

@@ -29,7 +29,7 @@ export function CtaBand({
         <div className="relative flex shrink-0 flex-col gap-3 sm:flex-row">
           <Link
             href={primary.href}
-            className="group inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3.5 font-display font-semibold text-accent-foreground shadow-lg shadow-black/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/25"
+            className="group inline-flex items-center justify-center gap-2 rounded-none bg-accent px-6 py-3.5 font-display font-semibold text-accent-foreground shadow-lg shadow-black/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/25"
           >
             {primary.label}
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
@@ -37,7 +37,7 @@ export function CtaBand({
           {secondary ? (
             <Link
               href={secondary.href}
-              className="inline-flex items-center justify-center rounded-full border border-primary-foreground/35 px-6 py-3.5 font-display font-semibold backdrop-blur-sm transition-colors hover:bg-primary-foreground/10"
+              className="inline-flex items-center justify-center rounded-none border border-primary-foreground/35 px-6 py-3.5 font-display font-semibold backdrop-blur-sm transition-colors hover:bg-primary-foreground/10"
             >
               {secondary.label}
             </Link>

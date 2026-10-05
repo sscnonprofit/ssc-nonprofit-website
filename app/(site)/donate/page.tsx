@@ -85,7 +85,7 @@ export default async function DonatePage() {
               href={site.donorForm}
               target="_blank"
               rel="noreferrer"
-              className="group mt-auto inline-flex w-fit items-center gap-2 rounded-full border border-primary px-5 py-3 font-display text-sm font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
+              className="group mt-auto inline-flex w-fit items-center gap-2 rounded-none border border-primary px-5 py-3 font-display text-sm font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
             >
               <FileText className="size-4" aria-hidden="true" />
               Download Form
@@ -101,7 +101,7 @@ export default async function DonatePage() {
             </p>
             <a
               href={site.phoneHref}
-              className="group mt-auto inline-flex w-fit items-center gap-2 rounded-full border border-primary px-5 py-3 font-display text-sm font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
+              className="group mt-auto inline-flex w-fit items-center gap-2 rounded-none border border-primary px-5 py-3 font-display text-sm font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
             >
               <Phone className="size-4" aria-hidden="true" />
               Call Now
@@ -118,7 +118,7 @@ export default async function DonatePage() {
               href={site.onlineGiving}
               target="_blank"
               rel="noreferrer"
-              className="group mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-accent px-5 py-3 font-display text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
+              className="group mt-auto inline-flex w-fit items-center gap-2 rounded-none bg-accent px-5 py-3 font-display text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
             >
               Donate Now
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
@@ -140,7 +140,7 @@ export default async function DonatePage() {
             <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
               <a
                 href={site.phoneHref}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-display font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
+                className="inline-flex items-center justify-center gap-2 rounded-none bg-primary px-6 py-3.5 font-display font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
               >
                 <Phone className="size-4" aria-hidden="true" />
                 {site.phone}
@@ -148,7 +148,7 @@ export default async function DonatePage() {
               {philanthropy.email ? (
                 <a
                   href={`mailto:${philanthropy.email}`}
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-primary px-6 py-3.5 font-display font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
+                  className="inline-flex items-center justify-center gap-2 rounded-none border border-primary px-6 py-3.5 font-display font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
                 >
                   <Mail className="size-4" aria-hidden="true" />
                   Email

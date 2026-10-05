@@ -135,7 +135,7 @@ export default async function EventDetailPage({ params }: Props) {
             {!cancelled && (
               <a
                 href={`/api/events/${event.slug}/ics${next ? `?o=${encodeURIComponent(next.key)}` : ""}`}
-                className="inline-flex min-h-12 items-center gap-2 rounded-full border border-primary px-5 py-3 font-display text-sm font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
+                className="inline-flex min-h-12 items-center gap-2 rounded-none border border-primary px-5 py-3 font-display text-sm font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
               >
                 <CalendarPlusIcon className="size-4" aria-hidden="true" />
                 Add to calendar
@@ -146,7 +146,7 @@ export default async function EventDetailPage({ params }: Props) {
                 href={event.ctaUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex min-h-12 items-center gap-2 rounded-full bg-accent px-5 py-3 font-display text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+                className="inline-flex min-h-12 items-center gap-2 rounded-none bg-accent px-5 py-3 font-display text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
               >
                 {event.ctaLabel || "Learn more"}
                 <ExternalLinkIcon className="size-4" aria-hidden="true" />

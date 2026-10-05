@@ -20,14 +20,14 @@ export default async function NotFound() {
       <div className="flex flex-wrap items-center gap-4">
         <Link
           href="/"
-          className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-display text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+          className="group inline-flex items-center gap-2 rounded-none bg-primary px-6 py-3 font-display text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
         >
           <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" aria-hidden="true" />
           Back to home
         </Link>
         <a
           href={site.phoneHref}
-          className="inline-flex items-center gap-2 rounded-full border border-primary px-6 py-3 font-display text-sm font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
+          className="inline-flex items-center gap-2 rounded-none border border-primary px-6 py-3 font-display text-sm font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
         >
           <Phone className="size-4" aria-hidden="true" />
           {site.phone}

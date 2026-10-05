@@ -65,7 +65,7 @@ export const COLOR_LABELS: Record<ColorKey, { label: string; hint: string; pairW
 
 export type SectionSpacing = "compact" | "normal" | "airy"
 export type ShadowStyle = "none" | "soft" | "elevated"
-export type ButtonShape = "square" | "rounded" | "pill"
+export type ButtonShape = "square" | "rounded"
 export type ButtonStyle = "fill" | "outline"
 export type HeaderStyle = "solid" | "transparent" | "minimal"
 export type FooterLayout = "columns" | "centered" | "minimal"
@@ -355,7 +355,7 @@ export function sanitizeTheme(input: unknown): ThemeSettings {
       shadow: pick(l.shadow, ["none", "soft", "elevated"] as const, d.layout.shadow),
     },
     buttons: {
-      shape: pick(b.shape, ["square", "rounded", "pill"] as const, d.buttons.shape),
+      shape: pick(b.shape, ["square", "rounded"] as const, d.buttons.shape),
       style: pick(b.style, ["fill", "outline"] as const, d.buttons.style),
       uppercase: bool(b.uppercase, d.buttons.uppercase),
     },
@@ -448,7 +448,7 @@ const SHADOW_HOVER: Record<ShadowStyle, string> = {
   soft: "0 20px 40px -24px rgba(30,10,16,0.22)",
   elevated: "0 32px 56px -24px rgba(30,10,16,0.4)",
 }
-const BUTTON_RADIUS: Record<ButtonShape, string> = { square: "0", rounded: "var(--radius)", pill: "9999px" }
+const BUTTON_RADIUS: Record<ButtonShape, string> = { square: "0", rounded: "min(var(--radius), 0.375rem)" }
 
 function fontStack(key: FontKey): string {
   const font = FONT_OPTIONS.find((f) => f.key === key) ?? FONT_OPTIONS[0]

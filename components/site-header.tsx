@@ -78,7 +78,7 @@ export function SiteHeader({
             </Link>
             <Link
               href="/donate"
-              className="rounded-full bg-accent px-4 py-1 font-display font-semibold text-accent-foreground shadow-sm transition-transform hover:-translate-y-px"
+              className="ssc-btn-accent px-4 py-1 text-xs uppercase tracking-[0.12em]"
             >
               Donate
             </Link>
@@ -89,7 +89,7 @@ export function SiteHeader({
       <div className="px-3 pt-3 md:px-4">
       <div
         className={cn(
-          "ssc-glass-nav relative mx-auto max-w-7xl overflow-hidden rounded-2xl border transition-[background-color,border-color,box-shadow] duration-300",
+          "ssc-glass-nav relative mx-auto max-w-7xl rounded-2xl border transition-[background-color,border-color,box-shadow] duration-300",
           scrolled
             ? "border-foreground/10 bg-background/70 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18),0_18px_40px_-20px_rgba(30,10,16,0.35)]"
             : transparent
@@ -140,7 +140,12 @@ export function SiteHeader({
                         : "text-foreground/75 hover:bg-foreground/5 hover:text-foreground",
                     )}
                     aria-expanded={menu === item.label}
-                    onClick={() => setMenu((v) => (v === item.label ? null : item.label))}
+                    onClick={(e) => {
+                      // Hover already opened this menu for pointer users, so a pointer click
+                      // must keep it open; only keyboard activation (detail === 0) toggles.
+                      const isKeyboard = e.detail === 0
+                      setMenu((v) => (isKeyboard && v === item.label ? null : item.label))
+                    }}
                   >
                     {item.label}
                     <ChevronDown
@@ -205,7 +210,7 @@ export function SiteHeader({
       </div>
 
       {!minimal && (
-        <div className="relative" aria-hidden="true">
+        <div className={cn("relative overflow-hidden", !open && "rounded-b-2xl")} aria-hidden="true">
           <BrandRule className="absolute inset-x-0 bottom-0 h-1.5 w-full rounded-none opacity-70 blur-md" />
           <BrandRule className="relative h-1 w-full gap-0.5 rounded-none" />
         </div>
@@ -215,7 +220,7 @@ export function SiteHeader({
       <div
         id="mobile-nav"
         hidden={!open}
-        className="max-h-[calc(100vh-8rem)] overflow-y-auto border-t border-foreground/10 px-5 py-4 lg:hidden"
+        className="max-h-[calc(100vh-8rem)] overflow-y-auto rounded-b-2xl border-t border-foreground/10 px-5 py-4 lg:hidden"
       >
         <nav aria-label="Mobile">
           <ul className="flex flex-col gap-1">

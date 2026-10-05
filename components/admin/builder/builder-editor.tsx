@@ -9,12 +9,16 @@ import {
   CloudIcon,
   CopyIcon,
   EyeIcon,
+  FullscreenIcon,
   HistoryIcon,
+  KeyboardIcon,
   LayersIcon,
+  LinkIcon,
   Loader2Icon,
   MonitorIcon,
   MoreHorizontalIcon,
   Redo2Icon,
+  SaveIcon,
   SlidersHorizontalIcon,
   SmartphoneIcon,
   TabletIcon,
@@ -22,6 +26,7 @@ import {
   TriangleAlertIcon,
   Undo2Icon,
   UploadCloudIcon,
+  XIcon,
 } from "lucide-react"
 import { toast } from "sonner"
 
@@ -87,6 +92,8 @@ export function BuilderEditor({
   const [saveState, setSaveState] = useState<SaveState>("saved")
   const [unpublished, setUnpublished] = useState(hasDraft || status !== "published")
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [shortcutsOpen, setShortcutsOpen] = useState(false)
+  const [focusMode, setFocusMode] = useState(false)
   const [sectionsSheetOpen, setSectionsSheetOpen] = useState(false)
   const [inspectorSheetOpen, setInspectorSheetOpen] = useState(false)
   const [busy, startTransition] = useTransition()
@@ -153,8 +160,12 @@ export function BuilderEditor({
       } else if (e.altKey && (e.key === "ArrowUp" || e.key === "ArrowDown") && builder.selectedId) {
         e.preventDefault()
         builder.move(builder.selectedId, e.key === "ArrowUp" ? -1 : 1)
+      } else if (e.key === "?" && !isTyping(e.target)) {
+        e.preventDefault()
+        setShortcutsOpen(true)
       } else if (e.key === "Escape") {
         builder.select(null)
+        setShortcutsOpen(false)
       }
     }
     window.addEventListener("keydown", onKey)
@@ -170,6 +181,14 @@ export function BuilderEditor({
   async function openPreview() {
     const ok = await persist()
     if (ok) window.open(`/api/admin/preview?path=${encodeURIComponent(`/${slug}`)}`, "_blank", "noopener")
+  }
+
+  async function copyPreviewLink() {
+    const ok = await persist()
+    if (!ok) return
+    const path = `/api/admin/preview?path=${encodeURIComponent(`/${slug}`)}`
+    await navigator.clipboard.writeText(`${window.location.origin}${path}`)
+    toast.success("Preview link copied")
   }
 
   function publish() {
@@ -257,6 +276,10 @@ export function BuilderEditor({
             <span className="hidden lg:inline">Preview</span>
             <span className="sr-only lg:hidden">Preview</span>
           </Button>
+          <Button variant="ghost" size="icon" className="hidden size-8 md:inline-flex" onClick={() => setFocusMode((value) => !value)} title={focusMode ? "Exit focus mode" : "Focus mode"}>
+            {focusMode ? <XIcon className="size-4" /> : <FullscreenIcon className="size-4" />}
+            <span className="sr-only">{focusMode ? "Exit focus mode" : "Focus mode"}</span>
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="size-8" />}>
               <MoreHorizontalIcon className="size-4" />
@@ -268,9 +291,17 @@ export function BuilderEditor({
                   <EyeIcon className="size-4" />
                   Preview draft
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => void copyPreviewLink()}>
+                  <LinkIcon className="size-4" />
+                  Copy preview link
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setHistoryOpen(true)}>
                   <HistoryIcon className="size-4" />
                   Version history
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setShortcutsOpen(true)}>
+                  <KeyboardIcon className="size-4" />
+                  Keyboard shortcuts
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator className="sm:hidden" />
@@ -342,34 +373,65 @@ export function BuilderEditor({
       </header>
 
       <div className="flex min-h-0 flex-1">
-        <aside className="hidden w-72 shrink-0 border-r border-border lg:block" aria-label="Sections and page settings">
-          <LeftPanel builder={builder} slug={slug} tab={leftTab} setTab={setLeftTab} insertAt={insertAt} setInsertAt={setInsertAt} />
-        </aside>
+        {!focusMode && (
+          <aside className="hidden w-72 shrink-0 border-r border-border lg:block" aria-label="Sections and page settings">
+            <LeftPanel builder={builder} slug={slug} tab={leftTab} setTab={setLeftTab} insertAt={insertAt} setInsertAt={setInsertAt} />
+          </aside>
+        )}
         <main className="min-w-0 flex-1 overflow-y-auto bg-muted/60" aria-label="Page canvas">
           <Canvas builder={builder} device={device} themeVars={themeVars} onInsert={openInsert} />
         </main>
-        <aside className="hidden w-80 shrink-0 border-l border-border xl:block" aria-label="Section inspector">
-          <Inspector builder={builder} />
-        </aside>
+        {!focusMode && (
+          <aside className="hidden w-80 shrink-0 border-l border-border xl:block" aria-label="Section inspector">
+            <Inspector builder={builder} />
+          </aside>
+        )}
       </div>
 
       <nav
         aria-label="Builder tools"
-        className="grid shrink-0 grid-cols-2 gap-2 border-t border-border bg-background p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] lg:hidden"
+        className="flex shrink-0 flex-col gap-2 border-t border-border bg-background p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] lg:hidden"
       >
-        <Button variant="outline" className="h-11" onClick={() => setSectionsSheetOpen(true)}>
-          <LayersIcon className="size-4" />
-          Sections
-        </Button>
-        <Button
-          variant={builder.selectedId ? "default" : "outline"}
-          className="h-11 xl:hidden"
-          disabled={!builder.selectedId}
-          onClick={() => setInspectorSheetOpen(true)}
-        >
-          <SlidersHorizontalIcon className="size-4" />
-          {builder.selectedId ? "Edit section" : "Select a section"}
-        </Button>
+        <div className="grid grid-cols-2 gap-2">
+          <Button variant="outline" className="h-11" onClick={() => setSectionsSheetOpen(true)}>
+            <LayersIcon className="size-4" />
+            Sections
+          </Button>
+          <Button
+            variant={builder.selectedId ? "default" : "outline"}
+            className="h-11 xl:hidden"
+            disabled={!builder.selectedId}
+            onClick={() => setInspectorSheetOpen(true)}
+          >
+            <SlidersHorizontalIcon className="size-4" />
+            {builder.selectedId ? "Edit section" : "Select a section"}
+          </Button>
+        </div>
+        <div className="flex items-center gap-1 rounded-lg bg-muted p-1" role="radiogroup" aria-label="Preview device">
+          {devices.map(({ value, label, icon: Icon }) => (
+            <button
+              key={value}
+              type="button"
+              role="radio"
+              aria-checked={device === value}
+              onClick={() => setDevice(value)}
+              className={cn("flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-md text-xs font-medium text-muted-foreground", device === value && "bg-background text-foreground shadow-sm")}
+            >
+              <Icon className="size-4" />
+              {label}
+            </button>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <Button variant="outline" className="h-11" onClick={() => void persist(true, "Saved version")}>
+            <SaveIcon className="size-4" />
+            Save version
+          </Button>
+          <Button variant="outline" className="h-11" onClick={() => void openPreview()}>
+            <EyeIcon className="size-4" />
+            Preview
+          </Button>
+        </div>
       </nav>
 
       <Sheet open={sectionsSheetOpen} onOpenChange={setSectionsSheetOpen}>
@@ -395,6 +457,31 @@ export function BuilderEditor({
           </div>
         </SheetContent>
       </Sheet>
+
+      <Dialog open={shortcutsOpen} onOpenChange={setShortcutsOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Keyboard shortcuts</DialogTitle>
+            <DialogDescription>Speed up common editing actions without leaving the canvas.</DialogDescription>
+          </DialogHeader>
+          <div className="grid grid-cols-1 gap-2 text-sm">
+            {[
+              ["Save version", "Ctrl / Cmd + S"],
+              ["Undo", "Ctrl / Cmd + Z"],
+              ["Redo", "Ctrl / Cmd + Shift + Z"],
+              ["Duplicate section", "Ctrl / Cmd + D"],
+              ["Move section", "Alt + Arrow Up / Down"],
+              ["Delete section", "Delete / Backspace"],
+              ["Show shortcuts", "?"],
+            ].map(([label, shortcut]) => (
+              <div key={label} className="flex items-center justify-between gap-4 rounded-lg border border-border bg-muted/40 px-3 py-2.5">
+                <span>{label}</span>
+                <kbd className="rounded border border-border bg-background px-2 py-1 font-mono text-xs text-muted-foreground">{shortcut}</kbd>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={historyOpen} onOpenChange={setHistoryOpen}>
         <DialogContent className="sm:max-w-md">

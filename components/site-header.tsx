@@ -139,7 +139,7 @@ export function SiteHeader({
                   : "border-foreground/10 bg-background/65 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3),0_14px_34px_-24px_rgba(30,10,16,0.35)]",
           )}
         >
-          <div className="flex items-center justify-between gap-4 px-4 py-3 md:px-5">
+          <div className="flex items-center justify-between gap-4 px-4 pb-5 pt-3 md:px-5">
             <Link
               href="/"
               className="group flex shrink-0 items-center gap-3 rounded-lg outline-offset-4"
@@ -150,9 +150,9 @@ export function SiteHeader({
                 alt=""
                 width={196}
                 height={49}
-                sizes={`${Math.round(logoHeight * LOGO_RATIO)}px`}
                 style={{ height: logoHeight, width: Math.round(logoHeight * LOGO_RATIO) }}
-                className="object-contain transition-opacity group-hover:opacity-90"
+                className="max-w-[60vw] object-contain transition-opacity group-hover:opacity-90"
+                unoptimized
                 priority
               />
             </Link>
@@ -269,7 +269,10 @@ export function SiteHeader({
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
-              className="flex size-11 items-center justify-center rounded-xl border border-foreground/10 bg-background/50 text-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] transition-colors hover:border-primary/30 hover:text-primary lg:hidden"
+              className={cn(
+                "flex size-11 shrink-0 items-center justify-center rounded-xl border bg-background/60 text-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] outline-offset-2 transition-all hover:border-primary/30 hover:text-primary active:scale-95 lg:hidden",
+                open ? "border-primary/30 text-primary" : "border-foreground/10",
+              )}
               aria-expanded={open}
               aria-controls="mobile-nav"
               aria-label={open ? "Close menu" : "Open menu"}
@@ -278,18 +281,11 @@ export function SiteHeader({
             </button>
           </div>
 
-          {!minimal && (
-            <div className={cn("relative overflow-hidden", !open && "rounded-b-2xl")} aria-hidden="true">
-              <BrandRule className="absolute inset-x-0 bottom-0 h-1.5 w-full rounded-none opacity-60 blur-md" />
-              <BrandRule className="relative h-1 w-full gap-0.5 rounded-none" />
-            </div>
-          )}
-
           {/* Mobile nav */}
           <div
             id="mobile-nav"
             hidden={!open}
-            className="max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-b-2xl px-4 pb-5 pt-3 lg:hidden"
+            className="mx-4 max-h-[calc(100dvh-9rem)] overflow-y-auto overscroll-contain border-t border-foreground/[0.08] pb-6 pt-2 lg:hidden"
           >
             <nav aria-label="Mobile">
               <ul className="flex flex-col">
@@ -373,6 +369,12 @@ export function SiteHeader({
               </a>
             </div>
           </div>
+
+          {!minimal && (
+            <div className="pointer-events-none absolute inset-x-4 bottom-2 md:inset-x-5" aria-hidden="true">
+              <BrandRule className="relative h-[3px] w-full gap-0.5 rounded-full shadow-none" />
+            </div>
+          )}
         </div>
       </div>
     </header>

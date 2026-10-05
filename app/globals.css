@@ -155,6 +155,12 @@
     box-shadow: var(--ssc-card-shadow-hover);
   }
 
+  /* Frosted glass surface for the floating site navbar and its dropdowns. */
+  .ssc-glass-nav {
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    backdrop-filter: blur(20px) saturate(170%);
+  }
+
   /* Theme-driven buttons used by builder blocks and the header CTA. */
   .ssc-btn,
   .ssc-btn-secondary,

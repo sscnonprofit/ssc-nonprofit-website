@@ -40,17 +40,7 @@ export function SiteHeader({
 
   return (
     <header
-      className={cn(
-        "ssc-header-glass z-40 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
-        header.sticky ? "sticky top-0" : "relative",
-        scrolled
-          ? "border-border/80 bg-background/85 shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_12px_32px_-16px_rgba(30,10,16,0.18)]"
-          : transparent
-            ? "border-transparent bg-background/0 shadow-none"
-            : minimal
-              ? "border-border/60 bg-background shadow-none"
-              : "border-border/40 bg-background/55 shadow-none",
-      )}
+      className={cn("z-40", header.sticky ? "sticky top-0" : "relative")}
       onKeyDown={(e) => {
         if (e.key === "Escape") setMenu(null)
       }}
@@ -96,7 +86,20 @@ export function SiteHeader({
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3">
+      <div className="px-3 pt-3 md:px-4">
+      <div
+        className={cn(
+          "ssc-glass-nav relative mx-auto max-w-7xl overflow-hidden rounded-2xl border transition-[background-color,border-color,box-shadow] duration-300",
+          scrolled
+            ? "border-foreground/10 bg-background/70 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18),0_18px_40px_-20px_rgba(30,10,16,0.35)]"
+            : transparent
+              ? "border-foreground/5 bg-background/25 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12)]"
+              : minimal
+                ? "border-border bg-background shadow-none"
+                : "border-foreground/10 bg-background/50 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.16),0_10px_30px_-22px_rgba(30,10,16,0.3)]",
+        )}
+      >
+      <div className="flex items-center justify-between gap-4 px-4 py-2.5 md:px-5">
         <Link href="/" className="flex shrink-0 items-center gap-3" aria-label={`${site.name} home`}>
           <Image
             src="/images/ssc-logo.png"
@@ -112,7 +115,7 @@ export function SiteHeader({
         {/* Desktop nav */}
         <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex items-center gap-1">
-            {nav.map((item) =>
+            {nav.map((item, index) =>
               item.children ? (
                 <li
                   key={item.label}
@@ -123,10 +126,10 @@ export function SiteHeader({
                   <button
                     type="button"
                     className={cn(
-                      "flex items-center gap-1 rounded-full px-3.5 py-2 font-display text-sm font-semibold transition-colors",
+                      "group/nav relative flex items-center gap-1 rounded-lg px-3.5 py-2 font-display text-sm font-semibold transition-colors",
                       menu === item.label
-                        ? "bg-primary/8 text-primary"
-                        : "text-foreground/75 hover:bg-primary/6 hover:text-primary",
+                        ? "bg-foreground/6 text-foreground"
+                        : "text-foreground/75 hover:bg-foreground/5 hover:text-foreground",
                     )}
                     aria-expanded={menu === item.label}
                     onClick={() => setMenu((v) => (v === item.label ? null : item.label))}
@@ -136,6 +139,7 @@ export function SiteHeader({
                       className={cn("size-3.5 transition-transform", menu === item.label && "rotate-180")}
                       aria-hidden="true"
                     />
+                    <NavUnderline index={index} active={menu === item.label} />
                   </button>
                   <div
                     className={cn(
@@ -145,12 +149,12 @@ export function SiteHeader({
                         : "invisible -translate-y-1 opacity-0",
                     )}
                   >
-                    <ul className="overflow-hidden rounded-xl border border-border/70 bg-card/95 p-1.5 shadow-xl shadow-primary/10 backdrop-blur-xl">
+                    <ul className="ssc-glass-nav overflow-hidden rounded-xl border border-foreground/10 bg-background/80 p-1.5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.16),0_24px_48px_-20px_rgba(30,10,16,0.4)]">
                       {item.children.map((child) => (
                         <li key={child.label}>
                           <NavLink
                             child={child}
-                            className="block rounded-lg px-3.5 py-2.5 text-sm transition-colors hover:bg-primary/6 hover:text-primary"
+                            className="block rounded-lg px-3.5 py-2.5 text-sm text-foreground/85 transition-colors hover:bg-foreground/6 hover:text-foreground"
                             onClick={() => setMenu(null)}
                             tabIndex={menu === item.label ? undefined : -1}
                           />
@@ -163,9 +167,10 @@ export function SiteHeader({
                 <li key={item.label}>
                   <Link
                     href={item.href ?? "/"}
-                    className="rounded-full px-3.5 py-2 font-display text-sm font-semibold text-foreground/75 transition-colors hover:bg-primary/6 hover:text-primary"
+                    className="group/nav relative block rounded-lg px-3.5 py-2 font-display text-sm font-semibold text-foreground/75 transition-colors hover:bg-foreground/5 hover:text-foreground"
                   >
                     {item.label}
+                    <NavUnderline index={index} />
                   </Link>
                 </li>
               ),
@@ -182,22 +187,27 @@ export function SiteHeader({
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="rounded-full p-2 text-foreground transition-colors hover:bg-primary/6 lg:hidden"
+          className="rounded-lg border border-foreground/10 bg-foreground/5 p-2 text-foreground transition-colors hover:bg-foreground/10 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
         >
-          {open ? <X className="size-6" aria-hidden="true" /> : <Menu className="size-6" aria-hidden="true" />}
+          {open ? <X className="size-5" aria-hidden="true" /> : <Menu className="size-5" aria-hidden="true" />}
         </button>
       </div>
 
-      {!minimal && <BrandRule className="h-1 w-full rounded-none" />}
+      {!minimal && (
+        <div className="relative" aria-hidden="true">
+          <BrandRule className="absolute inset-x-0 bottom-0 h-1.5 w-full rounded-none opacity-70 blur-md" />
+          <BrandRule className="relative h-1 w-full gap-0.5 rounded-none" />
+        </div>
+      )}
 
       {/* Mobile nav */}
       <div
         id="mobile-nav"
         hidden={!open}
-        className="max-h-[calc(100vh-8rem)] overflow-y-auto border-t border-border/70 bg-background/95 px-6 py-4 backdrop-blur-xl lg:hidden"
+        className="max-h-[calc(100vh-8rem)] overflow-y-auto border-t border-foreground/10 px-5 py-4 lg:hidden"
       >
         <nav aria-label="Mobile">
           <ul className="flex flex-col gap-1">
@@ -278,7 +288,24 @@ export function SiteHeader({
           </a>
         </div>
       </div>
+      </div>
+      </div>
     </header>
+  )
+}
+
+const BRAND_UNDERLINES = ["bg-brand-1", "bg-brand-2", "bg-brand-3", "bg-brand-4"] as const
+
+function NavUnderline({ index, active = false }: { index: number; active?: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "pointer-events-none absolute inset-x-3 -bottom-px h-0.5 origin-left rounded-full transition-transform duration-300 group-hover/nav:scale-x-100",
+        BRAND_UNDERLINES[index % BRAND_UNDERLINES.length],
+        active ? "scale-x-100" : "scale-x-0",
+      )}
+    />
   )
 }
 

@@ -56,10 +56,10 @@ function blankForm(): FormState {
 
 function Field({ id, label, hint, children }: { id: string; label: string; hint?: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex min-w-0 flex-col gap-1.5">
       <Label htmlFor={id}>{label}</Label>
       {children}
-      {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
+      {hint && <p className="text-xs text-muted-foreground [overflow-wrap:anywhere]">{hint}</p>}
     </div>
   )
 }
@@ -68,10 +68,10 @@ function ToggleRow({ id, label, hint, checked, onChange, disabled }: { id: strin
   return (
     <div className="flex min-h-11 items-start justify-between gap-4 rounded-lg border border-border p-3">
       <div className="min-w-0">
-        <Label htmlFor={id}>{label}</Label>
+        <Label htmlFor={id} className="leading-snug">{label}</Label>
         {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}
       </div>
-      <Switch id={id} checked={checked} onCheckedChange={onChange} disabled={disabled} />
+      <Switch id={id} checked={checked} onCheckedChange={onChange} disabled={disabled} className="mt-0.5 shrink-0" />
     </div>
   )
 }
@@ -155,13 +155,13 @@ export function EventFormSheet({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[calc(100dvh-2rem)] w-[calc(100%-1rem)] max-w-3xl flex-col gap-0 overflow-hidden p-0 sm:w-[calc(100%-3rem)]">
-        <DialogHeader className="shrink-0 border-b border-border p-4 text-left sm:p-6">
-          <DialogTitle>{eventId ? "Edit event" : "New event"}</DialogTitle>
-          <DialogDescription>Details marked as a draft stay hidden from the public calendar.</DialogDescription>
+      <DialogContent className="flex max-h-[calc(100dvh-1rem)] w-[calc(100%-1rem)] max-w-3xl flex-col gap-0 overflow-hidden p-0 sm:max-h-[calc(100dvh-3rem)] sm:w-[calc(100%-3rem)] sm:max-w-3xl">
+        <DialogHeader className="shrink-0 gap-1 border-b border-border py-4 pr-14 pl-4 text-left sm:px-6 sm:py-5 sm:pr-16">
+          <DialogTitle className="text-lg leading-tight text-balance">{eventId ? "Edit event" : "New event"}</DialogTitle>
+          <DialogDescription className="text-pretty">Details marked as a draft stay hidden from the public calendar.</DialogDescription>
         </DialogHeader>
 
-        <form id="event-form" onSubmit={submit} className="flex flex-1 flex-col gap-5 overflow-y-auto p-4">
+        <form id="event-form" onSubmit={submit} className="flex min-h-0 flex-1 flex-col gap-5 overflow-x-hidden overflow-y-auto overscroll-contain p-4 sm:p-6">
           <Field id="event-title" label="Title">
             <Input id="event-title" value={form.title} onChange={(e) => setTitle(e.target.value)} required maxLength={140} className="h-11 text-base" />
           </Field>
@@ -196,7 +196,7 @@ export function EventFormSheet({
 
           <ToggleRow id="event-allday" label="All-day event" checked={form.allDay} onChange={(allDay) => patch({ allDay, startAt: form.startAt.slice(0, 10) + (allDay ? "T00:00" : "T10:00"), endAt: form.endAt ? form.endAt.slice(0, 10) + (allDay ? "T00:00" : "T11:00") : "" })} />
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             <Field id="event-start" label="Starts">
               <Input id="event-start" type={dateInputType} value={dateValue(form.startAt)} onChange={(e) => setDay("startAt", e.target.value)} required className="h-11 text-base" />
             </Field>
@@ -231,8 +231,8 @@ export function EventFormSheet({
                 <p className="text-sm font-medium">Upcoming dates</p>
                 <ul className="flex flex-col gap-1.5">
                   {dates.map((date) => (
-                    <li key={date.key} className="flex items-center justify-between gap-2 rounded-md bg-muted/50 px-3 py-1.5 text-sm">
-                      <span className={date.cancelled ? "text-muted-foreground line-through" : ""}>
+                    <li key={date.key} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-md bg-muted/50 px-3 py-1.5 text-sm">
+                      <span className={date.cancelled ? "min-w-0 text-muted-foreground line-through" : "min-w-0"}>
                         {formatEventDate(new Date(date.start), { weekday: "short", month: "short", day: "numeric" })}
                       </span>
                       <Button type="button" variant="ghost" size="sm" className="h-9" disabled={pending} onClick={() => toggleDate(date.key, !date.cancelled)}>
@@ -339,11 +339,11 @@ export function EventFormSheet({
           </div>
         </form>
 
-        <DialogFooter className="shrink-0 flex-row justify-end gap-2 border-t border-border p-4 sm:p-6">
-          <Button type="button" variant="outline" className="h-11" onClick={() => onOpenChange(false)}>
+        <DialogFooter className="m-0 shrink-0 flex-row justify-end gap-2 rounded-t-none border-t border-border bg-popover px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6 sm:py-4">
+          <Button type="button" variant="outline" className="h-11 flex-1 sm:flex-none" onClick={() => onOpenChange(false)}>
             Close
           </Button>
-          <Button type="submit" form="event-form" className="h-11" disabled={pending}>
+          <Button type="submit" form="event-form" className="h-11 flex-1 sm:flex-none" disabled={pending}>
             {pending ? "Saving..." : eventId ? "Save changes" : "Create event"}
           </Button>
         </DialogFooter>

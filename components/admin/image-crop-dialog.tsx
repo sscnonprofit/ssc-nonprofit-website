@@ -58,13 +58,13 @@ export function ImageCropDialog({
         onOpenChange(next)
       }}
     >
-      <DialogContent className="sm:max-w-lg">
-        <DialogHeader>
+      <DialogContent className="max-h-[calc(100dvh-1rem)] overflow-y-auto overscroll-contain sm:max-w-lg">
+        <DialogHeader className="pr-8">
           <DialogTitle>Adjust image</DialogTitle>
           <DialogDescription>Drag to reposition and use the slider to zoom before saving.</DialogDescription>
         </DialogHeader>
 
-        <div className="relative h-72 w-full overflow-hidden rounded-lg bg-muted">
+        <div className="relative h-[min(18rem,45dvh)] w-full touch-none overflow-hidden rounded-lg bg-muted">
           {imageSrc && (
             <Cropper
               image={imageSrc}

@@ -41,10 +41,10 @@ function blankForm(): ExhibitionForm {
 
 function Field({ id, label, hint, children }: { id: string; label: string; hint?: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex min-w-0 flex-col gap-1.5">
       <Label htmlFor={id}>{label}</Label>
       {children}
-      {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
+      {hint && <p className="text-xs text-muted-foreground [overflow-wrap:anywhere]">{hint}</p>}
     </div>
   )
 }
@@ -53,17 +53,17 @@ function ToggleRow({ id, label, hint, checked, onChange }: { id: string; label: 
   return (
     <div className="flex min-h-11 items-start justify-between gap-4 rounded-lg border border-border p-3">
       <div className="min-w-0">
-        <Label htmlFor={id}>{label}</Label>
+        <Label htmlFor={id} className="leading-snug">{label}</Label>
         {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}
       </div>
-      <Switch id={id} checked={checked} onCheckedChange={onChange} />
+      <Switch id={id} checked={checked} onCheckedChange={onChange} className="mt-0.5 shrink-0" />
     </div>
   )
 }
 
 function Section({ id, title, hint, children }: { id: string; title: string; hint?: string; children: React.ReactNode }) {
   return (
-    <section className="flex flex-col gap-4 rounded-lg border border-border p-3" aria-labelledby={id}>
+    <section className="flex min-w-0 flex-col gap-4 rounded-lg border border-border p-3 sm:p-4" aria-labelledby={id}>
       <div>
         <h3 id={id} className="text-sm font-medium">{title}</h3>
         {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}
@@ -133,13 +133,13 @@ export function ExhibitionFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[calc(100dvh-2rem)] w-[calc(100%-1rem)] max-w-3xl flex-col gap-0 overflow-hidden p-0 sm:w-[calc(100%-3rem)]">
-        <DialogHeader className="shrink-0 border-b border-border p-4 text-left sm:p-6">
-          <DialogTitle>{exhibitionId ? "Edit exhibition" : "New exhibition"}</DialogTitle>
-          <DialogDescription>Drafts and archived exhibitions stay hidden from the Artists Gallery.</DialogDescription>
+      <DialogContent className="flex max-h-[calc(100dvh-1rem)] w-[calc(100%-1rem)] max-w-3xl flex-col gap-0 overflow-hidden p-0 sm:max-h-[calc(100dvh-3rem)] sm:w-[calc(100%-3rem)] sm:max-w-3xl">
+        <DialogHeader className="shrink-0 gap-1 border-b border-border py-4 pr-14 pl-4 text-left sm:px-6 sm:py-5 sm:pr-16">
+          <DialogTitle className="text-lg leading-tight text-balance">{exhibitionId ? "Edit exhibition" : "New exhibition"}</DialogTitle>
+          <DialogDescription className="text-pretty">Drafts and archived exhibitions stay hidden from the Artists Gallery.</DialogDescription>
         </DialogHeader>
 
-        <form id="exhibition-form" onSubmit={submit} className="flex flex-1 flex-col gap-5 overflow-y-auto p-4 sm:p-6">
+        <form id="exhibition-form" onSubmit={submit} className="flex min-h-0 flex-1 flex-col gap-5 overflow-x-hidden overflow-y-auto overscroll-contain p-4 sm:p-6">
           <Field id="ex-title" label="Title">
             <Input
               id="ex-title"
@@ -158,7 +158,7 @@ export function ExhibitionFormDialog({
           <ImageField label="Cover image" value={form.coverUrl} onChange={(url) => patch({ coverUrl: url || "" })} aspect={4 / 3} />
 
           <Section id="ex-dates" title="Dates" hint="Times are in Central Time, the same as the campus.">
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2">
               <Field id="ex-start" label="Exhibition opens">
                 <Input id="ex-start" type="datetime-local" value={form.startsAt} onChange={(e) => patch({ startsAt: e.target.value })} className="h-11 text-base" />
               </Field>
@@ -280,11 +280,11 @@ export function ExhibitionFormDialog({
           </div>
         </form>
 
-        <DialogFooter className="shrink-0 flex-row justify-end gap-2 border-t border-border p-4 sm:p-6">
-          <Button type="button" variant="outline" className="h-11" onClick={() => onOpenChange(false)}>
+        <DialogFooter className="m-0 shrink-0 flex-row justify-end gap-2 rounded-t-none border-t border-border bg-popover px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6 sm:py-4">
+          <Button type="button" variant="outline" className="h-11 flex-1 sm:flex-none" onClick={() => onOpenChange(false)}>
             Close
           </Button>
-          <Button type="submit" form="exhibition-form" className="h-11" disabled={pending}>
+          <Button type="submit" form="exhibition-form" className="h-11 flex-1 sm:flex-none" disabled={pending}>
             {pending ? "Saving..." : exhibitionId ? "Save changes" : "Create exhibition"}
           </Button>
         </DialogFooter>

@@ -76,12 +76,12 @@ export function ImageField({
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={value || "/placeholder.svg"} alt={label} className="size-full object-cover" />
-            <div className="absolute inset-0 flex items-center justify-center gap-2 bg-background/70 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
-              <Button type="button" size="sm" variant="secondary" onClick={() => inputRef.current?.click()} disabled={isUploading}>
+            <div className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-2 bg-background/85 p-2 backdrop-blur-sm transition-opacity [@media(hover:hover)]:inset-0 [@media(hover:hover)]:bg-background/70 [@media(hover:hover)]:p-0 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-focus-within:opacity-100 [@media(hover:hover)]:group-hover:opacity-100">
+              <Button type="button" size="sm" variant="secondary" className="h-9" onClick={() => inputRef.current?.click()} disabled={isUploading}>
                 <PencilIcon className="size-3.5" />
                 Replace
               </Button>
-              <Button type="button" size="sm" variant="destructive" onClick={() => onChange("")} disabled={isUploading}>
+              <Button type="button" size="sm" variant="destructive" className="h-9" onClick={() => onChange("")} disabled={isUploading}>
                 <XIcon className="size-3.5" />
                 Remove
               </Button>
@@ -92,7 +92,7 @@ export function ImageField({
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={isUploading}
-            className="flex flex-col items-center gap-2 p-6 text-center text-muted-foreground transition-colors hover:text-foreground"
+            className="flex size-full flex-col items-center justify-center gap-2 p-3 text-center text-muted-foreground transition-colors hover:text-foreground sm:p-6"
           >
             {isUploading ? <Loader2Icon className="size-6 animate-spin" /> : <ImageIcon className="size-6" />}
             <span className="text-sm font-medium">{isUploading ? "Uploading..." : "Drop an image or click to upload"}</span>

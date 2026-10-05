@@ -1,7 +1,7 @@
 "use client"
 
-import type { CSSProperties } from "react"
-import { ArrowDownIcon, ArrowUpIcon, CopyIcon, PlusIcon, Trash2Icon } from "lucide-react"
+import type { CSSProperties, DragEvent } from "react"
+import { ArrowDownIcon, ArrowUpIcon, CopyIcon, GripVerticalIcon, PlusIcon, Trash2Icon } from "lucide-react"
 
 import { EditProvider } from "@/lib/builder/editable"
 import { BLOCK_MAP } from "@/lib/builder/registry"
@@ -50,8 +50,36 @@ function ToolbarButton({ label, onClick, disabled, danger, children }: { label: 
 function CanvasSection({ section, index, total, builder, onInsert }: { section: Section; index: number; total: number; builder: Builder; onInsert: (i: number) => void }) {
   const selected = builder.selectedId === section.id
   const def = BLOCK_MAP[section.type]
+
+  function handleDragStart(event: DragEvent<HTMLDivElement>) {
+    const target = event.target as HTMLElement
+    if (target.closest("button, a, input, textarea, select, [contenteditable='true']")) {
+      event.preventDefault()
+      return
+    }
+    event.dataTransfer.effectAllowed = "move"
+    event.dataTransfer.setData("text/plain", section.id)
+    event.currentTarget.classList.add("opacity-60")
+  }
+
+  function handleDragEnd(event: DragEvent<HTMLDivElement>) {
+    event.currentTarget.classList.remove("opacity-60")
+  }
+
+  function handleDrop(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault()
+    const fromId = event.dataTransfer.getData("text/plain")
+    if (fromId && fromId !== section.id) builder.reorder(fromId, section.id)
+  }
+
   return (
     <div
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragOver={(event) => event.preventDefault()}
+      onDrop={handleDrop}
+      aria-label={`Drag ${section.label || def.label} section to reorder`}
       className={cn(
         "group/section relative outline-2 -outline-offset-2 outline-transparent transition-[outline-color]",
         selected ? "outline-primary" : "hover:outline-primary/40",
@@ -69,7 +97,10 @@ function CanvasSection({ section, index, total, builder, onInsert }: { section: 
           selected ? "flex" : "hidden group-hover/section:flex",
         )}
       >
-        <span className="px-2 text-[11px] font-semibold">{section.label || def.label}</span>
+        <span className="flex items-center gap-1 px-2 text-[11px] font-semibold" title="Drag to reorder">
+          <GripVerticalIcon className="size-3.5 opacity-75" aria-hidden="true" />
+          {section.label || def.label}
+        </span>
         <ToolbarButton label="Move up" disabled={index === 0} onClick={() => builder.move(section.id, -1)}>
           <ArrowUpIcon className="size-3.5" />
         </ToolbarButton>

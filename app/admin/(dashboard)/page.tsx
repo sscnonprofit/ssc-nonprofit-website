@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { listBuilderPages } from "@/lib/builder/pages"
 import { listPageRows } from "@/lib/cms/pages"
 import { cmsRegistry } from "@/lib/cms/registry"
+import { cn } from "@/lib/utils"
 
 export default async function AdminPagesDashboard() {
   const [rows, builderPages, recent] = await Promise.all([
@@ -27,26 +28,33 @@ export default async function AdminPagesDashboard() {
   const lastPublished = recent.find((rev) => rev.note === "Published")
 
   return (
-    <div className="flex flex-col gap-8">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="font-serif text-2xl font-semibold text-foreground">Pages</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Edit site content, save drafts, and publish changes. Publishing requires an admin.
-          </p>
+    <div className="flex flex-col gap-6 sm:gap-8">
+      <section className="relative overflow-hidden rounded-2xl border border-primary/15 bg-card p-5 shadow-[0_12px_32px_-24px_rgba(122,31,43,0.55)] sm:p-7">
+        <div className="absolute inset-y-0 right-0 hidden w-1/3 bg-[linear-gradient(135deg,transparent_0%,color-mix(in_oklab,var(--accent)_10%,transparent)_100%)] sm:block" />
+        <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-2xl">
+            <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+              <span className="size-2 rounded-full bg-accent shadow-[0_0_0_4px_color-mix(in_oklab,var(--accent)_16%,transparent)]" />
+              SSC content workspace
+            </div>
+            <h1 className="font-serif text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">Pages</h1>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
+              Build, refine, and publish compassionate digital experiences for families and residents. No code required.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {draftCount > 0 && (
+              <Badge variant="secondary" className="min-h-10 gap-1.5 rounded-xl px-3">
+                {draftCount} unpublished draft{draftCount === 1 ? "" : "s"}
+              </Badge>
+            )}
+            <CreatePageDialog />
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          {draftCount > 0 && (
-            <Badge variant="secondary" className="gap-1.5 py-1.5">
-              {draftCount} unpublished draft{draftCount === 1 ? "" : "s"}
-            </Badge>
-          )}
-          <CreatePageDialog />
-        </div>
-      </div>
+      </section>
 
       <div className="grid grid-cols-3 gap-2 sm:gap-3">
-        <Stat label="Pages" value={String(pages.length + builderPages.length)} />
+        <Stat label="Pages" value={String(pages.length + builderPages.length)} tone="primary" />
         <Stat label="Drafts" value={String(draftCount)} />
         <Stat
           label="Last published"
@@ -178,11 +186,11 @@ export default async function AdminPagesDashboard() {
   )
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({ label, value, tone = "neutral" }: { label: string; value: string; tone?: "primary" | "neutral" }) {
   return (
-    <div className="flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3">
-      <span className="text-xs text-muted-foreground">{label}</span>
-      <span className="truncate text-lg font-semibold text-foreground">{value}</span>
+    <div className={cn("flex min-w-0 flex-col gap-1 rounded-xl border bg-card p-3 shadow-[0_8px_20px_-18px_rgba(30,10,16,0.5)] sm:p-4", tone === "primary" ? "border-primary/20 bg-primary/[0.035]" : "border-border/80")}>
+      <span className="truncate text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">{label}</span>
+      <span className="truncate text-xl font-semibold tracking-tight text-foreground sm:text-2xl">{value}</span>
     </div>
   )
 }

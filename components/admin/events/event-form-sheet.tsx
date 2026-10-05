@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { slugify } from "@/lib/builder/schema"
@@ -154,12 +154,12 @@ export function EventFormSheet({
   const dateValue = (value: string) => (form.allDay ? value.slice(0, 10) : value)
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="flex w-full flex-col gap-0 p-0 sm:max-w-xl">
-        <SheetHeader className="border-b border-border p-4 text-left">
-          <SheetTitle>{eventId ? "Edit event" : "New event"}</SheetTitle>
-          <SheetDescription>Details marked as a draft stay hidden from the public calendar.</SheetDescription>
-        </SheetHeader>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="flex max-h-[calc(100dvh-2rem)] w-[calc(100%-1rem)] max-w-3xl flex-col gap-0 overflow-hidden p-0 sm:w-[calc(100%-3rem)]">
+        <DialogHeader className="shrink-0 border-b border-border p-4 text-left sm:p-6">
+          <DialogTitle>{eventId ? "Edit event" : "New event"}</DialogTitle>
+          <DialogDescription>Details marked as a draft stay hidden from the public calendar.</DialogDescription>
+        </DialogHeader>
 
         <form id="event-form" onSubmit={submit} className="flex flex-1 flex-col gap-5 overflow-y-auto p-4">
           <Field id="event-title" label="Title">
@@ -339,15 +339,15 @@ export function EventFormSheet({
           </div>
         </form>
 
-        <SheetFooter className="flex-row justify-end gap-2 border-t border-border p-4">
+        <DialogFooter className="shrink-0 flex-row justify-end gap-2 border-t border-border p-4 sm:p-6">
           <Button type="button" variant="outline" className="h-11" onClick={() => onOpenChange(false)}>
             Close
           </Button>
           <Button type="submit" form="event-form" className="h-11" disabled={pending}>
             {pending ? "Saving..." : eventId ? "Save changes" : "Create event"}
           </Button>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

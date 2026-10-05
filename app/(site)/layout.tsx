@@ -5,6 +5,7 @@ import siteFallback from "@/content/site.json"
 import { SiteAnnouncement } from "@/components/site-announcement"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
+import { SiteThemePreviewBridge } from "@/components/site-theme-preview-bridge"
 import { getContent } from "@/lib/cms/content"
 import { themeToCss } from "@/lib/cms/theme"
 import { getTheme } from "@/lib/cms/theme-store"
@@ -67,6 +68,7 @@ export default async function SiteLayout({
           </Link>
         </div>
       )}
+      <SiteThemePreviewBridge />
       <SiteAnnouncement announcement={theme.announcement} />
       <SiteHeader site={site} header={theme.header} />
       <main id="main">{children}</main>

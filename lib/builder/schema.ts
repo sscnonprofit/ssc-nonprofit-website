@@ -1,3 +1,4 @@
+import { sanitizeElements } from "@/lib/builder/elements"
 import { isSafeHref } from "@/lib/cms/theme"
 
 export type FieldType = "text" | "textarea" | "url" | "image" | "select"
@@ -20,9 +21,16 @@ export type ListField = {
   fields: ScalarField[]
 }
 
-export type Field = ScalarField | ListField
+export type ElementsField = {
+  key: string
+  label: string
+  type: "elements"
+  max: number
+}
 
-export type BlockCategory = "Hero" | "Content" | "Media" | "Social proof" | "Contact" | "Layout"
+export type Field = ScalarField | ListField | ElementsField
+
+export type BlockCategory = "Hero" | "Content" | "Media" | "Social proof" | "Contact" | "Layout" | "Custom"
 
 export type BlockDefinition = {
   type: string
@@ -148,7 +156,9 @@ export function sanitizeProps(def: BlockDefinition, input: unknown): Record<stri
   const raw = (input && typeof input === "object" ? input : {}) as Record<string, unknown>
   const out: Record<string, unknown> = {}
   for (const field of def.fields) {
-    if (field.type === "list") {
+    if (field.type === "elements") {
+      out[field.key] = sanitizeElements(raw[field.key]).slice(0, field.max)
+    } else if (field.type === "list") {
       const items = Array.isArray(raw[field.key]) ? (raw[field.key] as unknown[]) : []
       out[field.key] = items.slice(0, field.max).map((item) => {
         const itemRaw = (item && typeof item === "object" ? item : {}) as Record<string, unknown>

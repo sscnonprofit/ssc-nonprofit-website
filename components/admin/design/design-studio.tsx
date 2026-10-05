@@ -849,7 +849,7 @@ function themeVarsStyle(theme: ThemeSettings): React.CSSProperties {
     "--accent": theme.colors.accent,
     "--accent-foreground": theme.colors.accentForeground,
     "--radius": `${theme.layout.radius}rem`,
-    "--ssc-btn-radius": { square: "0.125rem", rounded: `${theme.layout.radius}rem`, pill: "9999px" }[theme.buttons.shape],
+    "--ssc-btn-radius": { square: "0", rounded: `${theme.layout.radius}rem`, pill: "9999px" }[theme.buttons.shape],
     "--ssc-btn-transform": theme.buttons.uppercase ? "uppercase" : "none",
     "--ssc-btn-tracking": theme.buttons.uppercase ? "0.08em" : "0",
     "--ssc-btn-bg": theme.buttons.style === "fill" ? "var(--primary)" : "transparent",

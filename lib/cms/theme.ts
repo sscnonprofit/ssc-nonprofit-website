@@ -129,7 +129,7 @@ export const DEFAULT_THEME: ThemeSettings = {
     scale: { h1: 3.5, h2: 2.25, h3: 1.375, eyebrow: 0.75 },
   },
   layout: { maxWidth: 1280, sectionSpacing: "normal", radius: 0.5, shadow: "soft" },
-  buttons: { shape: "pill", style: "fill", uppercase: false },
+  buttons: { shape: "square", style: "fill", uppercase: false },
   header: { style: "solid", sticky: true, logoHeight: 40, showUtilityBar: true },
   footer: { layout: "columns", background: "brand" },
   announcement: { enabled: false, text: "", href: "", tone: "brand", dismissible: true },
@@ -448,7 +448,7 @@ const SHADOW_HOVER: Record<ShadowStyle, string> = {
   soft: "0 20px 40px -24px rgba(30,10,16,0.22)",
   elevated: "0 32px 56px -24px rgba(30,10,16,0.4)",
 }
-const BUTTON_RADIUS: Record<ButtonShape, string> = { square: "0.125rem", rounded: "var(--radius)", pill: "9999px" }
+const BUTTON_RADIUS: Record<ButtonShape, string> = { square: "0", rounded: "var(--radius)", pill: "9999px" }
 
 function fontStack(key: FontKey): string {
   const font = FONT_OPTIONS.find((f) => f.key === key) ?? FONT_OPTIONS[0]

@@ -153,15 +153,15 @@ function ListEditor({ field, items, onChange }: { field: ListField; items: Recor
                   <ChevronDownIcon className={cn("size-3.5 shrink-0 transition-transform", !isOpen && "-rotate-90")} />
                   <span className="truncate">{title}</span>
                 </button>
-                <Button type="button" size="icon" variant="ghost" className="size-7" disabled={index === 0} onClick={() => move(index, index - 1)}>
+                <Button type="button" size="icon" variant="ghost" className="size-10 lg:size-7" disabled={index === 0} onClick={() => move(index, index - 1)}>
                   <ArrowUpIcon className="size-3.5" />
                   <span className="sr-only">Move up</span>
                 </Button>
-                <Button type="button" size="icon" variant="ghost" className="size-7" disabled={index === items.length - 1} onClick={() => move(index, index + 1)}>
+                <Button type="button" size="icon" variant="ghost" className="size-10 lg:size-7" disabled={index === items.length - 1} onClick={() => move(index, index + 1)}>
                   <ArrowDownIcon className="size-3.5" />
                   <span className="sr-only">Move down</span>
                 </Button>
-                <Button type="button" size="icon" variant="ghost" className="size-7 text-destructive" onClick={() => onChange(items.filter((_, i) => i !== index))}>
+                <Button type="button" size="icon" variant="ghost" className="size-10 lg:size-7 text-destructive" onClick={() => onChange(items.filter((_, i) => i !== index))}>
                   <Trash2Icon className="size-3.5" />
                   <span className="sr-only">Remove {field.itemLabel}</span>
                 </Button>

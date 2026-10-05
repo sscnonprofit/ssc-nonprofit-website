@@ -78,9 +78,9 @@ export function MediaGrid({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center gap-2">
-        <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Filter by file name" className="h-9 max-w-xs" aria-label="Filter media" />
-        <Button type="button" size="sm" onClick={() => inputRef.current?.click()} disabled={uploading > 0} className="ml-auto">
+      <div className="flex items-center gap-2">
+        <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Filter by file name" className="h-11 min-w-0 flex-1 sm:h-9 sm:max-w-xs" aria-label="Filter media" />
+        <Button type="button" onClick={() => inputRef.current?.click()} disabled={uploading > 0} className="h-11 shrink-0 sm:ml-auto sm:h-9">
           {uploading > 0 ? <Loader2Icon className="size-4 animate-spin" /> : <UploadIcon className="size-4" />}
           {uploading > 0 ? `Uploading ${uploading}...` : "Upload"}
         </Button>
@@ -150,14 +150,14 @@ export function MediaGrid({
                         type="button"
                         size="icon"
                         variant="ghost"
-                        className="size-6"
+                        className="size-10 sm:size-7"
                         onClick={() => navigator.clipboard.writeText(item.url).then(() => toast.success("Link copied"))}
                       >
                         <CopyIcon className="size-3" />
                         <span className="sr-only">Copy link</span>
                       </Button>
                       {canDelete && (
-                        <Button type="button" size="icon" variant="ghost" className="size-6 text-destructive" onClick={() => remove(item.url)}>
+                        <Button type="button" size="icon" variant="ghost" className="size-10 text-destructive sm:size-7" onClick={() => remove(item.url)}>
                           <Trash2Icon className="size-3" />
                           <span className="sr-only">Delete</span>
                         </Button>

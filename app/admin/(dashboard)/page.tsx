@@ -1,7 +1,11 @@
-import { ExternalLinkIcon, FileTextIcon, LayoutTemplateIcon, PencilIcon, SettingsIcon } from "lucide-react"
+import { desc } from "drizzle-orm"
+import { ExternalLinkIcon, FileTextIcon, HistoryIcon, LayoutTemplateIcon, PencilIcon, SettingsIcon } from "lucide-react"
 import Link from "next/link"
 
 import { CreatePageDialog } from "@/components/admin/builder/create-page-dialog"
+import { RebuildButton } from "@/components/admin/builder/rebuild-button"
+import { db } from "@/lib/db"
+import { pageRevisions } from "@/lib/db/schema"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,12 +14,17 @@ import { listPageRows } from "@/lib/cms/pages"
 import { cmsRegistry } from "@/lib/cms/registry"
 
 export default async function AdminPagesDashboard() {
-  const [rows, builderPages] = await Promise.all([listPageRows(), listBuilderPages()])
+  const [rows, builderPages, recent] = await Promise.all([
+    listPageRows(),
+    listBuilderPages(),
+    db.select().from(pageRevisions).orderBy(desc(pageRevisions.createdAt)).limit(6),
+  ])
   const bySlug = new Map(rows.map((row) => [row.slug, row]))
 
   const pages = cmsRegistry.filter((doc) => doc.group === "page")
   const settings = cmsRegistry.filter((doc) => doc.group === "settings")
   const draftCount = rows.filter((row) => row.draftContent).length
+  const lastPublished = recent.find((rev) => rev.note === "Published")
 
   return (
     <div className="flex flex-col gap-8">
@@ -34,6 +43,15 @@ export default async function AdminPagesDashboard() {
           )}
           <CreatePageDialog />
         </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+        <Stat label="Pages" value={String(pages.length + builderPages.length)} />
+        <Stat label="Drafts" value={String(draftCount)} />
+        <Stat
+          label="Last published"
+          value={lastPublished ? new Date(lastPublished.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" }) : "—"}
+        />
       </div>
 
       <section className="flex flex-col gap-3">
@@ -126,11 +144,45 @@ export default async function AdminPagesDashboard() {
                 description={doc.description}
                 routes={doc.routes}
                 hasDraft={Boolean(row?.draftContent)}
+                canRebuild
               />
             )
           })}
         </div>
       </section>
+
+      {recent.length > 0 && (
+        <section className="flex flex-col gap-3">
+          <h2 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+            <HistoryIcon className="size-3.5 text-muted-foreground" />
+            Recent activity
+          </h2>
+          <Card className="overflow-hidden py-0">
+            <ul className="divide-y divide-border">
+              {recent.map((rev) => (
+                <li key={rev.id} className="flex flex-col gap-0.5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+                  <span className="min-w-0 truncate text-sm text-foreground">
+                    <span className="font-medium">{rev.note || "Edited"}</span>
+                    <span className="text-muted-foreground"> · {rev.title || rev.pageSlug}</span>
+                  </span>
+                  <time dateTime={new Date(rev.createdAt).toISOString()} className="shrink-0 text-xs text-muted-foreground">
+                    {new Date(rev.createdAt).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}
+                  </time>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </section>
+      )}
+    </div>
+  )
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className="truncate text-lg font-semibold text-foreground">{value}</span>
     </div>
   )
 }
@@ -141,12 +193,14 @@ function PageCard({
   description,
   routes,
   hasDraft,
+  canRebuild = false,
 }: {
   slug: string
   label: string
   description: string
   routes: string[]
   hasDraft: boolean
+  canRebuild?: boolean
 }) {
   return (
     <Card className="group transition-colors hover:border-primary/30">
@@ -172,6 +226,7 @@ function PageCard({
             <PencilIcon data-icon="inline-start" />
             Edit
           </Button>
+          {canRebuild && <RebuildButton slug={slug} label={label} />}
           {routes.map((route) => (
             <Button
               key={route}

@@ -7,6 +7,8 @@ import { db } from "@/lib/db"
 import { pageRevisions, pages } from "@/lib/db/schema"
 import { requireAdmin, requireEditor } from "@/lib/cms/auth-helpers"
 import { getPageRow } from "@/lib/cms/pages"
+import { getCmsDoc } from "@/lib/cms/registry"
+import { templateToBuilderDoc } from "@/lib/builder/convert"
 import { isBuilderRow } from "@/lib/builder/pages"
 import { newBuilderDoc, sanitizeDoc } from "@/lib/builder/registry"
 import { slugify, validateSlug } from "@/lib/builder/schema"
@@ -103,6 +105,28 @@ export async function deleteBuilderPageAction(slug: string): Promise<Result> {
   await db.delete(pages).where(eq(pages.slug, slug))
   revalidateBuilder(slug)
   return { ok: true }
+}
+
+/** Creates a draft builder copy of a template page. The original stays live until the copy is published. */
+export async function convertTemplatePageAction(sourceSlug: string): Promise<Result<{ slug: string }>> {
+  const user = await requireEditor()
+  const doc = getCmsDoc(sourceSlug)
+  if (!doc || doc.group !== "page") return { ok: false, error: "Only template pages can be rebuilt." }
+  const row = await getPageRow(sourceSlug)
+  const content = row?.draftContent ?? row?.content
+  if (!content) return { ok: false, error: "This page has no content to copy yet." }
+
+  const builderDoc = sanitizeDoc(templateToBuilderDoc(doc.label, doc.description, content))
+  const base = slugify(`${sourceSlug}-builder`)
+  let slug = base
+  for (let n = 2; await getPageRow(slug); n++) slug = `${base}-${n}`.slice(0, 60)
+  const slugError = validateSlug(slug)
+  if (slugError) return { ok: false, error: slugError }
+
+  await db.insert(pages).values({ slug, title: builderDoc.title, content: builderDoc, draftContent: builderDoc, status: "draft", updatedBy: user.id })
+  await db.insert(pageRevisions).values({ pageSlug: slug, title: builderDoc.title, content: builderDoc, editedBy: user.id, note: `Rebuilt from ${doc.label}` })
+  revalidateBuilder(slug)
+  return { ok: true, data: { slug } }
 }
 
 export async function checkSlugAction(slug: string): Promise<Result> {

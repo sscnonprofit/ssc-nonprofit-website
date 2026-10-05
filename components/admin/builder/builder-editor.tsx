@@ -10,10 +10,12 @@ import {
   CopyIcon,
   EyeIcon,
   HistoryIcon,
+  LayersIcon,
   Loader2Icon,
   MonitorIcon,
   MoreHorizontalIcon,
   Redo2Icon,
+  SlidersHorizontalIcon,
   SmartphoneIcon,
   TabletIcon,
   Trash2Icon,
@@ -34,6 +36,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import {
   deleteBuilderPageAction,
   duplicateBuilderPageAction,
@@ -84,6 +87,8 @@ export function BuilderEditor({
   const [saveState, setSaveState] = useState<SaveState>("saved")
   const [unpublished, setUnpublished] = useState(hasDraft || status !== "published")
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [sectionsSheetOpen, setSectionsSheetOpen] = useState(false)
+  const [inspectorSheetOpen, setInspectorSheetOpen] = useState(false)
   const [busy, startTransition] = useTransition()
   const lastSaved = useRef(JSON.stringify(initialDoc))
   const latest = useRef(doc)
@@ -159,6 +164,12 @@ export function BuilderEditor({
   function openInsert(index: number) {
     setInsertAt(index)
     setLeftTab("add")
+    if (!window.matchMedia("(min-width: 1024px)").matches) setSectionsSheetOpen(true)
+  }
+
+  async function openPreview() {
+    const ok = await persist()
+    if (ok) window.open(`/api/admin/preview?path=${encodeURIComponent(`/${slug}`)}`, "_blank", "noopener")
   }
 
   function publish() {
@@ -236,20 +247,15 @@ export function BuilderEditor({
               </button>
             ))}
           </div>
-          <Button variant="ghost" size="sm" onClick={() => setHistoryOpen(true)}>
+          <Button variant="ghost" size="sm" className="hidden sm:inline-flex" onClick={() => setHistoryOpen(true)}>
             <HistoryIcon className="size-4" />
             <span className="hidden lg:inline">History</span>
+            <span className="sr-only lg:hidden">History</span>
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={async () => {
-              const ok = await persist()
-              if (ok) window.open(`/api/admin/preview?path=${encodeURIComponent(`/${slug}`)}`, "_blank", "noopener")
-            }}
-          >
+          <Button variant="ghost" size="sm" className="hidden sm:inline-flex" onClick={() => void openPreview()}>
             <EyeIcon className="size-4" />
             <span className="hidden lg:inline">Preview</span>
+            <span className="sr-only lg:hidden">Preview</span>
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="size-8" />}>
@@ -257,6 +263,17 @@ export function BuilderEditor({
               <span className="sr-only">More page actions</span>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
+              <DropdownMenuGroup className="sm:hidden">
+                <DropdownMenuItem onClick={() => void openPreview()}>
+                  <EyeIcon className="size-4" />
+                  Preview draft
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setHistoryOpen(true)}>
+                  <HistoryIcon className="size-4" />
+                  Version history
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator className="sm:hidden" />
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   onClick={() => void persist(true, "Saved version").then((ok) => ok && (toast.success("Version saved"), router.refresh()))}
@@ -336,9 +353,48 @@ export function BuilderEditor({
         </aside>
       </div>
 
-      <div className="border-t border-border bg-muted px-4 py-2 text-center text-xs text-muted-foreground lg:hidden">
-        The page builder works best on a larger screen. You can still edit text directly on the canvas.
-      </div>
+      <nav
+        aria-label="Builder tools"
+        className="grid shrink-0 grid-cols-2 gap-2 border-t border-border bg-background p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] lg:hidden"
+      >
+        <Button variant="outline" className="h-11" onClick={() => setSectionsSheetOpen(true)}>
+          <LayersIcon className="size-4" />
+          Sections
+        </Button>
+        <Button
+          variant={builder.selectedId ? "default" : "outline"}
+          className="h-11 xl:hidden"
+          disabled={!builder.selectedId}
+          onClick={() => setInspectorSheetOpen(true)}
+        >
+          <SlidersHorizontalIcon className="size-4" />
+          {builder.selectedId ? "Edit section" : "Select a section"}
+        </Button>
+      </nav>
+
+      <Sheet open={sectionsSheetOpen} onOpenChange={setSectionsSheetOpen}>
+        <SheetContent side="left" className="w-full max-w-sm gap-0 p-0 sm:max-w-sm">
+          <SheetHeader className="border-b border-border">
+            <SheetTitle>Sections</SheetTitle>
+            <SheetDescription className="sr-only">Add, reorder, and configure page sections</SheetDescription>
+          </SheetHeader>
+          <div className="min-h-0 flex-1">
+            <LeftPanel builder={builder} slug={slug} tab={leftTab} setTab={setLeftTab} insertAt={insertAt} setInsertAt={setInsertAt} />
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={inspectorSheetOpen && Boolean(builder.selectedId)} onOpenChange={setInspectorSheetOpen}>
+        <SheetContent side="bottom" className="max-h-[85dvh] gap-0 rounded-t-xl p-0">
+          <SheetHeader className="border-b border-border">
+            <SheetTitle>Edit section</SheetTitle>
+            <SheetDescription className="sr-only">Change the selected section&apos;s content and design</SheetDescription>
+          </SheetHeader>
+          <div className="min-h-0 flex-1 overflow-y-auto">
+            <Inspector builder={builder} />
+          </div>
+        </SheetContent>
+      </Sheet>
 
       <Dialog open={historyOpen} onOpenChange={setHistoryOpen}>
         <DialogContent className="sm:max-w-md">

@@ -158,7 +158,7 @@ export default async function ArtistsGalleryPage() {
           href={guidelines.agreement.href}
           target="_blank"
           rel="noreferrer"
-          className="mt-8 inline-flex items-center gap-2 rounded-none bg-accent px-6 py-3 font-display text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+          className="mt-8 inline-flex items-center gap-2 ssc-btn-shape bg-accent px-6 py-3 font-display text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
         >
           <Download className="size-4" aria-hidden="true" />
           {guidelines.agreement.label}

@@ -68,7 +68,7 @@ export default async function UpcomingEventsPage() {
               href={events.featured.cta.href}
               target="_blank"
               rel="noreferrer"
-              className="mt-2 inline-flex w-fit items-center gap-2 rounded-none bg-accent px-6 py-3 font-display text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+              className="mt-2 inline-flex w-fit items-center gap-2 ssc-btn-shape bg-accent px-6 py-3 font-display text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
             >
               {events.featured.cta.label}
               <ExternalLink className="size-4" aria-hidden="true" />
@@ -106,7 +106,7 @@ export default async function UpcomingEventsPage() {
                   href={c.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-auto inline-flex w-fit items-center gap-2 rounded-none border border-primary px-5 py-3 font-display text-sm font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
+                  className="mt-auto inline-flex w-fit items-center gap-2 ssc-btn-shape border border-primary px-5 py-3 font-display text-sm font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
                 >
                   <Download className="size-4" aria-hidden="true" />
                   View Calendar
@@ -138,7 +138,7 @@ export default async function UpcomingEventsPage() {
             <p className="text-pretty leading-relaxed text-muted-foreground">{events.gallery.body}</p>
             <Link
               href={events.gallery.href}
-              className="group mt-2 inline-flex w-fit items-center gap-2 rounded-none bg-primary px-6 py-3 font-display text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+              className="group mt-2 inline-flex w-fit items-center gap-2 ssc-btn-shape bg-primary px-6 py-3 font-display text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
             >
               See the exhibition
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />

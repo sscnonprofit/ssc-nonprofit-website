@@ -489,6 +489,9 @@ export function themeToVars(theme: ThemeSettings, { allColors = false } = {}): R
   vars["--ssc-btn-bg"] = b.style === "fill" ? "var(--primary)" : "transparent"
   vars["--ssc-btn-fg"] = b.style === "fill" ? "var(--primary-foreground)" : "var(--primary)"
   vars["--ssc-btn-border"] = "var(--primary)"
+  vars["--ssc-btn-accent-bg"] = b.style === "fill" ? "var(--accent)" : "transparent"
+  vars["--ssc-btn-accent-fg"] = b.style === "fill" ? "var(--accent-foreground)" : "var(--accent)"
+  vars["--ssc-btn-accent-border"] = "var(--accent)"
   return vars
 }
 

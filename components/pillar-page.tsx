@@ -54,7 +54,7 @@ export async function PillarPage({ slug }: { slug: PillarKey }) {
         {benefitsCta ? (
           <CtaLink
             href={benefitsCta.href}
-            className="group mt-8 inline-flex items-center gap-2 rounded-none bg-accent px-6 py-3.5 font-display font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
+            className="group mt-8 inline-flex items-center gap-2 ssc-btn-shape bg-accent px-6 py-3.5 font-display font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
           >
             {benefitsCta.label}
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
@@ -82,7 +82,7 @@ export async function PillarPage({ slug }: { slug: PillarKey }) {
             {callout.cta ? (
               <CtaLink
                 href={callout.cta.href}
-                className="group inline-flex shrink-0 items-center gap-2 rounded-none bg-primary px-6 py-3.5 font-display font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
+                className="group inline-flex shrink-0 items-center gap-2 ssc-btn-shape bg-primary px-6 py-3.5 font-display font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
               >
                 {callout.cta.label}
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />

@@ -122,7 +122,7 @@ export function RsvpForm({ eventId, dates, waitlistEnabled = false }: { eventId:
       <button
         type="submit"
         disabled={pending || !occurrence}
-        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-none bg-primary px-6 py-3 font-display text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="inline-flex min-h-12 items-center justify-center gap-2 ssc-btn-shape bg-primary px-6 py-3 font-display text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {pending && <Loader2Icon className="size-4 animate-spin" aria-hidden="true" />}
         {pending ? "Sending" : selectedFull ? "Join the waitlist" : "Reserve my spot"}

@@ -70,14 +70,14 @@ export default async function HomePage() {
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
                 href="/donate"
-                className="group inline-flex items-center gap-2 rounded-none bg-accent px-7 py-3.5 font-display font-semibold text-accent-foreground shadow-lg shadow-black/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/25"
+                className="group inline-flex items-center gap-2 ssc-btn-shape bg-accent px-7 py-3.5 font-display font-semibold text-accent-foreground shadow-lg shadow-black/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/25"
               >
                 Donate Now
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center rounded-none border border-primary-foreground/35 px-7 py-3.5 font-display font-semibold backdrop-blur-sm transition-colors hover:bg-primary-foreground/10"
+                className="inline-flex items-center ssc-btn-shape border border-primary-foreground/35 px-7 py-3.5 font-display font-semibold backdrop-blur-sm transition-colors hover:bg-primary-foreground/10"
               >
                 Schedule A Visit
               </Link>

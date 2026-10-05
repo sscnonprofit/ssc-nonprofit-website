@@ -1,4 +1,4 @@
-import { boolean, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core"
+import { boolean, integer, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core"
 
 // --- Better Auth required tables -------------------------------------------
 // Column names are camelCase to match Better Auth's defaults. Do not rename.

@@ -203,42 +203,47 @@ function PageCard({
   canRebuild?: boolean
 }) {
   return (
-    <Card className="group transition-colors hover:border-primary/30">
-      <CardHeader>
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+    <Card className="group overflow-hidden border-border/80 bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-md">
+      <CardHeader className="gap-4 border-b border-border/70 bg-muted/20 pb-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/10">
               <FileTextIcon className="size-4" />
             </span>
-            {label}
-          </CardTitle>
-          {hasDraft && (
-            <Badge variant="secondary" className="shrink-0">
-              Draft
-            </Badge>
-          )}
+            <div className="min-w-0">
+              <CardTitle className="truncate text-base">{label}</CardTitle>
+              <p className="mt-1 truncate font-mono text-xs text-muted-foreground">/{slug}</p>
+            </div>
+          </div>
+          <Badge variant={hasDraft ? "secondary" : "outline"} className="shrink-0 gap-1.5">
+            <span className={hasDraft ? "size-1.5 rounded-full bg-amber-500" : "size-1.5 rounded-full bg-emerald-500"} />
+            {hasDraft ? "Draft" : "Published"}
+          </Badge>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <p className="text-sm text-muted-foreground">{description}</p>
-        <div className="flex flex-wrap items-center gap-2 border-t border-border pt-3">
-          <Button render={<Link href={`/admin/pages/${slug}`} />} nativeButton={false} size="sm">
+      <CardContent className="flex flex-col gap-4 p-4">
+        <p className="min-h-10 text-sm leading-6 text-muted-foreground">{description}</p>
+        <div className="flex flex-col gap-2 border-t border-border pt-4">
+          <Button render={<Link href={`/admin/pages/${slug}`} />} nativeButton={false} className="w-full justify-center sm:w-auto">
             <PencilIcon data-icon="inline-start" />
-            Edit
+            Edit page content
           </Button>
-          {canRebuild && <RebuildButton slug={slug} label={label} />}
-          {routes.map((route) => (
-            <Button
-              key={route}
-              render={<Link href={route} target="_blank" rel="noopener noreferrer" />}
-              nativeButton={false}
-              size="sm"
-              variant="ghost"
-            >
-              <ExternalLinkIcon data-icon="inline-start" />
-              {routes.length > 1 ? route : "View live"}
-            </Button>
-          ))}
+          <div className="flex flex-wrap gap-2">
+            {canRebuild && <RebuildButton slug={slug} label={label} />}
+            {routes.map((route) => (
+              <Button
+                key={route}
+                render={<Link href={route} target="_blank" rel="noopener noreferrer" />}
+                nativeButton={false}
+                size="sm"
+                variant="outline"
+                className="min-h-10 flex-1 sm:flex-none"
+              >
+                <ExternalLinkIcon data-icon="inline-start" />
+                {routes.length > 1 ? route : "View live page"}
+              </Button>
+            ))}
+          </div>
         </div>
       </CardContent>
     </Card>

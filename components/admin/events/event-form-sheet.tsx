@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useTransition } from "react"
+import { useState, useTransition } from "react"
 import { BanIcon, RotateCcwIcon } from "lucide-react"
 import { toast } from "sonner"
 
@@ -45,6 +45,12 @@ function blankForm(): FormState {
     rsvpEnabled: false,
     recurrence: "none",
     recurrenceUntil: "",
+    cost: "",
+    accessibility: "",
+    contactName: "",
+    contactEmail: "",
+    contactPhone: "",
+    waitlistEnabled: false,
   }
 }
 
@@ -91,18 +97,17 @@ export function EventFormSheet({
   const [pending, startTransition] = useTransition()
   const isAdmin = role === "admin"
 
-  useEffect(() => {
-    if (!open) return
-    if (detail) {
-      setForm(detail.form)
-      setDates(detail.dates)
-      setSlugTouched(true)
-    } else {
-      setForm(blankForm())
-      setDates([])
-      setSlugTouched(false)
+  // Load once per opening; later refreshes of `detail` must not wipe unsaved edits.
+  const loadKey = open ? String(eventId ?? "new") : null
+  const [loadedKey, setLoadedKey] = useState<string | null>(null)
+  if (loadKey !== loadedKey) {
+    setLoadedKey(loadKey)
+    if (loadKey) {
+      setForm(detail ? detail.form : blankForm())
+      setDates(detail ? detail.dates : [])
+      setSlugTouched(Boolean(detail))
     }
-  }, [open, detail])
+  }
 
   function patch(values: Partial<FormState>) {
     setForm((current) => ({ ...current, ...values }))
@@ -241,6 +246,45 @@ export function EventFormSheet({
             )}
           </section>
 
+          <section className="flex flex-col gap-4 rounded-lg border border-border p-3" aria-labelledby="visitor-info-heading">
+            <div>
+              <h3 id="visitor-info-heading" className="text-sm font-medium">Visitor information</h3>
+              <p className="mt-0.5 text-xs text-muted-foreground">Helps residents and families decide if the event works for them.</p>
+            </div>
+            <Field id="event-cost" label="Cost" hint={'For example "Free", "$5 suggested donation" or "$12 per person".'}>
+              <Input id="event-cost" value={form.cost} onChange={(e) => patch({ cost: e.target.value })} maxLength={80} placeholder="Free" className="h-11 text-base" />
+            </Field>
+            <Field id="event-access" label="Accessibility" hint="Wheelchair access, seating, hearing loop, transportation, large-print materials.">
+              <Textarea
+                id="event-access"
+                value={form.accessibility}
+                onChange={(e) => patch({ accessibility: e.target.value })}
+                rows={3}
+                maxLength={1000}
+                placeholder="Wheelchair accessible. Seating provided. Shuttle leaves the main entrance at 9:45."
+                className="text-base"
+              />
+            </Field>
+          </section>
+
+          <section className="flex flex-col gap-4 rounded-lg border border-border p-3" aria-labelledby="contact-heading">
+            <div>
+              <h3 id="contact-heading" className="text-sm font-medium">Event contact</h3>
+              <p className="mt-0.5 text-xs text-muted-foreground">Shown on the event page for questions and phone sign-ups.</p>
+            </div>
+            <Field id="event-contact-name" label="Name">
+              <Input id="event-contact-name" value={form.contactName} onChange={(e) => patch({ contactName: e.target.value })} maxLength={120} autoComplete="off" className="h-11 text-base" />
+            </Field>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field id="event-contact-phone" label="Phone">
+                <Input id="event-contact-phone" type="tel" inputMode="tel" value={form.contactPhone} onChange={(e) => patch({ contactPhone: e.target.value })} maxLength={40} autoComplete="off" className="h-11 text-base" />
+              </Field>
+              <Field id="event-contact-email" label="Email">
+                <Input id="event-contact-email" type="email" inputMode="email" value={form.contactEmail} onChange={(e) => patch({ contactEmail: e.target.value })} maxLength={200} autoComplete="off" className="h-11 text-base" />
+              </Field>
+            </div>
+          </section>
+
           <ImageField label="Event image" value={form.image ?? ""} onChange={(url) => patch({ image: url || null })} aspect={16 / 9} />
           {form.image && (
             <Field id="event-alt" label="Image description" hint="Read aloud by screen readers.">
@@ -263,6 +307,15 @@ export function EventFormSheet({
               <Field id="event-capacity" label="Spots per date" hint="Leave blank for no limit.">
                 <Input id="event-capacity" type="number" inputMode="numeric" min={1} max={5000} value={form.capacity} onChange={(e) => patch({ capacity: e.target.value })} className="h-11 text-base" />
               </Field>
+            )}
+            {form.rsvpEnabled && form.capacity.trim() !== "" && (
+              <ToggleRow
+                id="event-waitlist"
+                label="Keep a waitlist when full"
+                hint="People can still sign up once spots run out. You choose who gets a freed spot."
+                checked={form.waitlistEnabled}
+                onChange={(waitlistEnabled) => patch({ waitlistEnabled })}
+              />
             )}
             <ToggleRow id="event-featured" label="Feature this event" hint="Pins it to the top of the events page." checked={form.featured} onChange={(featured) => patch({ featured })} />
           </section>

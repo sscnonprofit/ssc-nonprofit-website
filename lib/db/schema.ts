@@ -112,6 +112,12 @@ export const events = pgTable("events", {
   recurrence: text("recurrence").notNull().default("none"),
   recurrenceUntil: timestamp("recurrence_until", { withTimezone: true }),
   exceptions: jsonb("exceptions").notNull().default([]),
+  cost: text("cost").notNull().default(""),
+  accessibility: text("accessibility").notNull().default(""),
+  contactName: text("contact_name").notNull().default(""),
+  contactEmail: text("contact_email").notNull().default(""),
+  contactPhone: text("contact_phone").notNull().default(""),
+  waitlistEnabled: boolean("waitlist_enabled").notNull().default(false),
   updatedBy: text("updated_by"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
@@ -126,6 +132,8 @@ export const eventRsvps = pgTable("event_rsvps", {
   phone: text("phone").notNull().default(""),
   guests: integer("guests").notNull().default(1),
   note: text("note").notNull().default(""),
+  status: text("status").notNull().default("confirmed"),
+  checkedInAt: timestamp("checked_in_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 })
 

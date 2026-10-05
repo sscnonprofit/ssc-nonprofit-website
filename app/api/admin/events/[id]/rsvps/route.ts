@@ -24,7 +24,7 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
   if (!event) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
   const rows = await listRsvps(event.id)
-  const header = ["Name", "Email", "Phone", "Guests", "Date attending", "Note", "Signed up"]
+  const header = ["Name", "Email", "Phone", "Guests", "Date attending", "Status", "Checked in", "Note", "Signed up"]
   const lines = rows.map((row) =>
     [
       row.name,
@@ -32,6 +32,8 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
       row.phone,
       row.guests,
       formatEventDate(new Date(row.occurrence), { dateStyle: "medium", timeStyle: "short" }),
+      row.status === "waitlist" ? "Waitlist" : "Attending",
+      row.checkedInAt ? formatEventDate(row.checkedInAt, { timeStyle: "short" }) : "",
       row.note,
       formatEventDate(row.createdAt, { dateStyle: "medium", timeStyle: "short" }),
     ]

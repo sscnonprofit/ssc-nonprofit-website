@@ -2,7 +2,16 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeftIcon, CalendarPlusIcon, ExternalLinkIcon, MapPinIcon } from "lucide-react"
+import {
+  AccessibilityIcon,
+  ArrowLeftIcon,
+  CalendarPlusIcon,
+  ExternalLinkIcon,
+  MailIcon,
+  MapPinIcon,
+  PhoneIcon,
+  TicketIcon,
+} from "lucide-react"
 
 import { RsvpForm } from "@/components/events/rsvp-form"
 import { categoryLabel } from "@/lib/events/constants"
@@ -82,6 +91,44 @@ export default async function EventDetailPage({ params }: Props) {
                 </dd>
               </div>
             )}
+            {event.cost && (
+              <div>
+                <dt className="font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">Cost</dt>
+                <dd className="mt-1 flex items-start gap-2 font-medium">
+                  <TicketIcon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  {event.cost}
+                </dd>
+              </div>
+            )}
+            {event.accessibility && (
+              <div>
+                <dt className="font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">Accessibility</dt>
+                <dd className="mt-1 flex items-start gap-2 text-pretty leading-relaxed">
+                  <AccessibilityIcon className="mt-1 size-4 shrink-0" aria-hidden="true" />
+                  <span className="whitespace-pre-line">{event.accessibility}</span>
+                </dd>
+              </div>
+            )}
+            {(event.contactName || event.contactPhone || event.contactEmail) && (
+              <div>
+                <dt className="font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">Questions</dt>
+                <dd className="mt-1 flex flex-col gap-1">
+                  {event.contactName && <span className="font-medium">{event.contactName}</span>}
+                  {event.contactPhone && (
+                    <a href={`tel:${event.contactPhone}`} className="inline-flex min-h-11 items-center gap-2 font-medium underline underline-offset-4">
+                      <PhoneIcon className="size-4 shrink-0" aria-hidden="true" />
+                      {event.contactPhone}
+                    </a>
+                  )}
+                  {event.contactEmail && (
+                    <a href={`mailto:${event.contactEmail}`} className="inline-flex min-h-11 items-center gap-2 break-all font-medium underline underline-offset-4">
+                      <MailIcon className="size-4 shrink-0" aria-hidden="true" />
+                      {event.contactEmail}
+                    </a>
+                  )}
+                </dd>
+              </div>
+            )}
           </dl>
 
           <div className="flex flex-wrap gap-3">
@@ -128,7 +175,7 @@ export default async function EventDetailPage({ params }: Props) {
                     <span className="font-medium">{formatEventDate(new Date(date.start), { weekday: "short", month: "short", day: "numeric" })}</span>
                     <span className="text-sm text-muted-foreground">
                       {date.allDay ? "All day" : formatEventDate(new Date(date.start), { hour: "numeric", minute: "2-digit" })}
-                      {date.spotsLeft === 0 ? " · Full" : ""}
+                      {date.spotsLeft === 0 ? (event.waitlistEnabled ? " · Waitlist" : " · Full") : ""}
                     </span>
                   </li>
                 ))}
@@ -145,6 +192,7 @@ export default async function EventDetailPage({ params }: Props) {
               </h2>
               <RsvpForm
                 eventId={event.id}
+                waitlistEnabled={event.waitlistEnabled}
                 dates={upcoming.map((date) => ({ key: date.key, start: date.start, allDay: date.allDay, spotsLeft: date.spotsLeft }))}
               />
             </div>

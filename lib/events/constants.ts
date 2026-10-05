@@ -25,5 +25,8 @@ export function isEventStatus(value: unknown): value is EventStatus {
   return typeof value === "string" && (EVENT_STATUSES as readonly string[]).includes(value)
 }
 
+export const RSVP_STATUSES = ["confirmed", "waitlist"] as const
+export type RsvpStatus = (typeof RSVP_STATUSES)[number]
+
 export const ALBUM_STATUSES = ["draft", "published"] as const
 export type AlbumStatus = (typeof ALBUM_STATUSES)[number]

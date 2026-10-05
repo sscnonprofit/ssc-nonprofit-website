@@ -21,6 +21,8 @@ export type RsvpInput = {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+class RsvpRejected extends Error {}
+
 export async function submitRsvpAction(input: RsvpInput): Promise<RsvpResult> {
   const name = String(input.name ?? "").trim().slice(0, 120)
   const email = String(input.email ?? "").trim().toLowerCase().slice(0, 200)
@@ -44,27 +46,45 @@ export async function submitRsvpAction(input: RsvpInput): Promise<RsvpResult> {
   if (!match) return { ok: false, error: "That date is not available." }
   if (match.start.getTime() < Date.now() - 1000 * 60 * 60 * 3) return { ok: false, error: "That date has already passed." }
 
-  const [existing] = await db
-    .select({ id: eventRsvps.id })
-    .from(eventRsvps)
-    .where(and(eq(eventRsvps.eventId, event.id), eq(eventRsvps.occurrence, match.key), eq(eventRsvps.email, email)))
-    .limit(1)
-  if (existing) return { ok: false, error: "This email has already RSVPed for that date." }
+  try {
+    const waitlisted = await db.transaction(async (tx) => {
+      // Serialize sign-ups per event so two people can't both claim the last spot.
+      await tx.execute(sql`select pg_advisory_xact_lock(${event.id})`)
 
-  if (event.capacity) {
-    const [row] = await db
-      .select({ guests: sql<number>`coalesce(sum(${eventRsvps.guests}), 0)::int` })
-      .from(eventRsvps)
-      .where(and(eq(eventRsvps.eventId, event.id), eq(eventRsvps.occurrence, match.key)))
-    const taken = row?.guests ?? 0
-    const left = event.capacity - taken
-    if (left <= 0) return { ok: false, error: "Sorry, this date is full." }
-    if (guests > left) return { ok: false, error: `Only ${left} ${left === 1 ? "spot is" : "spots are"} left for this date.` }
+      const [existing] = await tx
+        .select({ id: eventRsvps.id })
+        .from(eventRsvps)
+        .where(and(eq(eventRsvps.eventId, event.id), eq(eventRsvps.occurrence, match.key), eq(eventRsvps.email, email)))
+        .limit(1)
+      if (existing) throw new RsvpRejected("This email has already signed up for that date.")
+
+      let status: "confirmed" | "waitlist" = "confirmed"
+      if (event.capacity) {
+        const [row] = await tx
+          .select({ guests: sql<number>`coalesce(sum(${eventRsvps.guests}), 0)::int` })
+          .from(eventRsvps)
+          .where(and(eq(eventRsvps.eventId, event.id), eq(eventRsvps.occurrence, match.key), eq(eventRsvps.status, "confirmed")))
+        const left = event.capacity - (row?.guests ?? 0)
+        if (guests > left) {
+          if (!event.waitlistEnabled) {
+            throw new RsvpRejected(
+              left <= 0 ? "Sorry, this date is full." : `Only ${left} ${left === 1 ? "spot is" : "spots are"} left for this date.`,
+            )
+          }
+          status = "waitlist"
+        }
+      }
+
+      await tx.insert(eventRsvps).values({ eventId: event.id, occurrence: match.key, name, email, phone, guests, note, status })
+      return status === "waitlist"
+    })
+
+    revalidatePath("/upcoming-events")
+    revalidatePath(`/upcoming-events/${event.slug}`)
+    revalidatePath("/admin/events")
+    return { ok: true, waitlisted }
+  } catch (error) {
+    if (error instanceof RsvpRejected) return { ok: false, error: error.message }
+    throw error
   }
-
-  await db.insert(eventRsvps).values({ eventId: event.id, occurrence: match.key, name, email, phone, guests, note })
-
-  revalidatePath("/upcoming-events")
-  revalidatePath(`/upcoming-events/${event.slug}`)
-  return { ok: true }
 }

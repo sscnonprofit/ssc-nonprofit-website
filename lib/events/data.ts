@@ -23,6 +23,8 @@ export type PublicOccurrence = {
   featured: boolean
   recurring: boolean
   rsvpEnabled: boolean
+  waitlistEnabled: boolean
+  cost: string
   spotsLeft: number | null
   key: string
   start: string
@@ -47,22 +49,29 @@ export type AdminEvent = {
   nextStart: string | null
   rsvpGuests: number
   rsvpCount: number
+  waitlistCount: number
+  checkedInGuests: number
+  waitlistEnabled: boolean
   updatedAt: string
 }
 
+const confirmedOnly = eq(eventRsvps.status, "confirmed")
+
 async function guestTotals(eventIds: number[]) {
-  const totals = new Map<number, { guests: number; count: number }>()
+  const totals = new Map<number, { guests: number; count: number; waitlist: number; checkedIn: number }>()
   if (eventIds.length === 0) return totals
   const rows = await db
     .select({
       eventId: eventRsvps.eventId,
-      guests: sql<number>`coalesce(sum(${eventRsvps.guests}), 0)::int`,
-      count: sql<number>`count(*)::int`,
+      guests: sql<number>`coalesce(sum(${eventRsvps.guests}) filter (where ${eventRsvps.status} = 'confirmed'), 0)::int`,
+      count: sql<number>`(count(*) filter (where ${eventRsvps.status} = 'confirmed'))::int`,
+      waitlist: sql<number>`(count(*) filter (where ${eventRsvps.status} = 'waitlist'))::int`,
+      checkedIn: sql<number>`coalesce(sum(${eventRsvps.guests}) filter (where ${eventRsvps.checkedInAt} is not null), 0)::int`,
     })
     .from(eventRsvps)
     .where(inArray(eventRsvps.eventId, eventIds))
     .groupBy(eventRsvps.eventId)
-  for (const row of rows) totals.set(row.eventId, { guests: row.guests, count: row.count })
+  for (const row of rows) totals.set(row.eventId, row)
   return totals
 }
 
@@ -90,6 +99,9 @@ export async function listAdminEvents(): Promise<AdminEvent[]> {
       nextStart: next?.start.toISOString() ?? null,
       rsvpGuests: total?.guests ?? 0,
       rsvpCount: total?.count ?? 0,
+      waitlistCount: total?.waitlist ?? 0,
+      checkedInGuests: total?.checkedIn ?? 0,
+      waitlistEnabled: row.waitlistEnabled,
       updatedAt: row.updatedAt.toISOString(),
     }
   })
@@ -116,6 +128,12 @@ export type AdminEventDetail = {
     rsvpEnabled: boolean
     recurrence: string
     recurrenceUntil: string
+    cost: string
+    accessibility: string
+    contactName: string
+    contactEmail: string
+    contactPhone: string
+    waitlistEnabled: boolean
   }
   /** Upcoming dates of a repeating event, so single dates can be cancelled. */
   dates: { key: string; start: string; cancelled: boolean }[]
@@ -148,6 +166,12 @@ export async function listAdminEventDetails(): Promise<Record<number, AdminEvent
         rsvpEnabled: row.rsvpEnabled,
         recurrence: row.recurrence,
         recurrenceUntil: toLocalInput(row.recurrenceUntil),
+        cost: row.cost,
+        accessibility: row.accessibility,
+        contactName: row.contactName,
+        contactEmail: row.contactEmail,
+        contactPhone: row.contactPhone,
+        waitlistEnabled: row.waitlistEnabled,
       },
       dates:
         row.recurrence === "none"
@@ -180,7 +204,7 @@ export async function guestsForOccurrence(eventId: number, occurrence: string) {
   const [row] = await db
     .select({ guests: sql<number>`coalesce(sum(${eventRsvps.guests}), 0)::int` })
     .from(eventRsvps)
-    .where(and(eq(eventRsvps.eventId, eventId), eq(eventRsvps.occurrence, occurrence)))
+    .where(and(eq(eventRsvps.eventId, eventId), eq(eventRsvps.occurrence, occurrence), confirmedOnly))
   return row?.guests ?? 0
 }
 
@@ -203,6 +227,8 @@ function toPublic(
     featured: event.featured,
     recurring: event.recurrence !== "none",
     rsvpEnabled: event.rsvpEnabled,
+    waitlistEnabled: event.waitlistEnabled,
+    cost: event.cost,
     spotsLeft: event.rsvpEnabled && event.capacity ? Math.max(event.capacity - taken, 0) : null,
     key: occurrence.key,
     start: occurrence.start.toISOString(),
@@ -220,7 +246,7 @@ async function bookedMap(eventIds: number[]) {
       guests: sql<number>`coalesce(sum(${eventRsvps.guests}), 0)::int`,
     })
     .from(eventRsvps)
-    .where(inArray(eventRsvps.eventId, eventIds))
+    .where(and(inArray(eventRsvps.eventId, eventIds), confirmedOnly))
     .groupBy(eventRsvps.eventId, eventRsvps.occurrence)
   for (const row of rows) map.set(`${row.eventId}:${row.occurrence}`, row.guests)
   return map

@@ -4,6 +4,8 @@ import { useMemo, useState, useTransition } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import {
+  BanIcon,
+  RotateCcwIcon,
   CalendarPlusIcon,
   CopyIcon,
   EyeIcon,
@@ -55,6 +57,7 @@ const FILTERS = [
   { value: "upcoming", label: "Upcoming" },
   { value: "published", label: "Published" },
   { value: "draft", label: "Drafts" },
+  { value: "cancelled", label: "Cancelled" },
   { value: "past", label: "Past" },
 ] as const
 
@@ -82,6 +85,7 @@ export function EventsManager({
   const [editingId, setEditingId] = useState<number | null>(null)
   const [rsvpFor, setRsvpFor] = useState<{ id: number; title: string } | null>(null)
   const [deleting, setDeleting] = useState<AdminEvent | null>(null)
+  const [cancelling, setCancelling] = useState<AdminEvent | null>(null)
   const [pending, startTransition] = useTransition()
   const canEdit = role === "admin" || role === "editor"
   const isAdmin = role === "admin"
@@ -97,6 +101,7 @@ export function EventsManager({
         if (filter === "past") return !upcoming
         if (filter === "published") return event.status === "published"
         if (filter === "draft") return event.status === "draft"
+        if (filter === "cancelled") return event.status === "cancelled"
         return true
       })
       .sort((a, b) => {
@@ -108,6 +113,20 @@ export function EventsManager({
         return aFuture ? aDate - bDate : bDate - aDate
       })
   }, [events, filter, query])
+
+  const summary = useMemo(() => {
+    const now = Date.now()
+    const monthAhead = now + 1000 * 60 * 60 * 24 * 30
+    const upcoming = events.filter(
+      (event) => event.status === "published" && event.nextStart !== null && new Date(event.nextStart).getTime() <= monthAhead,
+    )
+    return {
+      nextMonth: upcoming.length,
+      guests: events.filter((event) => event.nextStart !== null).reduce((sum, event) => sum + event.rsvpGuests, 0),
+      waitlist: events.reduce((sum, event) => sum + event.waitlistCount, 0),
+      drafts: events.filter((event) => event.status === "draft").length,
+    }
+  }, [events])
 
   function run(task: () => Promise<{ ok: boolean; error?: string }>, success: string) {
     startTransition(async () => {
@@ -128,6 +147,25 @@ export function EventsManager({
 
   return (
     <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" role="group" aria-label="Events at a glance">
+        {[
+          { label: "Live in next 30 days", value: summary.nextMonth, filterTo: "upcoming" as Filter },
+          { label: "Guests signed up", value: summary.guests, filterTo: "upcoming" as Filter },
+          { label: "On waitlists", value: summary.waitlist, filterTo: "upcoming" as Filter },
+          { label: "Drafts to review", value: summary.drafts, filterTo: "draft" as Filter },
+        ].map((item) => (
+          <button
+            key={item.label}
+            type="button"
+            onClick={() => setFilter(item.filterTo)}
+            className="flex min-h-11 flex-col items-start gap-1.5 rounded-xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50"
+          >
+            <span className="text-xs text-muted-foreground">{item.label}</span>
+            <span className="font-serif text-2xl font-semibold leading-none text-foreground">{item.value}</span>
+          </button>
+        ))}
+      </div>
+
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
@@ -228,8 +266,14 @@ export function EventsManager({
                       >
                         <UsersIcon className="size-3" aria-hidden="true" />
                         {event.rsvpGuests}
-                        {event.capacity ? ` / ${event.capacity}` : ""} RSVPs
+                        {event.capacity && event.recurrence === "none" ? ` / ${event.capacity}` : ""} attending
+                        {event.checkedInGuests > 0 && ` · ${event.checkedInGuests} in`}
                       </button>
+                    )}
+                    {event.waitlistCount > 0 && (
+                      <Badge variant="outline" className="border-accent/50 text-foreground">
+                        {event.waitlistCount} waitlisted
+                      </Badge>
                     )}
                   </div>
                 </div>
@@ -243,7 +287,7 @@ export function EventsManager({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-52">
                     {canEdit && (
-                      <DropdownMenuItem className="min-h-11" onSelect={() => openEditor(event.id)}>
+                      <DropdownMenuItem className="min-h-11" onClick={() => openEditor(event.id)}>
                         <PencilIcon className="size-4" />
                         Edit
                       </DropdownMenuItem>
@@ -257,17 +301,17 @@ export function EventsManager({
                         View on site
                       </DropdownMenuItem>
                     )}
-                    <DropdownMenuItem className="min-h-11" onSelect={() => setRsvpFor({ id: event.id, title: event.title })}>
+                    <DropdownMenuItem className="min-h-11" onClick={() => setRsvpFor({ id: event.id, title: event.title })}>
                       <UsersIcon className="size-4" />
                       View RSVPs
                     </DropdownMenuItem>
                     {canEdit && (
                       <>
-                        <DropdownMenuItem className="min-h-11" onSelect={() => run(() => duplicateEventAction(event.id), "Duplicated as a draft")}>
+                        <DropdownMenuItem className="min-h-11" onClick={() => run(() => duplicateEventAction(event.id), "Duplicated as a draft")}>
                           <CopyIcon className="size-4" />
                           Duplicate
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="min-h-11" onSelect={() => run(() => toggleFeaturedAction(event.id, !event.featured), event.featured ? "Removed from featured" : "Marked as featured")}>
+                        <DropdownMenuItem className="min-h-11" onClick={() => run(() => toggleFeaturedAction(event.id, !event.featured), event.featured ? "Removed from featured" : "Marked as featured")}>
                           <StarIcon className="size-4" />
                           {event.featured ? "Remove featured" : "Feature"}
                         </DropdownMenuItem>
@@ -276,7 +320,7 @@ export function EventsManager({
                     {isAdmin && (
                       <DropdownMenuItem
                         className="min-h-11"
-                        onSelect={() =>
+                        onClick={() =>
                           run(
                             () => setEventStatusAction(event.id, event.status === "published" ? "draft" : "published"),
                             event.status === "published" ? "Event unpublished" : "Event published",
@@ -287,10 +331,23 @@ export function EventsManager({
                         {event.status === "published" ? "Unpublish" : "Publish"}
                       </DropdownMenuItem>
                     )}
+                    {isAdmin && event.status !== "draft" && (
+                      <DropdownMenuItem
+                        className="min-h-11"
+                        onClick={() =>
+                          event.status === "cancelled"
+                            ? run(() => setEventStatusAction(event.id, "published"), "Event restored")
+                            : setCancelling(event)
+                        }
+                      >
+                        {event.status === "cancelled" ? <RotateCcwIcon className="size-4" /> : <BanIcon className="size-4" />}
+                        {event.status === "cancelled" ? "Restore event" : "Cancel event"}
+                      </DropdownMenuItem>
+                    )}
                     {canEdit && (isAdmin || event.status === "draft") && (
                       <>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem variant="destructive" className="min-h-11" onSelect={() => setDeleting(event)}>
+                        <DropdownMenuItem variant="destructive" className="min-h-11" onClick={() => setDeleting(event)}>
                           <Trash2Icon className="size-4" />
                           Delete
                         </DropdownMenuItem>
@@ -313,7 +370,41 @@ export function EventsManager({
         onSaved={() => router.refresh()}
       />
 
-      <RsvpDialog event={rsvpFor} canEdit={canEdit} onClose={() => setRsvpFor(null)} />
+      <RsvpDialog event={rsvpFor} canEdit={canEdit} isAdmin={isAdmin} onClose={() => setRsvpFor(null)} onChanged={() => router.refresh()} />
+
+      <Dialog open={Boolean(cancelling)} onOpenChange={(open) => !open && setCancelling(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Cancel this event?</DialogTitle>
+            <DialogDescription>
+              {cancelling?.title} will leave the public calendar and its page will show a cancellation notice.
+              {cancelling && cancelling.rsvpCount > 0
+                ? ` ${cancelling.rsvpCount} ${cancelling.rsvpCount === 1 ? "person has" : "people have"} signed up, so export the attendee list to let them know.`
+                : ""}{" "}
+              You can restore it later.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            {cancelling && cancelling.rsvpCount > 0 && (
+              <Button variant="outline" className="h-11" nativeButton={false} render={<a href={`/api/admin/events/${cancelling.id}/rsvps`} download />}>
+                Export attendees
+              </Button>
+            )}
+            <Button
+              variant="destructive"
+              className="h-11"
+              disabled={pending}
+              onClick={() => {
+                const target = cancelling
+                setCancelling(null)
+                if (target) run(() => setEventStatusAction(target.id, "cancelled"), "Event cancelled")
+              }}
+            >
+              Cancel event
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={Boolean(deleting)} onOpenChange={(open) => !open && setDeleting(null)}>
         <DialogContent>

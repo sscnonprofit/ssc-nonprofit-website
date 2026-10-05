@@ -17,20 +17,28 @@ function dateLabel(date: RsvpDate) {
   return date.allDay ? day : `${day}, ${formatEventDate(start, { hour: "numeric", minute: "2-digit" })}`
 }
 
-export function RsvpForm({ eventId, dates }: { eventId: number; dates: RsvpDate[] }) {
+export function RsvpForm({ eventId, dates, waitlistEnabled = false }: { eventId: number; dates: RsvpDate[]; waitlistEnabled?: boolean }) {
   const [occurrence, setOccurrence] = useState(dates.find((d) => d.spotsLeft !== 0)?.key ?? dates[0]?.key ?? "")
   const [error, setError] = useState<string | null>(null)
-  const [done, setDone] = useState<string | null>(null)
+  const [done, setDone] = useState<{ message: string; waitlisted: boolean } | null>(null)
   const [pending, startTransition] = useTransition()
+
+  const selected = dates.find((d) => d.key === occurrence)
+  const selectedFull = selected?.spotsLeft === 0
+  const allFull = dates.length > 0 && dates.every((d) => d.spotsLeft === 0)
 
   if (done) {
     return (
       <div role="status" className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-secondary p-8 text-center">
         <CheckCircle2Icon className="size-10 text-accent" aria-hidden="true" />
-        <p className="font-display text-xl font-semibold">You&apos;re on the list</p>
-        <p className="text-pretty text-muted-foreground">{done}</p>
+        <p className="font-display text-xl font-semibold">{done.waitlisted ? "You're on the waitlist" : "You're on the list"}</p>
+        <p className="text-pretty text-muted-foreground">{done.message}</p>
       </div>
     )
+  }
+
+  if (allFull && !waitlistEnabled) {
+    return <p className="rounded-xl bg-secondary p-4 text-pretty text-muted-foreground">Every upcoming date is full. Please check back, as spots sometimes open up.</p>
   }
 
   function onSubmit(formData: FormData) {
@@ -47,7 +55,12 @@ export function RsvpForm({ eventId, dates }: { eventId: number; dates: RsvpDate[
         note: String(formData.get("note") ?? ""),
       })
       if (result.ok) {
-        setDone(chosen ? `We saved your spot for ${dateLabel(chosen)}.` : "We saved your spot.")
+        const when = chosen ? ` for ${dateLabel(chosen)}` : ""
+        setDone(
+          result.waitlisted
+            ? { waitlisted: true, message: `That date is full, so we added you to the waitlist${when}. We'll be in touch if a spot opens up.` }
+            : { waitlisted: false, message: `We saved your spot${when}.` },
+        )
       } else {
         setError(result.error)
       }
@@ -66,9 +79,9 @@ export function RsvpForm({ eventId, dates }: { eventId: number; dates: RsvpDate[
             className="h-12 w-full rounded-lg border border-input bg-background px-3 text-base"
           >
             {dates.map((date) => (
-              <option key={date.key} value={date.key} disabled={date.spotsLeft === 0}>
+              <option key={date.key} value={date.key} disabled={date.spotsLeft === 0 && !waitlistEnabled}>
                 {dateLabel(date)}
-                {date.spotsLeft === 0 ? " (full)" : date.spotsLeft !== null ? ` (${date.spotsLeft} left)` : ""}
+                {date.spotsLeft === 0 ? (waitlistEnabled ? " (full, join waitlist)" : " (full)") : date.spotsLeft !== null ? ` (${date.spotsLeft} left)` : ""}
               </option>
             ))}
           </select>
@@ -96,6 +109,11 @@ export function RsvpForm({ eventId, dates }: { eventId: number; dates: RsvpDate[
         <Label htmlFor="rsvp-note">Note (optional)</Label>
         <Textarea id="rsvp-note" name="note" rows={3} placeholder="Accessibility needs, questions, anything we should know" className="text-base" />
       </div>
+      {selectedFull && waitlistEnabled && (
+        <p className="rounded-lg bg-secondary p-3 text-sm text-pretty text-muted-foreground">
+          This date is full. Sign up below to join the waitlist and we&apos;ll contact you if a spot opens.
+        </p>
+      )}
       {error && (
         <p role="alert" className="text-sm font-medium text-destructive">
           {error}
@@ -107,7 +125,7 @@ export function RsvpForm({ eventId, dates }: { eventId: number; dates: RsvpDate[
         className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 font-display text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {pending && <Loader2Icon className="size-4 animate-spin" aria-hidden="true" />}
-        {pending ? "Sending" : "Reserve my spot"}
+        {pending ? "Sending" : selectedFull ? "Join the waitlist" : "Reserve my spot"}
       </button>
     </form>
   )

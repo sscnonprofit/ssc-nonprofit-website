@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next"
 
+import { listPublicAlbums, listPublicOccurrences } from "@/lib/events/data"
+
 const BASE_URL = "https://sscnonprofit.org"
 
 const routes = [
@@ -19,12 +21,37 @@ const routes = [
   { path: "/artists-gallery", priority: 0.6 },
 ]
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = "force-dynamic"
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date()
-  return routes.map(({ path, priority }) => ({
+  const entries: MetadataRoute.Sitemap = routes.map(({ path, priority }) => ({
     url: `${BASE_URL}${path}`,
     lastModified,
     changeFrequency: "monthly",
     priority,
   }))
+
+  try {
+    const [occurrences, albums] = await Promise.all([
+      listPublicOccurrences({ from: new Date(), to: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365) }),
+      listPublicAlbums(),
+    ])
+    const eventSlugs = [...new Set(occurrences.map((item) => item.slug))]
+    for (const slug of eventSlugs) {
+      entries.push({ url: `${BASE_URL}/upcoming-events/${slug}`, lastModified, changeFrequency: "weekly", priority: 0.5 })
+    }
+    for (const album of albums) {
+      entries.push({
+        url: `${BASE_URL}/artists-gallery/${album.slug}`,
+        lastModified: new Date(album.updatedAt),
+        changeFrequency: "monthly",
+        priority: 0.4,
+      })
+    }
+  } catch {
+    // The static routes still render if the database is unreachable.
+  }
+
+  return entries
 }

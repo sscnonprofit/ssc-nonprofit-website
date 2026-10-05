@@ -7,8 +7,12 @@ import eventsFallback from "@/content/events.json"
 import { BrandRule } from "@/components/brand-rule"
 import { CtaBand } from "@/components/cta-band"
 import { PageHero } from "@/components/page-hero"
+import { EventsBrowser } from "@/components/events/events-browser"
 import { SectionHeading } from "@/components/section-heading"
 import { getContent } from "@/lib/cms/content"
+import { listPublicOccurrences } from "@/lib/events/data"
+
+export const dynamic = "force-dynamic"
 
 export async function generateMetadata(): Promise<Metadata> {
   const events = await getContent("events", eventsFallback)
@@ -20,6 +24,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function UpcomingEventsPage() {
   const events = await getContent("events", eventsFallback)
+  const upcoming = await listPublicOccurrences({
+    from: new Date(Date.now() - 1000 * 60 * 60 * 3),
+    to: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+  })
 
   return (
     <>
@@ -30,6 +38,17 @@ export default async function UpcomingEventsPage() {
         image={events.hero.image}
         imageAlt={events.hero.imageAlt}
       />
+
+      {/* Live events from the database */}
+      <section id="events" aria-labelledby="events-heading" className="mx-auto max-w-4xl px-6 py-16 sm:py-24">
+        <div className="mb-8 flex flex-col gap-3">
+          <BrandRule />
+          <h2 id="events-heading" className="text-balance font-display text-3xl font-semibold sm:text-4xl">
+            What&apos;s on
+          </h2>
+        </div>
+        <EventsBrowser items={upcoming} />
+      </section>
 
       {/* Featured event */}
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-24">

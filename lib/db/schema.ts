@@ -87,3 +87,69 @@ export const pageRevisions = pgTable("page_revisions", {
   note: text("note"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 })
+
+// --- Events & gallery --------------------------------------------------------
+
+export const events = pgTable("events", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  summary: text("summary").notNull().default(""),
+  description: text("description").notNull().default(""),
+  category: text("category").notNull().default("community"),
+  location: text("location").notNull().default(""),
+  startAt: timestamp("start_at", { withTimezone: true }).notNull(),
+  endAt: timestamp("end_at", { withTimezone: true }),
+  allDay: boolean("all_day").notNull().default(false),
+  image: text("image"),
+  imageAlt: text("image_alt").notNull().default(""),
+  ctaLabel: text("cta_label").notNull().default(""),
+  ctaUrl: text("cta_url").notNull().default(""),
+  featured: boolean("featured").notNull().default(false),
+  status: text("status").notNull().default("draft"),
+  capacity: integer("capacity"),
+  rsvpEnabled: boolean("rsvp_enabled").notNull().default(false),
+  recurrence: text("recurrence").notNull().default("none"),
+  recurrenceUntil: timestamp("recurrence_until", { withTimezone: true }),
+  exceptions: jsonb("exceptions").notNull().default([]),
+  updatedBy: text("updated_by"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const eventRsvps = pgTable("event_rsvps", {
+  id: serial("id").primaryKey(),
+  eventId: integer("event_id").notNull(),
+  occurrence: text("occurrence").notNull(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull().default(""),
+  guests: integer("guests").notNull().default(1),
+  note: text("note").notNull().default(""),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const galleryAlbums = pgTable("gallery_albums", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  description: text("description").notNull().default(""),
+  coverUrl: text("cover_url"),
+  status: text("status").notNull().default("draft"),
+  featured: boolean("featured").notNull().default(false),
+  eventId: integer("event_id"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  updatedBy: text("updated_by"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const galleryPhotos = pgTable("gallery_photos", {
+  id: serial("id").primaryKey(),
+  albumId: integer("album_id").notNull(),
+  url: text("url").notNull(),
+  alt: text("alt").notNull().default(""),
+  caption: text("caption").notNull().default(""),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})

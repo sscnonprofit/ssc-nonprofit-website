@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import Image from "next/image"
+import Link from "next/link"
 import { Check, Download, Mail, MapPin } from "lucide-react"
 
 import galleryFallback from "@/content/gallery.json"
@@ -8,6 +10,9 @@ import { CtaBand } from "@/components/cta-band"
 import { PageHero } from "@/components/page-hero"
 import { SectionHeading } from "@/components/section-heading"
 import { getContent } from "@/lib/cms/content"
+import { listPublicAlbums } from "@/lib/events/data"
+
+export const dynamic = "force-dynamic"
 
 export async function generateMetadata(): Promise<Metadata> {
   const gallery = await getContent("gallery", galleryFallback)
@@ -18,9 +23,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ArtistsGalleryPage() {
-  const [gallery, site] = await Promise.all([
+  const [gallery, site, albums] = await Promise.all([
     getContent("gallery", galleryFallback),
     getContent("site", siteFallback),
+    listPublicAlbums(),
   ])
   const { intro, theme, guidelines, dropoff, display } = gallery
 
@@ -33,6 +39,42 @@ export default async function ArtistsGalleryPage() {
         image={gallery.hero.image}
         imageAlt={gallery.hero.imageAlt}
       />
+
+      {albums.length > 0 && (
+        <section id="albums" aria-labelledby="albums-heading" className="mx-auto max-w-7xl px-6 pt-16 sm:pt-24">
+          <div className="mb-8 flex flex-col gap-3">
+            <BrandRule />
+            <h2 id="albums-heading" className="text-balance font-display text-3xl font-semibold sm:text-4xl">
+              Photo albums
+            </h2>
+          </div>
+          <ul className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
+            {albums.map((album, index) => (
+              <li key={album.id} className={album.featured && index === 0 ? "col-span-2 lg:col-span-1" : undefined}>
+                <Link href={`/artists-gallery/${album.slug}`} className="ssc-card group flex h-full flex-col overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
+                    {album.cover && (
+                      <Image
+                        src={album.cover}
+                        alt=""
+                        fill
+                        sizes="(min-width: 1024px) 24rem, 50vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-1 p-4">
+                    <h3 className="text-balance font-display text-base font-semibold leading-snug sm:text-lg">{album.title}</h3>
+                    <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                      {album.photoCount} {album.photoCount === 1 ? "photo" : "photos"}
+                    </p>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* Invitation + opening card */}
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-24">

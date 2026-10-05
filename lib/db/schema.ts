@@ -152,6 +152,83 @@ export const galleryAlbums = pgTable("gallery_albums", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 })
 
+export const galleryExhibitions = pgTable("gallery_exhibitions", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  description: text("description").notNull().default(""),
+  coverUrl: text("cover_url"),
+  venueName: text("venue_name").notNull().default(""),
+  venueAddress: text("venue_address").notNull().default(""),
+  venuePhone: text("venue_phone").notNull().default(""),
+  venueEmail: text("venue_email").notNull().default(""),
+  venueWebsite: text("venue_website").notNull().default(""),
+  startsAt: timestamp("starts_at", { withTimezone: true }),
+  endsAt: timestamp("ends_at", { withTimezone: true }),
+  publicOpeningAt: timestamp("public_opening_at", { withTimezone: true }),
+  submissionDeadline: timestamp("submission_deadline", { withTimezone: true }),
+  status: text("status").notNull().default("draft"),
+  featured: boolean("featured").notNull().default(false),
+  submissionsEnabled: boolean("submissions_enabled").notNull().default(false),
+  createdBy: text("created_by"),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const galleryExhibitionAlbums = pgTable("gallery_exhibition_albums", {
+  exhibitionId: integer("exhibition_id").notNull(),
+  albumId: integer("album_id").notNull(),
+  sortOrder: integer("sort_order").notNull().default(0),
+})
+
+export const gallerySubmissions = pgTable("gallery_submissions", {
+  id: serial("id").primaryKey(),
+  exhibitionId: integer("exhibition_id").notNull(),
+  artistName: text("artist_name").notNull(),
+  artistEmail: text("artist_email").notNull(),
+  artistPhone: text("artist_phone").notNull().default(""),
+  artistBio: text("artist_bio").notNull().default(""),
+  artistStatement: text("artist_statement").notNull().default(""),
+  portfolioUrl: text("portfolio_url").notNull().default(""),
+  socialHandles: text("social_handles").notNull().default(""),
+  artworkTitle: text("artwork_title").notNull(),
+  medium: text("medium").notNull().default(""),
+  dimensions: text("dimensions").notNull().default(""),
+  yearCreated: integer("year_created"),
+  editionInfo: text("edition_info").notNull().default(""),
+  askingPrice: text("asking_price").notNull().default(""),
+  notForSale: boolean("not_for_sale").notNull().default(false),
+  artworkDescription: text("artwork_description").notNull().default(""),
+  imageUrls: jsonb("image_urls").notNull().default([]),
+  status: text("status").notNull().default("submitted"),
+  reviewNotes: text("review_notes").notNull().default(""),
+  reviewerId: text("reviewer_id"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const galleryExhibitionOccurrences = pgTable("gallery_exhibition_occurrences", {
+  id: serial("id").primaryKey(),
+  exhibitionId: integer("exhibition_id").notNull(),
+  startsAt: timestamp("starts_at", { withTimezone: true }).notNull(),
+  endsAt: timestamp("ends_at", { withTimezone: true }),
+  recurrence: text("recurrence").notNull().default("none"),
+  cancelled: boolean("cancelled").notNull().default(false),
+})
+
+export const galleryExhibitionRsvps = pgTable("gallery_exhibition_rsvps", {
+  id: serial("id").primaryKey(),
+  exhibitionId: integer("exhibition_id").notNull(),
+  occurrenceId: integer("occurrence_id"),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  guests: integer("guests").notNull().default(1),
+  status: text("status").notNull().default("confirmed"),
+  waitlistPosition: integer("waitlist_position"),
+  checkedInAt: timestamp("checked_in_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
 export const galleryPhotos = pgTable("gallery_photos", {
   id: serial("id").primaryKey(),
   albumId: integer("album_id").notNull(),

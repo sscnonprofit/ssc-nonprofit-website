@@ -1,21 +1,6 @@
-import { notFound, redirect } from "next/navigation"
+import { redirect } from "next/navigation"
 
-import { updateExhibitionAction } from "@/app/admin/exhibition-actions"
-import { Button } from "@/components/ui/button"
-import { getExhibitionById } from "@/lib/gallery/exhibitions"
-import { requireEditor } from "@/lib/cms/auth-helpers"
-
-export default async function ExhibitionEditorPage({ params }: { params: Promise<{ id: string }> }) {
-  await requireEditor()
-  const { id: rawId } = await params
-  const id = Number(rawId)
-  const exhibition = await getExhibitionById(id)
-  if (!exhibition) notFound()
-  async function save(formData: FormData) {
-    "use server"
-    const result = await updateExhibitionAction(id, { title: String(formData.get("title") ?? ""), slug: String(formData.get("slug") ?? ""), description: String(formData.get("description") ?? ""), coverUrl: String(formData.get("coverUrl") ?? ""), venueName: String(formData.get("venueName") ?? ""), venueAddress: String(formData.get("venueAddress") ?? ""), venuePhone: String(formData.get("venuePhone") ?? ""), venueEmail: String(formData.get("venueEmail") ?? ""), venueWebsite: String(formData.get("venueWebsite") ?? ""), startsAt: String(formData.get("startsAt") ?? ""), endsAt: String(formData.get("endsAt") ?? ""), publicOpeningAt: String(formData.get("publicOpeningAt") ?? ""), submissionDeadline: String(formData.get("submissionDeadline") ?? ""), status: String(formData.get("status") ?? "draft"), featured: formData.get("featured") === "on", submissionsEnabled: formData.get("submissionsEnabled") === "on" })
-    if (result.ok) redirect("/admin/exhibitions")
-  }
-  return <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6"><p className="font-mono text-xs uppercase tracking-[0.18em] text-primary">Gallery exhibition</p><h1 className="mt-2 font-display text-3xl font-semibold">{exhibition.title}</h1><form action={save} className="mt-8 grid gap-5 rounded-2xl border border-border bg-card p-6 md:grid-cols-2"><Field label="Title" name="title" defaultValue={exhibition.title} required /><Field label="Slug" name="slug" defaultValue={exhibition.slug} required /><Field label="Cover image URL" name="coverUrl" defaultValue={exhibition.coverUrl ?? ""} /><Field label="Venue name" name="venueName" defaultValue={exhibition.venueName} /><Field label="Venue address" name="venueAddress" defaultValue={exhibition.venueAddress} /><Field label="Venue phone" name="venuePhone" defaultValue={exhibition.venuePhone} /><Field label="Venue email" name="venueEmail" defaultValue={exhibition.venueEmail} /><Field label="Venue website" name="venueWebsite" defaultValue={exhibition.venueWebsite} /><Field label="Start" name="startsAt" type="datetime-local" defaultValue={exhibition.startsAt?.toISOString().slice(0,16)} /><Field label="End" name="endsAt" type="datetime-local" defaultValue={exhibition.endsAt?.toISOString().slice(0,16)} /><Field label="Public opening" name="publicOpeningAt" type="datetime-local" defaultValue={exhibition.publicOpeningAt?.toISOString().slice(0,16)} /><Field label="Submission deadline" name="submissionDeadline" type="datetime-local" defaultValue={exhibition.submissionDeadline?.toISOString().slice(0,16)} /><label className="grid gap-2 text-sm"><span>Status</span><select name="status" defaultValue={exhibition.status} className="h-10 rounded-lg border border-input bg-background px-3"><option value="draft">Draft</option><option value="open">Open for Submissions</option><option value="upcoming">Upcoming</option><option value="active">Active</option><option value="closed">Closed</option><option value="archived">Archived</option></select></label><div className="flex items-center gap-5 text-sm"><label className="flex gap-2"><input type="checkbox" name="featured" defaultChecked={exhibition.featured} /> Featured</label><label className="flex gap-2"><input type="checkbox" name="submissionsEnabled" defaultChecked={exhibition.submissionsEnabled} /> Open submissions</label></div><label className="grid gap-2 text-sm md:col-span-2"><span>Description</span><textarea name="description" defaultValue={exhibition.description} rows={7} className="rounded-lg border border-input bg-background px-3 py-2" /></label><Button type="submit" className="md:col-span-2">Save exhibition</Button></form></main>
+export default async function ExhibitionEditorRedirect({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  redirect(`/admin/exhibitions?edit=${encodeURIComponent(id)}`)
 }
-function Field({ label, name, defaultValue, type = "text", required }: { label: string; name: string; defaultValue?: string; type?: string; required?: boolean }) { return <label className="grid gap-2 text-sm"><span>{label}</span><input name={name} defaultValue={defaultValue} type={type} required={required} className="h-10 rounded-lg border border-input bg-background px-3" /></label> }

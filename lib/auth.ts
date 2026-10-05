@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth"
+import { eq } from "drizzle-orm"
 
 import { db, pool } from "@/lib/db"
 import { user as userTable } from "@/lib/db/schema"
@@ -49,9 +50,29 @@ export const auth = betterAuth({
         // client-supplied role on sign-up.
         input: false,
       },
+      disabled: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
+        input: false,
+      },
     },
   },
   databaseHooks: {
+    session: {
+      create: {
+        // Suspended accounts cannot start a new session.
+        before: async (newSession) => {
+          const [account] = await db
+            .select({ disabled: userTable.disabled })
+            .from(userTable)
+            .where(eq(userTable.id, newSession.userId))
+            .limit(1)
+          if (account?.disabled) return false
+          return { data: newSession }
+        },
+      },
+    },
     user: {
       create: {
         // The very first account created becomes the admin so the CMS has an

@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 
 import { db } from "@/lib/db"
-import { pageRevisions, pages, user as userTable } from "@/lib/db/schema"
+import { pageRevisions, pages } from "@/lib/db/schema"
 import { getSessionUser, requireAdmin, requireEditor } from "@/lib/cms/auth-helpers"
 import { getCmsDoc } from "@/lib/cms/registry"
 
@@ -93,23 +93,6 @@ export async function restoreRevisionAction(slug: string, revisionId: number) {
     .where(eq(pages.slug, slug))
 
   revalidateDoc(slug)
-}
-
-/** Lists all registered users for the admin "Users" panel. Admin-only. */
-export async function listUsersAction() {
-  await requireAdmin()
-  return db
-    .select({ id: userTable.id, name: userTable.name, email: userTable.email, role: userTable.role, createdAt: userTable.createdAt })
-    .from(userTable)
-    .orderBy(userTable.createdAt)
-}
-
-/** Promotes or demotes a user. Admins cannot change their own role, to avoid locking themselves out. */
-export async function updateUserRoleAction(userId: string, role: "admin" | "editor") {
-  const admin = await requireAdmin()
-  if (admin.id === userId) throw new Error("You cannot change your own role.")
-  await db.update(userTable).set({ role, updatedAt: new Date() }).where(eq(userTable.id, userId))
-  revalidatePath("/admin/users")
 }
 
 export async function getCurrentUserAction() {

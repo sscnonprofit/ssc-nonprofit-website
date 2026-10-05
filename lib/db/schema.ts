@@ -11,6 +11,8 @@ export const user = pgTable("user", {
   image: text("image"),
   /** App-level authorization: "admin" can publish/manage users, "editor" can draft/edit content. */
   role: text("role").notNull().default("editor"),
+  /** Suspended accounts cannot sign in and existing sessions are rejected. */
+  disabled: boolean("disabled").notNull().default(false),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 })

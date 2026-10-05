@@ -1,3 +1,4 @@
+import { MAX_ELEMENTS, starterElements } from "@/lib/builder/elements"
 import {
   DEFAULT_STYLE,
   DEFAULT_VISIBILITY,
@@ -403,11 +404,22 @@ export const BLOCKS: BlockDefinition[] = [
     defaults: {},
     defaultStyle: { paddingY: "sm" },
   },
+  {
+    type: "custom",
+    label: "Custom section",
+    description: "Build your own layout from text, images, buttons, and more.",
+    category: "Custom",
+    variants: [{ value: "default", label: "Default" }],
+    fields: [{ key: "elements", label: "Elements", type: "elements", max: MAX_ELEMENTS }],
+    get defaults() {
+      return { elements: starterElements() }
+    },
+  },
 ]
 
 export const BLOCK_MAP: Record<string, BlockDefinition> = Object.fromEntries(BLOCKS.map((b) => [b.type, b]))
 
-export const BLOCK_CATEGORIES: BlockCategory[] = ["Hero", "Content", "Media", "Social proof", "Contact", "Layout"]
+export const BLOCK_CATEGORIES: BlockCategory[] = ["Hero", "Content", "Media", "Social proof", "Contact", "Layout", "Custom"]
 
 export function createSection(type: string, overrides?: { variant?: string; style?: Partial<SectionStyle> }): Section {
   const def = BLOCK_MAP[type]

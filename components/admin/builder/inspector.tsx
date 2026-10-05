@@ -2,17 +2,27 @@
 
 import { useState } from "react"
 import {
+  AlignLeftIcon,
   ArrowDownIcon,
   ArrowUpIcon,
   ChevronDownIcon,
   CopyIcon,
+  ImageIcon,
   ImagesIcon,
+  ListIcon,
+  MinusIcon,
   MonitorIcon,
   MousePointerClickIcon,
+  MoveVerticalIcon,
   PlusIcon,
+  QuoteIcon,
   SmartphoneIcon,
+  SparklesIcon,
   TabletIcon,
   Trash2Icon,
+  TypeIcon,
+  VideoIcon,
+  type LucideIcon,
 } from "lucide-react"
 
 import { ColorField, ControlGroup, Segmented, SliderField, ToggleField } from "@/components/admin/design/controls"
@@ -23,8 +33,24 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import {
+  createElement,
+  elementId,
+  ELEMENT_DEFS,
+  ELEMENT_GROUPS,
+  ELEMENT_MAP,
+  type CustomElement,
+  type ElementKind,
+} from "@/lib/builder/elements"
 import { BLOCK_MAP } from "@/lib/builder/registry"
-import { DEFAULT_STYLE, type ListField, type ScalarField, type Section, type SectionStyle } from "@/lib/builder/schema"
+import {
+  DEFAULT_STYLE,
+  type ElementsField,
+  type ListField,
+  type ScalarField,
+  type Section,
+  type SectionStyle,
+} from "@/lib/builder/schema"
 import { cn } from "@/lib/utils"
 
 import { setPath, type Builder } from "./use-builder"
@@ -200,6 +226,208 @@ function ListEditor({ field, items, onChange }: { field: ListField; items: Recor
   )
 }
 
+const ELEMENT_ICONS: Record<ElementKind, LucideIcon> = {
+  heading: TypeIcon,
+  text: AlignLeftIcon,
+  quote: QuoteIcon,
+  list: ListIcon,
+  image: ImageIcon,
+  video: VideoIcon,
+  iconBox: SparklesIcon,
+  button: MousePointerClickIcon,
+  divider: MinusIcon,
+  spacer: MoveVerticalIcon,
+}
+
+function elementSummary(el: CustomElement) {
+  const def = ELEMENT_MAP[el.kind]
+  const preview = (el.text || el.text2 || el.items.split("\n")[0] || "").trim()
+  return preview ? `${def.label}: ${preview}` : def.label
+}
+
+function ElementsEditor({ field, items, onChange }: { field: ElementsField; items: CustomElement[]; onChange: (items: CustomElement[]) => void }) {
+  const [open, setOpen] = useState<string | null>(null)
+  const [picking, setPicking] = useState(items.length === 0)
+
+  const patch = (id: string, change: Partial<CustomElement>) => onChange(items.map((el) => (el.id === id ? { ...el, ...change } : el)))
+  const move = (from: number, to: number) => {
+    if (to < 0 || to >= items.length) return
+    const next = [...items]
+    const [item] = next.splice(from, 1)
+    next.splice(to, 0, item)
+    onChange(next)
+  }
+  const add = (kind: ElementKind) => {
+    const created = createElement(kind)
+    onChange([...items, created])
+    setOpen(created.id)
+    setPicking(false)
+  }
+  const duplicate = (index: number) => {
+    if (items.length >= field.max) return
+    const copy = { ...items[index], id: elementId() }
+    const next = [...items]
+    next.splice(index + 1, 0, copy)
+    onChange(next)
+    setOpen(copy.id)
+  }
+  const atLimit = items.length >= field.max
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-medium">{field.label}</span>
+        <span className="font-mono text-[10px] text-muted-foreground">
+          {items.length}/{field.max}
+        </span>
+      </div>
+
+      {items.length === 0 && (
+        <p className="rounded-lg border border-dashed border-border p-4 text-center text-xs text-muted-foreground">
+          Nothing here yet. Add your first element below.
+        </p>
+      )}
+
+      <ul className="flex flex-col gap-1.5">
+        {items.map((el, index) => {
+          const def = ELEMENT_MAP[el.kind]
+          const Icon = ELEMENT_ICONS[el.kind]
+          const isOpen = open === el.id
+          return (
+            <li key={el.id} className="rounded-lg border border-border bg-card">
+              <div className="flex items-center gap-1 pr-1">
+                <button
+                  type="button"
+                  aria-expanded={isOpen}
+                  onClick={() => setOpen(isOpen ? null : el.id)}
+                  className="flex min-h-11 min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm lg:min-h-9"
+                >
+                  <ChevronDownIcon className={cn("size-3.5 shrink-0 transition-transform", !isOpen && "-rotate-90")} />
+                  <Icon className="size-4 shrink-0 text-primary" aria-hidden="true" />
+                  <span className="truncate">{elementSummary(el)}</span>
+                </button>
+                <Button type="button" size="icon" variant="ghost" className="size-10 lg:size-7" disabled={index === 0} onClick={() => move(index, index - 1)}>
+                  <ArrowUpIcon className="size-3.5" />
+                  <span className="sr-only">Move up</span>
+                </Button>
+                <Button type="button" size="icon" variant="ghost" className="size-10 lg:size-7" disabled={index === items.length - 1} onClick={() => move(index, index + 1)}>
+                  <ArrowDownIcon className="size-3.5" />
+                  <span className="sr-only">Move down</span>
+                </Button>
+              </div>
+              {isOpen && (
+                <div className="flex flex-col gap-4 border-t border-border p-3">
+                  {def.fields.map((sub) => (
+                    <ScalarInput
+                      key={sub.key}
+                      field={sub}
+                      value={String(el[sub.key as keyof CustomElement] ?? "")}
+                      onChange={(v) => patch(el.id, { [sub.key]: v } as Partial<CustomElement>)}
+                    />
+                  ))}
+                  {def.sizes && (
+                    <Segmented
+                      label="Size"
+                      value={el.size}
+                      options={def.sizes}
+                      onChange={(size) => patch(el.id, { size: size as CustomElement["size"] })}
+                    />
+                  )}
+                  {def.alignable && (
+                    <Segmented
+                      label="Alignment"
+                      value={el.align}
+                      options={[
+                        { value: "inherit", label: "Auto" },
+                        { value: "left", label: "Left" },
+                        { value: "center", label: "Center" },
+                        { value: "right", label: "Right" },
+                      ]}
+                      onChange={(align) => patch(el.id, { align: align as CustomElement["align"] })}
+                    />
+                  )}
+                  <Segmented
+                    label="Width (on larger screens)"
+                    value={el.span}
+                    options={[
+                      { value: "full", label: "Full" },
+                      { value: "half", label: "1/2" },
+                      { value: "third", label: "1/3" },
+                    ]}
+                    onChange={(span) => patch(el.id, { span: span as CustomElement["span"] })}
+                  />
+                  <div className="flex gap-2">
+                    <Button type="button" variant="outline" size="sm" className="min-h-11 flex-1 lg:min-h-8" disabled={atLimit} onClick={() => duplicate(index)}>
+                      <CopyIcon className="size-4" />
+                      Duplicate
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="min-h-11 flex-1 text-destructive lg:min-h-8"
+                      onClick={() => {
+                        onChange(items.filter((item) => item.id !== el.id))
+                        setOpen(null)
+                      }}
+                    >
+                      <Trash2Icon className="size-4" />
+                      Delete
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+
+      {picking ? (
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-muted/40 p-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold">Choose an element</span>
+            {items.length > 0 && (
+              <Button type="button" variant="ghost" size="sm" onClick={() => setPicking(false)}>
+                Cancel
+              </Button>
+            )}
+          </div>
+          {ELEMENT_GROUPS.map((group) => (
+            <div key={group} className="flex flex-col gap-2">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{group}</p>
+              <div className="grid grid-cols-2 gap-2">
+                {ELEMENT_DEFS.filter((d) => d.group === group).map((d) => {
+                  const Icon = ELEMENT_ICONS[d.kind]
+                  return (
+                    <button
+                      key={d.kind}
+                      type="button"
+                      disabled={atLimit}
+                      onClick={() => add(d.kind)}
+                      className="flex min-h-14 flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left transition-colors hover:border-primary hover:bg-primary/5 disabled:opacity-50"
+                    >
+                      <span className="flex items-center gap-2 text-sm font-medium">
+                        <Icon className="size-4 text-primary" aria-hidden="true" />
+                        {d.label}
+                      </span>
+                      <span className="text-[11px] leading-snug text-muted-foreground">{d.description}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <Button type="button" variant="outline" className="min-h-11 lg:min-h-9" disabled={atLimit} onClick={() => setPicking(true)}>
+          <PlusIcon className="size-4" />
+          Add element
+        </Button>
+      )}
+    </div>
+  )
+}
+
 function ContentTab({ section, builder }: { section: Section; builder: Builder }) {
   const def = BLOCK_MAP[section.type]
   const set = (key: string, value: unknown) => builder.updateSection(section.id, (s) => ({ ...s, props: setPath(s.props, key, value) }))
@@ -214,7 +442,14 @@ function ContentTab({ section, builder }: { section: Section; builder: Builder }
         />
       )}
       {def.fields.map((field) =>
-        field.type === "list" ? (
+        field.type === "elements" ? (
+          <ElementsEditor
+            key={field.key}
+            field={field}
+            items={(section.props[field.key] as CustomElement[]) ?? []}
+            onChange={(items) => set(field.key, items)}
+          />
+        ) : field.type === "list" ? (
           <ListEditor
             key={field.key}
             field={field}

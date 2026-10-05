@@ -5,6 +5,7 @@ import Image from "next/image"
 import {
   CalendarDaysIcon,
   ExternalLinkIcon,
+  FrameIcon,
   GalleryHorizontalIcon,
   ImagesIcon,
   LayoutDashboardIcon,
@@ -37,6 +38,15 @@ type AdminShellProps = {
   userEmail: string
   role: string
   children: React.ReactNode
+}
+
+type NavItem = { href: string; label: string; icon: React.ComponentType<{ className?: string }> }
+type NavGroup = { label: string; items: NavItem[] }
+
+/** The dashboard also owns the page editor routes, so it stays highlighted there. */
+function isActive(pathname: string, href: string) {
+  if (href === "/admin") return pathname === "/admin" || pathname.startsWith("/admin/pages/")
+  return pathname === href || pathname.startsWith(`${href}/`)
 }
 
 function getInitials(name: string) {
@@ -75,38 +85,60 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
     router.refresh()
   }
 
-  const navItems = [
-    { href: "/admin", label: "Pages", icon: LayoutDashboardIcon },
-    { href: "/admin/design", label: "Design", icon: PaletteIcon },
-    { href: "/admin/events", label: "Events", icon: CalendarDaysIcon },
-  { href: "/admin/gallery", label: "Gallery", icon: GalleryHorizontalIcon },
-  { href: "/admin/media", label: "Media", icon: ImagesIcon },
-    { href: "/admin/navigation", label: "Navigation", icon: MenuIcon },
-    ...(role === "admin" ? [{ href: "/admin/users", label: "Users", icon: UsersIcon }] : []),
+  const navGroups: NavGroup[] = [
+    {
+      label: "Content",
+      items: [
+        { href: "/admin", label: "Dashboard", icon: LayoutDashboardIcon },
+        { href: "/admin/events", label: "Events", icon: CalendarDaysIcon },
+        { href: "/admin/gallery", label: "Gallery", icon: GalleryHorizontalIcon },
+        { href: "/admin/exhibitions", label: "Exhibitions", icon: FrameIcon },
+      ],
+    },
+    {
+      label: "Site",
+      items: [
+        { href: "/admin/design", label: "Design", icon: PaletteIcon },
+        { href: "/admin/media", label: "Media", icon: ImagesIcon },
+        { href: "/admin/navigation", label: "Navigation", icon: MenuIcon },
+      ],
+    },
+    ...(role === "admin"
+      ? [{ label: "Team", items: [{ href: "/admin/users", label: "Users", icon: UsersIcon }] }]
+      : []),
   ]
 
-  const activeItem = navItems.find((item) => item.href === pathname)
+  const activeItem = navGroups.flatMap((group) => group.items).find((item) => isActive(pathname, item.href))
 
   const navLinks = (
-    <nav aria-label="Admin" className="flex flex-1 flex-col gap-1 p-3">
-      {navItems.map((item) => {
-        const active = pathname === item.href
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            aria-current={active ? "page" : undefined}
-            onClick={() => setMobileNavOpen(false)}
-            className={cn(
-              "flex min-h-11 items-center gap-2.5 rounded-md px-3 text-sm font-medium transition-colors lg:min-h-9",
-              active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"
-            )}
-          >
-            <item.icon className="size-4 shrink-0" />
-            {item.label}
-          </Link>
-        )
-      })}
+    <nav aria-label="Admin" className="flex flex-1 flex-col gap-5 overflow-y-auto p-3">
+      {navGroups.map((group) => (
+        <div key={group.label} className="flex flex-col gap-1">
+          <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/80">
+            {group.label}
+          </p>
+          {group.items.map((item) => {
+            const active = isActive(pathname, item.href)
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                onClick={() => setMobileNavOpen(false)}
+                className={cn(
+                  "relative flex min-h-11 items-center gap-2.5 rounded-md px-3 text-sm font-medium transition-colors lg:min-h-9",
+                  active
+                    ? "bg-primary/10 text-primary before:absolute before:inset-y-1.5 before:left-0 before:w-0.5 before:rounded-full before:bg-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                )}
+              >
+                <item.icon className="size-4 shrink-0" />
+                {item.label}
+              </Link>
+            )
+          })}
+        </div>
+      ))}
 
       <Link
         href="/"
@@ -162,6 +194,12 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
 
   return (
     <div className="flex min-h-svh flex-col bg-muted/30 lg:flex-row">
+      <a
+        href="#admin-main"
+        className="sr-only z-50 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
+      >
+        Skip to content
+      </a>
       <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-card/95 px-2 backdrop-blur lg:hidden">
         <Button
           variant="ghost"
@@ -199,8 +237,8 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
         <div className="border-t border-border p-3">{accountMenu}</div>
       </aside>
 
-      <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:ml-60 lg:px-8 lg:py-8">
-        <div className="mx-auto max-w-5xl">{children}</div>
+      <main id="admin-main" className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:ml-60 lg:px-8 lg:py-8">
+        <div className="mx-auto max-w-6xl">{children}</div>
       </main>
     </div>
   )

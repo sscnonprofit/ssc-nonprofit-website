@@ -1,5 +1,16 @@
 import { desc } from "drizzle-orm"
-import { ExternalLinkIcon, FileTextIcon, HistoryIcon, LayoutTemplateIcon, PencilIcon, SettingsIcon } from "lucide-react"
+import {
+  ArrowUpRightIcon,
+  CalendarDaysIcon,
+  ExternalLinkIcon,
+  FileTextIcon,
+  FrameIcon,
+  GalleryHorizontalIcon,
+  HistoryIcon,
+  LayoutTemplateIcon,
+  PencilIcon,
+  SettingsIcon,
+} from "lucide-react"
 import Link from "next/link"
 
 import { CreatePageDialog } from "@/components/admin/builder/create-page-dialog"
@@ -9,17 +20,24 @@ import { pageRevisions } from "@/lib/db/schema"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { getFeatureOverview } from "@/lib/admin/overview"
 import { listBuilderPages } from "@/lib/builder/pages"
+import { getSessionUser } from "@/lib/cms/auth-helpers"
 import { listPageRows } from "@/lib/cms/pages"
 import { cmsRegistry } from "@/lib/cms/registry"
+import { hasPermission } from "@/lib/cms/roles"
 import { cn } from "@/lib/utils"
 
 export default async function AdminPagesDashboard() {
-  const [rows, builderPages, recent] = await Promise.all([
+  const [rows, builderPages, recent, overview, user] = await Promise.all([
     listPageRows(),
     listBuilderPages(),
     db.select().from(pageRevisions).orderBy(desc(pageRevisions.createdAt)).limit(6),
+    getFeatureOverview(),
+    getSessionUser(),
   ])
+  const canEdit = hasPermission(user?.role, "edit_content")
+  const firstName = user?.name?.trim().split(/\s+/)[0]
   const bySlug = new Map(rows.map((row) => [row.slug, row]))
 
   const pages = cmsRegistry.filter((doc) => doc.group === "page")
@@ -37,9 +55,12 @@ export default async function AdminPagesDashboard() {
               <span className="size-2 rounded-full bg-accent shadow-[0_0_0_4px_color-mix(in_oklab,var(--accent)_16%,transparent)]" />
               SSC content workspace
             </div>
-            <h1 className="font-serif text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">Pages</h1>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
-              Build, refine, and publish compassionate digital experiences for families and residents. No code required.
+            <h1 className="text-balance font-serif text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+              {firstName ? `Welcome back, ${firstName}` : "Dashboard"}
+            </h1>
+            <p className="mt-2 max-w-xl text-pretty text-sm leading-6 text-muted-foreground sm:text-base">
+              Manage pages, events, galleries and exhibitions in one place. Everything you change stays a draft until
+              it is published.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -48,8 +69,47 @@ export default async function AdminPagesDashboard() {
                 {draftCount} unpublished draft{draftCount === 1 ? "" : "s"}
               </Badge>
             )}
-            <CreatePageDialog />
+            {canEdit && <CreatePageDialog />}
           </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="overview-heading" className="flex flex-col gap-3">
+        <h2 id="overview-heading" className="text-sm font-semibold text-foreground">
+          Overview
+        </h2>
+        <div className="grid gap-3 md:grid-cols-3">
+          <OverviewCard
+            href="/admin/events"
+            icon={CalendarDaysIcon}
+            title="Events"
+            primary={{ value: overview.events.upcoming, label: "upcoming" }}
+            details={[
+              { label: "Drafts", value: overview.events.drafts },
+              { label: "On waitlists", value: overview.events.waitlisted },
+            ]}
+            attention={overview.events.waitlisted > 0 ? `${overview.events.waitlisted} waitlisted` : undefined}
+          />
+          <OverviewCard
+            href="/admin/gallery"
+            icon={GalleryHorizontalIcon}
+            title="Gallery"
+            primary={{ value: overview.gallery.published, label: "published albums" }}
+            details={[{ label: "Draft albums", value: overview.gallery.drafts }]}
+          />
+          <OverviewCard
+            href="/admin/exhibitions"
+            icon={FrameIcon}
+            title="Exhibitions"
+            primary={{ value: overview.exhibitions.live, label: "live" }}
+            details={[
+              { label: "Drafts", value: overview.exhibitions.drafts },
+              { label: "New submissions", value: overview.exhibitions.newSubmissions },
+            ]}
+            attention={
+              overview.exhibitions.newSubmissions > 0 ? `${overview.exhibitions.newSubmissions} to review` : undefined
+            }
+          />
         </div>
       </section>
 
@@ -152,7 +212,7 @@ export default async function AdminPagesDashboard() {
                 description={doc.description}
                 routes={doc.routes}
                 hasDraft={Boolean(row?.draftContent)}
-                canRebuild
+                canRebuild={canEdit}
               />
             )
           })}
@@ -183,6 +243,57 @@ export default async function AdminPagesDashboard() {
         </section>
       )}
     </div>
+  )
+}
+
+function OverviewCard({
+  href,
+  icon: Icon,
+  title,
+  primary,
+  details,
+  attention,
+}: {
+  href: string
+  icon: React.ComponentType<{ className?: string }>
+  title: string
+  primary: { value: number; label: string }
+  details: { label: string; value: number }[]
+  attention?: string
+}) {
+  return (
+    <Link
+      href={href}
+      className="group flex flex-col gap-4 rounded-xl border border-border/80 bg-card p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+    >
+      <div className="flex items-center justify-between gap-3">
+        <span className="flex items-center gap-2.5 text-sm font-semibold text-foreground">
+          <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <Icon className="size-4" />
+          </span>
+          {title}
+        </span>
+        <ArrowUpRightIcon className="size-4 text-muted-foreground transition-colors group-hover:text-primary" aria-hidden />
+      </div>
+      <p className="flex items-baseline gap-2">
+        <span className="text-3xl font-semibold tabular-nums tracking-tight text-foreground">{primary.value}</span>
+        <span className="text-sm text-muted-foreground">{primary.label}</span>
+      </p>
+      <dl className="flex flex-wrap gap-x-4 gap-y-1 border-t border-border pt-3 text-xs text-muted-foreground">
+        {details.map((item) => (
+          <div key={item.label} className="flex gap-1.5">
+            <dt>{item.label}</dt>
+            <dd className="font-medium tabular-nums text-foreground">{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+      {attention && (
+        <Badge variant="secondary" className="w-fit gap-1.5">
+          <span className="size-1.5 rounded-full bg-amber-500" />
+          {attention}
+        </Badge>
+      )}
+    </Link>
   )
 }
 

@@ -100,21 +100,29 @@ export function SiteHeader({
         )}
       >
       <div className="flex items-center justify-between gap-4 px-4 py-2.5 md:px-5">
-        <Link href="/" className="flex shrink-0 items-center gap-3" aria-label={`${site.name} home`}>
-          <Image
-            src="/images/ssc-logo.png"
-            alt={`${site.name} logo`}
-            width={188}
-            height={48}
-            className="w-auto"
-            style={{ height: header.logoHeight }}
-            priority
-          />
+        <Link
+          href="/"
+          className="group flex min-w-0 shrink-0 items-center gap-3"
+          aria-label={`${site.name} home`}
+        >
+          <span className="relative flex items-center rounded-xl border border-foreground/10 bg-background/45 px-2.5 py-2 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18)] transition-colors group-hover:border-primary/30">
+            <Image
+              src="/images/ssc-logo.png"
+              alt={`${site.name} logo`}
+              width={196}
+              height={49}
+              className="h-auto w-[158px] object-contain sm:w-[178px] md:w-[196px]"
+              priority
+            />
+          </span>
+          <span className="hidden border-l border-foreground/10 pl-3 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground xl:block">
+            Senior Living
+          </span>
         </Link>
 
         {/* Desktop nav */}
         <nav aria-label="Main" className="hidden lg:block">
-          <ul className="flex items-center gap-1">
+          <ul className="flex items-center gap-0.5 rounded-xl border border-foreground/5 bg-foreground/[0.025] p-1">
             {nav.map((item, index) =>
               item.children ? (
                 <li
@@ -126,7 +134,7 @@ export function SiteHeader({
                   <button
                     type="button"
                     className={cn(
-                      "group/nav relative flex items-center gap-1 rounded-lg px-3.5 py-2 font-display text-sm font-semibold transition-colors",
+                      "group/nav relative flex items-center gap-1 rounded-lg px-3.5 py-2.5 font-display text-[13px] font-semibold tracking-[0.015em] transition-colors",
                       menu === item.label
                         ? "bg-foreground/6 text-foreground"
                         : "text-foreground/75 hover:bg-foreground/5 hover:text-foreground",
@@ -167,7 +175,7 @@ export function SiteHeader({
                 <li key={item.label}>
                   <Link
                     href={item.href ?? "/"}
-                    className="group/nav relative block rounded-lg px-3.5 py-2 font-display text-sm font-semibold text-foreground/75 transition-colors hover:bg-foreground/5 hover:text-foreground"
+                    className="group/nav relative block rounded-lg px-3.5 py-2.5 font-display text-[13px] font-semibold tracking-[0.015em] text-foreground/75 transition-colors hover:bg-foreground/5 hover:text-foreground"
                   >
                     {item.label}
                     <NavUnderline index={index} />
@@ -187,7 +195,7 @@ export function SiteHeader({
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="rounded-lg border border-foreground/10 bg-foreground/5 p-2 text-foreground transition-colors hover:bg-foreground/10 lg:hidden"
+          className="rounded-xl border border-foreground/10 bg-background/45 p-2.5 text-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.16)] transition-colors hover:border-primary/30 hover:bg-foreground/10 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -268,14 +276,14 @@ export function SiteHeader({
           <Link
             href="/contact"
             onClick={() => setOpen(false)}
-            className="rounded-full bg-primary px-5 py-3 text-center font-display font-semibold text-primary-foreground"
+            className="ssc-btn justify-center py-3 text-center"
           >
             Schedule A Visit
           </Link>
           <Link
             href="/donate"
             onClick={() => setOpen(false)}
-            className="rounded-full bg-accent px-5 py-3 text-center font-display font-semibold text-accent-foreground"
+            className="ssc-btn-accent justify-center py-3 text-center"
           >
             Donate
           </Link>

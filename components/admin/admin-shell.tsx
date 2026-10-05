@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import { ExternalLinkIcon, ImagesIcon, LayoutDashboardIcon, LogOutIcon, MenuIcon, PaletteIcon, UsersIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -37,11 +38,16 @@ function getInitials(name: string) {
 function BrandMark() {
   return (
     <div className="flex min-w-0 items-center gap-2.5">
-      <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary font-display text-sm font-bold text-primary-foreground">
-        S
-      </div>
-      <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-foreground">SSC Content</p>
+      <Image
+        src="/images/ssc-logo.png"
+        alt="Sheboygan Senior Community logo"
+        width={188}
+        height={48}
+        className="h-9 w-auto max-w-[8.5rem] object-contain object-left"
+        priority
+      />
+      <div className="min-w-0 border-l border-border pl-2.5">
+        <p className="truncate text-sm font-semibold text-foreground">Content</p>
         <p className="truncate text-xs text-muted-foreground">Manager</p>
       </div>
     </div>

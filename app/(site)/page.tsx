@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Award, CalendarDays, Star } from "lucide-react"
+import { ArrowRight, Award, CalendarDays } from "lucide-react"
 
 import homeFallback from "@/content/home.json"
 import siteFallback from "@/content/site.json"
@@ -89,12 +89,6 @@ export default async function HomePage() {
                   <Award className="size-3.5 text-accent" aria-hidden="true" />
                 </span>
                 U.S. News &amp; World Report &ldquo;Best Nursing Home&rdquo;
-              </li>
-              <li className="inline-flex items-center gap-2.5 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-2 backdrop-blur-sm">
-                <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-accent/20">
-                  <Star className="size-3.5 text-accent" aria-hidden="true" />
-                </span>
-                Consistently ranked a 5-Star facility
               </li>
             </ul>
           </div>

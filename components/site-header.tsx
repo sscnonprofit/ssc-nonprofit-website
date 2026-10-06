@@ -134,7 +134,7 @@ export function SiteHeader({
         </div>
       </div>
 
-      <div className="px-3 pt-3 md:px-4">
+      <div className="px-2 pt-2 md:px-4 md:pt-3">
         <div
           className={cn(
             "ssc-glass-nav ssc-header-glass relative mx-auto max-w-7xl border backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-200 motion-reduce:transition-none",
@@ -144,10 +144,10 @@ export function SiteHeader({
                 ? "rounded-xl border-foreground/10 bg-background/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35),0_22px_44px_-24px_rgba(30,10,16,0.45)]"
                 : transparent
                   ? "rounded-2xl border-foreground/5 bg-background/30 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]"
-                  : "rounded-2xl border-foreground/10 bg-background/65 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3),0_14px_34px_-24px_rgba(30,10,16,0.35)]",
+                  : "rounded-2xl border-foreground/10 bg-background/90 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3),0_14px_34px_-24px_rgba(30,10,16,0.35)]",
           )}
         >
-          <div className="flex items-center justify-between gap-4 px-4 pb-5 pt-3 md:px-5">
+          <div className="flex min-h-16 items-center justify-between gap-3 px-3 py-2 md:min-h-20 md:px-5 md:py-3">
             <Link
               href="/"
               className="group flex shrink-0 items-center gap-3 rounded-lg outline-offset-4"
@@ -279,7 +279,7 @@ export function SiteHeader({
               type="button"
               onClick={() => setOpen((v) => !v)}
               className={cn(
-                "flex size-11 shrink-0 items-center justify-center rounded-xl border bg-background/60 text-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] outline-offset-2 transition-all hover:border-primary/30 hover:text-primary active:scale-95 lg:hidden",
+                "flex size-11 shrink-0 items-center justify-center rounded-xl border bg-background/80 text-foreground shadow-[0_2px_8px_-4px_rgba(30,10,16,0.3),inset_0_1px_0_0_rgba(255,255,255,0.4)] outline-offset-2 transition-all hover:border-primary/30 hover:text-primary active:scale-95 lg:hidden",
                 open ? "border-primary/30 text-primary" : "border-foreground/10",
               )}
               aria-expanded={open}
@@ -294,7 +294,7 @@ export function SiteHeader({
           <div
             id="mobile-nav"
             hidden={!open}
-            className="mx-4 max-h-[calc(100dvh-9rem)] overflow-y-auto overscroll-contain overscroll-behavior-contain border-t border-foreground/[0.08] pb-6 pt-2 lg:hidden"
+            className="mx-3 max-h-[calc(100dvh-8rem)] overflow-y-auto overscroll-contain overscroll-behavior-contain border-t border-foreground/[0.08] pb-4 pt-2 lg:hidden"
           >
             <nav aria-label="Mobile">
               <ul className="flex flex-col">

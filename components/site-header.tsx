@@ -147,7 +147,7 @@ export function SiteHeader({
                   : "rounded-2xl border-foreground/10 bg-background/90 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3),0_14px_34px_-24px_rgba(30,10,16,0.35)]",
           )}
         >
-          <div className="flex min-h-16 items-center justify-between gap-3 px-3 py-2 md:min-h-20 md:px-5 md:py-3">
+          <div className="flex min-h-16 items-center justify-between gap-3 px-3 py-3 md:min-h-20 md:px-5 md:py-3">
             <Link
               href="/"
               className="group flex shrink-0 items-center gap-3 rounded-lg outline-offset-4"
@@ -279,7 +279,7 @@ export function SiteHeader({
               type="button"
               onClick={() => setOpen((v) => !v)}
               className={cn(
-                "flex size-11 shrink-0 items-center justify-center rounded-xl border bg-background/80 text-foreground shadow-[0_2px_8px_-4px_rgba(30,10,16,0.3),inset_0_1px_0_0_rgba(255,255,255,0.4)] outline-offset-2 transition-all hover:border-primary/30 hover:text-primary active:scale-95 lg:hidden",
+                "flex size-11 shrink-0 self-center items-center justify-center rounded-xl border bg-background/80 text-foreground shadow-[0_2px_8px_-4px_rgba(30,10,16,0.3),inset_0_1px_0_0_rgba(255,255,255,0.4)] outline-offset-2 transition-all hover:border-primary/30 hover:text-primary active:scale-95 lg:hidden",
                 open ? "border-primary/30 text-primary" : "border-foreground/10",
               )}
               aria-expanded={open}

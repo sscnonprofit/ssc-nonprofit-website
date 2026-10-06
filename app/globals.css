@@ -156,6 +156,64 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    min-width: 320px;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    min-width: 320px;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    font-family: var(--ssc-font-body);
+    font-size: var(--ssc-base-size);
+    line-height: var(--ssc-line-height);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  button,
+  a,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  @media (max-width: 639px) {
+    button:not([aria-hidden="true"]),
+    [role="button"] {
+      min-height: 44px;
+    }
+
+    button[data-size="icon-xs"],
+    button[data-size="icon-sm"],
+    button[data-size="icon"],
+    button[aria-label="Close"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
+  @media (min-width: 640px) {
+    input,
+    select,
+    textarea {
+      font-size: inherit;
+    }
+  }
   html {
     -webkit-text-size-adjust: 100%;
   }

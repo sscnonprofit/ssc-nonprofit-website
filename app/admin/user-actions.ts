@@ -1,6 +1,7 @@
 "use server"
 
 import { and, asc, eq, ne } from "drizzle-orm"
+import { headers } from "next/headers"
 import { revalidatePath } from "next/cache"
 
 import { auth } from "@/lib/auth"
@@ -19,6 +20,25 @@ export type ManagedUser = {
 }
 
 export type UserActionResult = { ok: true } | { ok: false; error: string }
+
+function cleanPrefix(value: string) {
+  const prefix = value.trim()
+  if (prefix.length > 20) throw new Error("Prefix must be 20 characters or fewer.")
+  if (!/^[\p{L}\p{M}\d .,'’-]*$/u.test(prefix)) throw new Error("Use letters, numbers, spaces, or basic punctuation only.")
+  return prefix
+}
+
+export async function updateProfilePrefixAction(prefixValue: string): Promise<UserActionResult> {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session?.user) throw new Error("Unauthorized")
+    await db.update(userTable).set({ prefix: cleanPrefix(prefixValue), updatedAt: new Date() }).where(eq(userTable.id, session.user.id))
+    revalidatePath("/admin/profile")
+    return { ok: true }
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : "Unable to save your profile." }
+  }
+}
 
 const MIN_PASSWORD_LENGTH = 8
 

@@ -9,6 +9,7 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("emailVerified").notNull().default(false),
   image: text("image"),
+  prefix: text("prefix").notNull().default(""),
   /** App-level authorization: "admin" can publish/manage users, "editor" can draft/edit content. */
   role: text("role").notNull().default("editor"),
   /** Suspended accounts cannot sign in and existing sessions are rejected. */

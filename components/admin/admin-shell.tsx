@@ -13,6 +13,7 @@ import {
   MenuIcon,
   PaletteIcon,
   UsersIcon,
+  UserCircleIcon,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -186,6 +187,10 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          <DropdownMenuItem render={<Link href="/admin/profile" />}>
+            <UserCircleIcon />
+            Profile settings
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
             <LogOutIcon />
             Sign out

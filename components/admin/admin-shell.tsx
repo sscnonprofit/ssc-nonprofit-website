@@ -129,7 +129,7 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
                 className={cn(
                   "relative flex min-h-11 items-center gap-2.5 rounded-md px-3 text-sm font-medium transition-colors lg:min-h-9",
                   active
-                    ? "bg-primary/10 text-primary before:absolute before:inset-y-1.5 before:left-0 before:w-0.5 before:rounded-full before:bg-primary"
+                    ? "bg-primary/10 text-primary before:absolute before:inset-y-1.5 before:left-0 before:w-0.5 before:rounded-full before:bg-primary dark:bg-muted dark:text-foreground"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
@@ -194,14 +194,14 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
   )
 
   return (
-    <div className="flex min-h-svh flex-col bg-muted/30 lg:flex-row">
+    <div className="flex min-h-svh flex-col bg-muted/30 lg:flex-row dark:bg-background">
       <a
         href="#admin-main"
         className="sr-only z-50 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
       >
         Skip to content
       </a>
-      <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-card/95 px-2 backdrop-blur lg:hidden">
+      <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-card/95 px-2 backdrop-blur lg:hidden dark:bg-background/80">
         <Button
           variant="ghost"
           size="icon"
@@ -236,7 +236,7 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
         </SheetContent>
       </Sheet>
 
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-border bg-card lg:flex">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-border bg-card lg:flex dark:bg-background">
         <div className="flex h-16 items-center border-b border-border px-5">
           <BrandMark />
         </div>

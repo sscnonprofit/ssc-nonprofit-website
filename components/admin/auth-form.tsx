@@ -50,7 +50,7 @@ export function AdminAuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
         <div className="grid w-full overflow-hidden rounded-2xl border border-border bg-card shadow-2xl shadow-primary/10 lg:grid-cols-[0.9fr_1.1fr]">
           <section className="relative hidden flex-col justify-between overflow-hidden bg-primary p-8 text-primary-foreground lg:flex xl:p-10">
             <div className="relative z-10 flex items-center gap-3">
-              <Image src="/images/ssc-logo.png" alt="Sheboygan Senior Community" width={190} height={57} className="h-auto w-48 brightness-0 invert" priority />
+              <Image src="/images/ssc-logo.png" alt="Sheboygan Senior Community" width={190} height={57} quality={100} sizes="192px" className="h-auto w-48 brightness-0 invert" priority />
             </div>
             <div className="relative z-10 max-w-sm">
               <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-primary-foreground/70">Content workspace</p>
@@ -69,7 +69,7 @@ export function AdminAuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
           <Card className="rounded-none border-0 bg-card shadow-none">
             <CardHeader className="gap-5 px-6 pb-4 pt-8 sm:px-10 sm:pt-10">
               <div className="flex items-center justify-between gap-4 lg:hidden">
-                <Image src="/images/ssc-logo.png" alt="Sheboygan Senior Community" width={175} height={53} className="h-auto w-44" priority />
+                <Image src="/images/ssc-logo.png" alt="Sheboygan Senior Community" width={175} height={53} quality={100} sizes="176px" className="h-auto w-44 object-contain" priority />
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
                   <LockIcon className="size-5" />
                 </div>

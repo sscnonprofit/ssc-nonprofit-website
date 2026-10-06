@@ -61,7 +61,9 @@ export function SiteFooter({ site, theme = DEFAULT_THEME }: { site: typeof siteF
                 alt={`${site.name} logo`}
                 width={200}
                 height={54}
-                className="h-10 w-auto"
+                quality={100}
+                sizes="200px"
+                className="h-10 w-auto object-contain"
               />
             </div>
             <p className="mt-5 text-sm leading-relaxed text-primary-foreground/80">{site.description}</p>

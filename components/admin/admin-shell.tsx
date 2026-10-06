@@ -62,9 +62,11 @@ function BrandMark() {
       <Image
         src="/images/ssc-logo.png"
         alt="Sheboygan Senior Community logo"
-        width={188}
-        height={48}
-        className="h-9 w-auto max-w-[8.5rem] object-contain object-left"
+              width={188}
+              height={48}
+              quality={100}
+              sizes="136px"
+              className="h-9 w-auto max-w-[8.5rem] object-contain object-left"
         priority
       />
       <div className="min-w-0 border-l border-border pl-2.5">

@@ -59,17 +59,17 @@ export function CreatePageDialog() {
           if (!next) reset()
         }}
       >
-        <DialogContent className="sm:max-w-2xl">
-          <form onSubmit={submit} className="flex flex-col gap-5">
-            <DialogHeader>
-              <DialogTitle>Create a page</DialogTitle>
-              <DialogDescription>Pick a starting layout. You can add, remove, and restyle every section in the builder.</DialogDescription>
+        <DialogContent className="flex max-h-[calc(100dvh-1rem)] w-[calc(100%-1rem)] max-w-2xl flex-col gap-0 overflow-hidden p-0 sm:max-h-[calc(100dvh-3rem)] sm:w-[calc(100%-3rem)]">
+          <form onSubmit={submit} className="flex min-h-0 flex-1 flex-col gap-5 overflow-x-hidden overflow-y-auto overscroll-contain p-4 sm:p-6">
+            <DialogHeader className="pr-10">
+              <DialogTitle className="text-lg leading-tight text-balance">Create a page</DialogTitle>
+              <DialogDescription className="text-pretty">Pick a starting layout. You can add, remove, and restyle every section in the builder.</DialogDescription>
             </DialogHeader>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2">
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="new-title">Page name</Label>
-                <Input id="new-title" value={title} maxLength={120} required autoFocus placeholder="e.g. Memory Care" onChange={(e) => setTitle(e.target.value)} />
+                <Input id="new-title" value={title} maxLength={120} required autoFocus placeholder="e.g. Memory Care" className="h-11 text-base sm:text-sm" onChange={(e) => setTitle(e.target.value)} />
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="new-slug">Web address</Label>
@@ -78,6 +78,7 @@ export function CreatePageDialog() {
                   <input
                     id="new-slug"
                     value={effectiveSlug}
+                    inputMode="url"
                     maxLength={60}
                     aria-invalid={Boolean(slugError)}
                     aria-describedby="new-slug-hint"
@@ -85,7 +86,7 @@ export function CreatePageDialog() {
                       setSlugTouched(true)
                       setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"))
                     }}
-                    className="h-9 min-w-0 flex-1 bg-transparent pr-3 font-mono text-sm outline-none"
+                    className="h-11 min-w-0 flex-1 bg-transparent pr-3 font-mono text-base outline-none sm:text-sm"
                   />
                 </div>
                 <span id="new-slug-hint" className={cn("text-xs", slugError ? "text-destructive" : "text-muted-foreground")}>
@@ -105,7 +106,7 @@ export function CreatePageDialog() {
                     aria-checked={template === t.id}
                     onClick={() => setTemplate(t.id)}
                     className={cn(
-                      "flex flex-col gap-1 rounded-lg border border-border p-3 text-left transition-colors hover:bg-muted",
+                      "flex min-h-20 min-w-0 flex-col gap-1 rounded-md border border-border p-3 text-left transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
                       template === t.id && "border-primary bg-primary/5 ring-1 ring-primary",
                     )}
                   >
@@ -122,11 +123,11 @@ export function CreatePageDialog() {
               </p>
             )}
 
-            <DialogFooter>
-              <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
+            <DialogFooter className="sticky bottom-0 m-0 shrink-0 flex-row gap-2 rounded-t-none border-t border-border bg-popover px-0 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-0 sm:py-0">
+              <Button type="button" variant="outline" className="h-11 flex-1 sm:flex-none" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={pending || !title.trim() || Boolean(slugError) || !effectiveSlug}>
+              <Button type="submit" className="h-11 flex-1 sm:flex-none" disabled={pending || !title.trim() || Boolean(slugError) || !effectiveSlug}>
                 {pending && <Loader2Icon className="size-4 animate-spin" />}
                 Create and open builder
               </Button>

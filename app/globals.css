@@ -2,6 +2,8 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+@custom-variant dark (&:is(.dark, .dark *));
+
 @theme inline {
   --font-sans: var(--ssc-font-body);
   --font-display: var(--ssc-font-heading);
@@ -38,7 +40,9 @@
   --radius-3xl: calc(var(--radius) * 3);
 }
 
-:root {
+/* .ssc-light lets a subtree (e.g. the builder canvas) opt back into light tokens inside the dark admin. */
+:root,
+.ssc-light {
   color-scheme: light;
 
   /* Warm paper white */
@@ -99,6 +103,41 @@
   --ssc-btn-accent-bg: var(--accent);
   --ssc-btn-accent-fg: var(--accent-foreground);
   --ssc-btn-accent-border: var(--accent);
+}
+
+/* Admin dark theme: warm charcoal surfaces, with the wine primary lifted so it stays readable. */
+.dark {
+  color-scheme: dark;
+
+  --background: oklch(0.165 0.008 20);
+  --foreground: oklch(0.955 0.005 60);
+
+  --card: oklch(0.205 0.009 20);
+  --card-foreground: oklch(0.955 0.005 60);
+  --popover: oklch(0.235 0.01 20);
+  --popover-foreground: oklch(0.955 0.005 60);
+
+  --primary: oklch(0.7 0.125 12);
+  --primary-foreground: oklch(0.17 0.02 15);
+
+  --accent: oklch(0.74 0.105 62);
+  --accent-foreground: oklch(0.2 0.015 40);
+
+  --secondary: oklch(0.275 0.01 20);
+  --secondary-foreground: oklch(0.93 0.005 60);
+  --muted: oklch(0.255 0.009 20);
+  --muted-foreground: oklch(0.72 0.012 40);
+
+  --destructive: oklch(0.7 0.17 25);
+  --border: oklch(1 0 0 / 11%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.7 0.125 12);
+
+  --brand-3: oklch(0.68 0.12 140);
+  --brand-4: oklch(0.56 0.08 150);
+
+  --ssc-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --ssc-card-shadow-hover: 0 20px 40px -24px rgba(0, 0, 0, 0.7);
 }
 
 @layer base {

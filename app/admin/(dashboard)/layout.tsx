@@ -2,6 +2,7 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
 import { AdminShell } from "@/components/admin/admin-shell"
+import { ADMIN_THEME_INIT_SCRIPT, AdminThemeProvider } from "@/components/admin/admin-theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { auth } from "@/lib/auth"
 
@@ -13,9 +14,14 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
   const role = (session.user as { role?: string }).role ?? "editor"
 
   return (
-    <AdminShell userName={session.user.name} userEmail={session.user.email} role={role}>
-      {children}
-      <Toaster />
-    </AdminShell>
+    <>
+      <script dangerouslySetInnerHTML={{ __html: ADMIN_THEME_INIT_SCRIPT }} />
+      <AdminThemeProvider>
+        <AdminShell userName={session.user.name} userEmail={session.user.email} role={role}>
+          {children}
+          <Toaster />
+        </AdminShell>
+      </AdminThemeProvider>
+    </>
   )
 }

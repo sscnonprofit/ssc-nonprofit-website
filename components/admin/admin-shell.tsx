@@ -18,6 +18,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 
 import { authClient } from "@/lib/auth-client"
+import { AdminThemeQuickToggle, AdminThemeSelector } from "@/components/admin/admin-theme-toggle"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -213,8 +214,11 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
         </Button>
         <BrandMark />
         {activeItem && (
-          <span className="ml-auto truncate pr-3 text-sm font-medium text-muted-foreground">{activeItem.label}</span>
+          <span className="ml-auto truncate pr-1 text-sm font-medium text-muted-foreground">{activeItem.label}</span>
         )}
+        <div className={activeItem ? "shrink-0" : "ml-auto shrink-0"}>
+          <AdminThemeQuickToggle />
+        </div>
       </header>
 
       <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
@@ -225,7 +229,10 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
             <BrandMark />
           </SheetHeader>
           {navLinks}
-          <div className="border-t border-border p-3">{accountMenu}</div>
+          <div className="flex flex-col gap-3 border-t border-border p-3">
+            <AdminThemeSelector />
+            {accountMenu}
+          </div>
         </SheetContent>
       </Sheet>
 
@@ -234,7 +241,10 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
           <BrandMark />
         </div>
         {navLinks}
-        <div className="border-t border-border p-3">{accountMenu}</div>
+        <div className="flex flex-col gap-3 border-t border-border p-3">
+          <AdminThemeSelector />
+          {accountMenu}
+        </div>
       </aside>
 
       <main id="admin-main" className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:ml-60 lg:px-8 lg:py-8">

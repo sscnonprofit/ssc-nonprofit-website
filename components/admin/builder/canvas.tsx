@@ -144,7 +144,7 @@ export function Canvas({
         style={{ maxWidth: width ?? "100%" }}
       >
         <div
-          className="@container min-h-[60vh] bg-background text-foreground [color-scheme:light]"
+          className="ssc-light @container min-h-[60vh] bg-background text-foreground"
           style={
             {
               ...themeVars,

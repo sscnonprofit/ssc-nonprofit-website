@@ -279,7 +279,7 @@ export function SiteHeader({
               type="button"
               onClick={() => setOpen((v) => !v)}
               className={cn(
-                "flex size-11 shrink-0 self-center items-center justify-center rounded-xl border bg-background/80 text-foreground shadow-[0_2px_8px_-4px_rgba(30,10,16,0.3),inset_0_1px_0_0_rgba(255,255,255,0.4)] outline-offset-2 transition-all hover:border-primary/30 hover:text-primary active:scale-95 lg:hidden",
+                "flex size-11 shrink-0 self-center items-center justify-center rounded-xl border bg-background/80 text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.4),inset_0_-2px_0_rgba(0,0,0,0.1),0_2px_4px_rgba(30,10,16,0.14),0_8px_16px_-10px_rgba(30,10,16,0.35)] outline-offset-2 transition-[border-color,color,box-shadow,transform] hover:border-primary/30 hover:text-primary hover:-translate-y-px hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.48),inset_0_-2px_0_rgba(0,0,0,0.12),0_4px_8px_rgba(30,10,16,0.16),0_12px_22px_-12px_rgba(30,10,16,0.4)] active:translate-y-px active:shadow-[inset_0_2px_3px_rgba(0,0,0,0.18),0_1px_2px_rgba(30,10,16,0.16)] lg:hidden",
                 open ? "border-primary/30 text-primary" : "border-foreground/10",
               )}
               aria-expanded={open}

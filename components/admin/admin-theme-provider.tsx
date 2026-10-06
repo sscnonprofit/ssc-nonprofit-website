@@ -20,9 +20,9 @@ function readStoredPreference(): AdminThemePreference {
     const stored = window.localStorage.getItem(ADMIN_THEME_STORAGE_KEY)
     if (stored === "light" || stored === "dark" || stored === "system") return stored
   } catch {
-    // Storage can be blocked (private mode, embedded frames); fall back to the OS setting.
+    // Storage can be blocked (private mode, embedded frames); use the light default.
   }
-  return "system"
+  return "light"
 }
 
 function applyTheme(resolved: AdminResolvedTheme) {
@@ -30,13 +30,14 @@ function applyTheme(resolved: AdminResolvedTheme) {
 }
 
 /**
- * Runs before first paint (inlined in the admin layout) so there is no light flash on dark setups.
+ * Runs before first paint (inlined in the admin layout) so the admin defaults to light
+ * without a flash, while an explicitly saved dark preference is preserved.
  * Keep the storage key in sync with ADMIN_THEME_STORAGE_KEY.
  */
-export const ADMIN_THEME_INIT_SCRIPT = `(function(){try{var s=localStorage.getItem("${ADMIN_THEME_STORAGE_KEY}");var d=s==="dark"||((s!=="light")&&window.matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.toggle("dark",d)}catch(e){}})()`
+export const ADMIN_THEME_INIT_SCRIPT = `(function(){try{var s=localStorage.getItem("${ADMIN_THEME_STORAGE_KEY}");var d=s==="dark";document.documentElement.classList.toggle("dark",d)}catch(e){}})()`
 
 export function AdminThemeProvider({ children }: { children: React.ReactNode }) {
-  const [preference, setPreferenceState] = useState<AdminThemePreference>("system")
+  const [preference, setPreferenceState] = useState<AdminThemePreference>("light")
   const [systemDark, setSystemDark] = useState(false)
 
   useEffect(() => {

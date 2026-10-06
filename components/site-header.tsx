@@ -293,11 +293,17 @@ export function SiteHeader({
           {/* Mobile nav */}
           <div
             id="mobile-nav"
-            hidden={!open}
-            className="mx-3 max-h-[calc(100dvh-8rem)] overflow-y-auto overscroll-contain overscroll-behavior-contain border-t border-foreground/[0.08] pb-4 pt-2 lg:hidden"
+            aria-hidden={!open}
+            data-open={open}
+            className={cn(
+              "mx-3 overflow-hidden border-t border-foreground/[0.08] transition-[max-height,opacity,transform] duration-300 ease-out motion-reduce:transition-none lg:hidden",
+              open
+                ? "max-h-[calc(100dvh-8rem)] translate-y-0 overflow-y-auto overscroll-contain overscroll-behavior-contain pb-4 pt-2 opacity-100"
+                : "pointer-events-none max-h-0 -translate-y-2 overflow-y-hidden pb-0 pt-0 opacity-0",
+            )}
           >
-            <nav aria-label="Mobile">
-              <ul className="flex flex-col">
+            <nav aria-label="Mobile" className="motion-reduce:transform-none">
+              <ul className="flex flex-col [&>li]:transition-[opacity,transform] [&>li]:duration-300 [&>li]:ease-out [&>li]:motion-reduce:transition-none data-[open=false]:[&>li]:translate-y-1 data-[open=false]:[&>li]:opacity-0" data-open={open}>
                 {nav.map((item) => {
                   const active = isItemActive(pathname, item)
                   return item.children ? (

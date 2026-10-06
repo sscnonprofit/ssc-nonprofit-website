@@ -73,16 +73,11 @@ export function SiteHeader({
 
   useEffect(() => {
     if (!open) return
-    const previous = document.body.style.overflow
-    document.body.style.overflow = "hidden"
     const onResize = () => {
       if (window.innerWidth >= 1024) setOpen(false)
     }
     window.addEventListener("resize", onResize)
-    return () => {
-      document.body.style.overflow = previous
-      window.removeEventListener("resize", onResize)
-    }
+    return () => window.removeEventListener("resize", onResize)
   }, [open])
 
   return (
@@ -300,7 +295,7 @@ export function SiteHeader({
           <div
             id="mobile-nav"
             hidden={!open}
-            className="mx-4 max-h-[calc(100dvh-9rem)] overflow-y-auto overscroll-contain border-t border-foreground/[0.08] pb-6 pt-2 lg:hidden"
+            className="mx-4 max-h-[calc(100dvh-9rem)] overflow-y-auto overscroll-contain overscroll-behavior-contain border-t border-foreground/[0.08] pb-6 pt-2 lg:hidden"
           >
             <nav aria-label="Mobile">
               <ul className="flex flex-col">

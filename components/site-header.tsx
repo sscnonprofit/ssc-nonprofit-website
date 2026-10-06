@@ -83,9 +83,8 @@ export function SiteHeader({
   return (
     <header
       className={cn(
-        "isolate z-50 transition-[padding] duration-300",
+        "isolate z-50",
         header.sticky ? "sticky top-0" : "relative",
-        header.sticky && scrolled ? "pt-[env(safe-area-inset-top)]" : "",
       )}
       onKeyDown={(e) => {
         if (e.key === "Escape") {
@@ -100,9 +99,9 @@ export function SiteHeader({
       {/* Utility bar */}
       <div
           className={cn(
-            "hidden overflow-hidden bg-primary text-primary-foreground transition-[max-height,opacity,transform] duration-300 motion-reduce:transition-none",
+            "hidden overflow-hidden bg-primary text-primary-foreground transition-opacity duration-300 motion-reduce:transition-none",
           showUtilityBar && "md:block",
-          scrolled && header.sticky ? "max-h-0 opacity-0" : "max-h-12 opacity-100",
+          scrolled && header.sticky ? "opacity-0 pointer-events-none" : "opacity-100",
         )}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-2 text-[13px]">
@@ -135,10 +134,10 @@ export function SiteHeader({
         </div>
       </div>
 
-      <div className={cn("px-3 transition-[padding] duration-300 motion-reduce:transition-none md:px-4", minimal || scrolled ? "pt-0" : "pt-3")}>
+      <div className="px-3 pt-3 md:px-4">
         <div
           className={cn(
-            "ssc-glass-nav ssc-header-glass relative mx-auto max-w-7xl border backdrop-blur-xl transition-[background-color,border-color,border-radius,box-shadow,transform] duration-300 motion-reduce:transition-none",
+            "ssc-glass-nav ssc-header-glass relative mx-auto max-w-7xl border backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-200 motion-reduce:transition-none",
             minimal
               ? "rounded-none border-x-0 border-t-0 border-border bg-background"
               : scrolled

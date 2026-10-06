@@ -55,10 +55,20 @@ export function SiteHeader({
   }
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    let frame = 0
+    const onScroll = () => {
+      if (frame) return
+      frame = window.requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 24)
+        frame = 0
+      })
+    }
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
+    return () => {
+      window.removeEventListener("scroll", onScroll)
+      if (frame) window.cancelAnimationFrame(frame)
+    }
   }, [])
 
   useEffect(() => {
@@ -77,7 +87,11 @@ export function SiteHeader({
 
   return (
     <header
-      className={cn("z-40", header.sticky ? "sticky top-0" : "relative")}
+      className={cn(
+        "isolate z-50 transition-[padding] duration-300",
+        header.sticky ? "sticky top-0" : "relative",
+        header.sticky && scrolled ? "pt-[env(safe-area-inset-top)]" : "",
+      )}
       onKeyDown={(e) => {
         if (e.key === "Escape") {
           setMenu(null)
@@ -90,8 +104,8 @@ export function SiteHeader({
     >
       {/* Utility bar */}
       <div
-        className={cn(
-          "hidden overflow-hidden bg-primary text-primary-foreground transition-[max-height,opacity] duration-300",
+          className={cn(
+            "hidden overflow-hidden bg-primary text-primary-foreground transition-[max-height,opacity,transform] duration-300 motion-reduce:transition-none",
           showUtilityBar && "md:block",
           scrolled && header.sticky ? "max-h-0 opacity-0" : "max-h-12 opacity-100",
         )}
@@ -126,17 +140,17 @@ export function SiteHeader({
         </div>
       </div>
 
-      <div className={cn("px-3 md:px-4", minimal ? "pt-0" : "pt-3")}>
+      <div className={cn("px-3 transition-[padding] duration-300 motion-reduce:transition-none md:px-4", minimal || scrolled ? "pt-0" : "pt-3")}>
         <div
           className={cn(
-            "ssc-glass-nav ssc-header-glass relative mx-auto max-w-7xl rounded-2xl border transition-[background-color,border-color,box-shadow] duration-300",
+            "ssc-glass-nav ssc-header-glass relative mx-auto max-w-7xl border backdrop-blur-xl transition-[background-color,border-color,border-radius,box-shadow,transform] duration-300 motion-reduce:transition-none",
             minimal
               ? "rounded-none border-x-0 border-t-0 border-border bg-background"
               : scrolled
-                ? "border-foreground/10 bg-background/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35),0_22px_44px_-24px_rgba(30,10,16,0.45)]"
+                ? "rounded-xl border-foreground/10 bg-background/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35),0_22px_44px_-24px_rgba(30,10,16,0.45)]"
                 : transparent
-                  ? "border-foreground/5 bg-background/30 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]"
-                  : "border-foreground/10 bg-background/65 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3),0_14px_34px_-24px_rgba(30,10,16,0.35)]",
+                  ? "rounded-2xl border-foreground/5 bg-background/30 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]"
+                  : "rounded-2xl border-foreground/10 bg-background/65 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3),0_14px_34px_-24px_rgba(30,10,16,0.35)]",
           )}
         >
           <div className="flex items-center justify-between gap-4 px-4 pb-5 pt-3 md:px-5">

@@ -159,7 +159,7 @@
 
   html {
     min-width: 320px;
-    overflow-x: hidden;
+    overflow-x: clip;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
@@ -168,7 +168,7 @@
     @apply bg-background text-foreground;
     min-width: 320px;
     min-height: 100dvh;
-    overflow-x: hidden;
+    overflow-x: clip;
     font-family: var(--ssc-font-body);
     font-size: var(--ssc-base-size);
     line-height: var(--ssc-line-height);

@@ -178,7 +178,7 @@ export default async function TheChallengePage() {
             <p className="text-pretty leading-relaxed text-muted-foreground">{challenge.join.body}</p>
             <Link
               href="/donate"
-              className="group mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-7 py-4 font-display font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
+              className="ssc-btn-accent group mt-2 w-fit px-6 py-3 font-display font-semibold"
             >
               Make A Donation
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />

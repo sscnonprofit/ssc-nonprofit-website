@@ -95,6 +95,8 @@
   --ssc-card-shadow: 0 1px 2px rgba(30, 10, 16, 0.04);
   --ssc-card-shadow-hover: 0 20px 40px -24px rgba(30, 10, 16, 0.22);
   --ssc-btn-radius: 0px;
+  --ssc-btn-height: 2.25rem;
+  --ssc-btn-padding-x: 0.875rem;
   --ssc-btn-transform: none;
   --ssc-btn-tracking: 0;
   --ssc-btn-bg: var(--primary);
@@ -224,7 +226,9 @@
   .ssc-btn,
   .ssc-btn-secondary,
   .ssc-btn-accent {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-display text-sm font-semibold;
+    @apply inline-flex items-center justify-center gap-2 font-display text-sm font-semibold;
+    min-height: var(--ssc-btn-height);
+    padding-inline: var(--ssc-btn-padding-x);
     border-radius: var(--ssc-btn-radius);
     text-transform: var(--ssc-btn-transform);
     letter-spacing: var(--ssc-btn-tracking);
@@ -280,6 +284,18 @@
     --ssc-btn-bg: var(--ssc-btn-accent-bg);
     --ssc-btn-fg: var(--ssc-btn-accent-fg);
     --ssc-btn-border: var(--ssc-btn-accent-border);
+  }
+
+  /* Keep every button rectangular and compact, including buttons composed outside Button. */
+  button:not([role="switch"]),
+  [role="button"] {
+    border-radius: var(--ssc-btn-radius);
+  }
+
+  .ssc-btn,
+  .ssc-btn-secondary,
+  .ssc-btn-accent {
+    min-height: var(--ssc-btn-height);
   }
 
   /* Builder typography scale. */

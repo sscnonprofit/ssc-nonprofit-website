@@ -27,7 +27,7 @@ export function PageHero({
         aria-hidden="true"
       />
 
-      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-6 py-20 sm:py-28">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-6 py-14 sm:py-24">
         <BrandRule />
         <div className="flex flex-wrap items-center gap-3">
           <p className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-accent">{eyebrow}</p>
@@ -37,7 +37,7 @@ export function PageHero({
             </span>
           ) : null}
         </div>
-        <h1 className="max-w-4xl text-balance text-4xl font-semibold sm:text-5xl lg:text-6xl">{title}</h1>
+        <h1 className="ssc-h1 max-w-4xl text-balance">{title}</h1>
         {body ? <p className="max-w-3xl text-pretty leading-relaxed text-primary-foreground/85">{body}</p> : null}
       </div>
     </section>

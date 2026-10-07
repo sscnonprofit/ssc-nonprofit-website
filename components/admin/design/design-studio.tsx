@@ -141,7 +141,8 @@ export function DesignStudio({
   })
   const theme = history.present
   const [panel, setPanel] = useState<PanelId>("presets")
-  const [device, setDevice] = useState<(typeof DEVICES)[number]["id"]>("desktop")
+  const [workspace, setWorkspace] = useState<"settings" | "preview">("settings")
+  const [device, setDevice] = useState<(typeof DEVICES)[number]["id"]>("mobile")
   const [savedJson, setSavedJson] = useState(() => JSON.stringify(initialTheme))
   const [draftPending, setDraftPending] = useState(hasDraft)
   const [pending, startTransition] = useTransition()
@@ -212,11 +213,18 @@ export function DesignStudio({
       router.refresh()
     })
 
-  const handlePreview = () =>
+  const handlePreview = () => {
+    const preview = window.open("about:blank", "_blank")
+    if (preview) preview.opener = null
     startTransition(async () => {
-      if (dirty && !(await saveDraft())) return
-      window.open("/api/admin/preview?path=/", "_blank", "noopener,noreferrer")
+      if (dirty && !(await saveDraft())) {
+        preview?.close()
+        return
+      }
+      if (preview) preview.location.replace("/api/admin/preview?path=/")
+      else toast.error("Allow popups to open the draft preview")
     })
+  }
 
   const handleDiscard = () => {
     if (!window.confirm("Discard all unpublished theme changes?")) return
@@ -254,7 +262,10 @@ export function DesignStudio({
     startTransition(async () => {
       const result = await listThemeRevisionsAction()
       if (result.ok) setRevisions(result.data ?? [])
-      else toast.error(result.error)
+      else {
+        setRevisions([])
+        toast.error(result.error)
+      }
     })
   }
 
@@ -284,7 +295,9 @@ export function DesignStudio({
 
   const importTheme = async (file: File) => {
     try {
+      if (file.size > 100_000) throw new Error("Theme file is too large")
       const parsed = JSON.parse(await file.text())
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed) || !parsed.colors || !parsed.typography) throw new Error("Invalid theme export")
       const imported = sanitizeTheme(parsed)
       if (!isAdmin) imported.customCss = theme.customCss
       dispatch({ type: "replace", theme: imported })
@@ -342,7 +355,7 @@ export function DesignStudio({
                 title={d.label}
                 onClick={() => setDevice(d.id)}
                 className={cn(
-                  "rounded-md p-1.5 transition-colors",
+                  "flex size-11 items-center justify-center rounded-md transition-colors",
                   device === d.id ? "bg-background text-foreground shadow-sm" : "text-muted-foreground",
                 )}
               >
@@ -376,11 +389,19 @@ export function DesignStudio({
         </div>
       </div>
 
+      <div className="flex gap-2 border-b border-border bg-card p-3 lg:hidden" aria-label="Studio workspace">
+        <Button className="flex-1" variant={workspace === "settings" ? "default" : "outline"} aria-pressed={workspace === "settings"} onClick={() => setWorkspace("settings")}>
+          <PaletteIcon data-icon="inline-start" /> Settings
+        </Button>
+        <Button className="flex-1" variant={workspace === "preview" ? "default" : "outline"} aria-pressed={workspace === "preview"} onClick={() => setWorkspace("preview")}>
+          <EyeIcon data-icon="inline-start" /> Live preview
+        </Button>
+      </div>
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-        <aside className="flex shrink-0 border-b border-border bg-background lg:w-[26rem] lg:border-r lg:border-b-0">
+        <aside className={cn("min-w-0 shrink-0 flex-col border-b border-border bg-background lg:flex lg:w-[26rem] lg:flex-row lg:border-r lg:border-b-0", workspace === "settings" ? "flex" : "hidden")}>
           <nav
             aria-label="Design settings"
-            className="flex shrink-0 flex-col gap-1 border-r border-border p-2"
+            className="flex max-w-full shrink-0 gap-1 overflow-x-auto border-b border-border p-2 lg:flex-col lg:border-r lg:border-b-0"
           >
             {PANELS.map((p) => (
               <button
@@ -390,14 +411,14 @@ export function DesignStudio({
                 aria-current={panel === p.id ? "page" : undefined}
                 title={p.label}
                 className={cn(
-                  "flex size-10 items-center justify-center rounded-lg transition-colors",
+                  "flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-sm transition-colors lg:size-11 lg:px-0",
                   panel === p.id
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground",
                 )}
               >
                 <p.icon className="size-[18px]" />
-                <span className="sr-only">{p.label}</span>
+                <span className="lg:sr-only">{p.label}</span>
               </button>
             ))}
           </nav>
@@ -800,7 +821,11 @@ export function DesignStudio({
           </div>
         </aside>
 
-        <div className="min-w-0 flex-1 overflow-y-auto bg-muted/40 p-4 lg:max-h-[calc(100dvh-8.5rem)] lg:p-8">
+        <div className={cn("min-w-0 flex-1 overflow-y-auto bg-muted/40 p-3 lg:block lg:max-h-[calc(100dvh-8.5rem)] lg:p-6", workspace === "preview" ? "block" : "hidden")}>
+          <div className="mb-3 flex items-center justify-between gap-3 text-sm text-muted-foreground">
+            <span>Live site preview</span>
+            <span>{deviceWidth ?? 1280}px · {device}</span>
+          </div>
           <ThemePreview theme={theme} width={deviceWidth} />
         </div>
       </div>

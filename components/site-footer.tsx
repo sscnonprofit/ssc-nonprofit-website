@@ -61,7 +61,7 @@ export function SiteFooter({ site, theme = DEFAULT_THEME }: { site: typeof siteF
                 alt={`${site.name} logo`}
                 width={200}
                 height={54}
-                quality={100}
+                quality={75}
                 sizes="200px"
                 className="h-10 w-auto object-contain"
               />

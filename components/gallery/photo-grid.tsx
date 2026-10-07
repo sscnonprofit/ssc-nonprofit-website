@@ -9,6 +9,8 @@ export type GridPhoto = { id: number; url: string; alt: string; caption: string 
 export function PhotoGrid({ photos, title }: { photos: GridPhoto[]; title: string }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
+  const viewerRef = useRef<HTMLDivElement>(null)
+  const isOpen = openIndex !== null
   const returnFocus = useRef<HTMLElement | null>(null)
   const touchStart = useRef<number | null>(null)
 
@@ -22,7 +24,7 @@ export function PhotoGrid({ photos, title }: { photos: GridPhoto[]; title: strin
   )
 
   useEffect(() => {
-    if (openIndex === null) return
+    if (!isOpen) return
     closeRef.current?.focus()
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = "hidden"
@@ -30,13 +32,26 @@ export function PhotoGrid({ photos, title }: { photos: GridPhoto[]; title: strin
       if (event.key === "Escape") close()
       if (event.key === "ArrowRight") step(1)
       if (event.key === "ArrowLeft") step(-1)
+      if (event.key === "Tab") {
+        const buttons = viewerRef.current?.querySelectorAll<HTMLButtonElement>("button:not(:disabled)")
+        if (!buttons?.length) return
+        const first = buttons[0]
+        const last = buttons[buttons.length - 1]
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault()
+          last.focus()
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault()
+          first.focus()
+        }
+      }
     }
     window.addEventListener("keydown", onKey)
     return () => {
       window.removeEventListener("keydown", onKey)
       document.body.style.overflow = previousOverflow
     }
-  }, [openIndex, close, step])
+  }, [isOpen, close, step])
 
   const current = openIndex === null ? null : photos[openIndex]
 
@@ -68,10 +83,11 @@ export function PhotoGrid({ photos, title }: { photos: GridPhoto[]; title: strin
 
       {current && openIndex !== null && (
         <div
+          ref={viewerRef}
           role="dialog"
           aria-modal="true"
           aria-label={`${title} photo viewer`}
-          className="fixed inset-0 z-50 flex flex-col bg-black/95 text-white"
+          className="dark fixed inset-0 z-50 flex flex-col bg-background/95 text-foreground"
           onTouchStart={(event) => {
             touchStart.current = event.touches[0]?.clientX ?? null
           }}
@@ -91,7 +107,7 @@ export function PhotoGrid({ photos, title }: { photos: GridPhoto[]; title: strin
               type="button"
               onClick={close}
               aria-label="Close viewer"
-              className="flex size-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20"
+              className="flex size-11 items-center justify-center rounded-full bg-foreground/10 hover:bg-foreground/20"
             >
               <XIcon className="size-5" aria-hidden="true" />
             </button>
@@ -107,14 +123,14 @@ export function PhotoGrid({ photos, title }: { photos: GridPhoto[]; title: strin
               priority
             />
           </div>
-          {current.caption && <p className="p-4 text-center text-pretty text-sm text-white/90">{current.caption}</p>}
+          {current.caption && <p className="p-4 text-center text-pretty text-sm text-foreground/90">{current.caption}</p>}
           {photos.length > 1 && (
             <div className="flex items-center justify-center gap-6 p-4 pb-6">
               <button
                 type="button"
                 onClick={() => step(-1)}
                 aria-label="Previous photo"
-                className="flex size-12 items-center justify-center rounded-full bg-white/10 hover:bg-white/20"
+                className="flex size-12 items-center justify-center rounded-full bg-foreground/10 hover:bg-foreground/20"
               >
                 <ChevronLeftIcon className="size-6" aria-hidden="true" />
               </button>
@@ -122,7 +138,7 @@ export function PhotoGrid({ photos, title }: { photos: GridPhoto[]; title: strin
                 type="button"
                 onClick={() => step(1)}
                 aria-label="Next photo"
-                className="flex size-12 items-center justify-center rounded-full bg-white/10 hover:bg-white/20"
+                className="flex size-12 items-center justify-center rounded-full bg-foreground/10 hover:bg-foreground/20"
               >
                 <ChevronRightIcon className="size-6" aria-hidden="true" />
               </button>

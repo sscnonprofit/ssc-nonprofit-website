@@ -19,6 +19,8 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { VisualEditor } from "@/components/admin/visual-editor/visual-editor"
+import { LeadershipEditor } from "@/components/admin/leadership-editor"
+import { buttonVariants } from "@/components/ui/button"
 
 type Revision = {
   id: number
@@ -152,7 +154,8 @@ export function PageEditor({
             )}
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {slug === "leadership" && <a href="/api/admin/preview?path=/leadership" target="_blank" rel="noopener noreferrer" className={buttonVariants({ variant: "outline", size: "sm" })}>Preview saved draft</a>}
           {hasDraft && (
             <Button variant="ghost" size="sm" onClick={handleDiscard} disabled={pending}>
               <Trash2 data-icon="inline-start" />
@@ -201,7 +204,7 @@ export function PageEditor({
               </FieldGroup>
               <div className="mt-5">
                 {contentObj ? (
-                  <VisualEditor content={contentObj} onChange={handleVisualChange} />
+                  slug === "leadership" ? <LeadershipEditor content={contentObj} onChange={handleVisualChange} /> : <VisualEditor content={contentObj} onChange={handleVisualChange} />
                 ) : (
                   <p className="rounded-md border border-dashed border-border p-4 text-sm text-muted-foreground">
                     This page&apos;s content couldn&apos;t be parsed as an object. Use the JSON tab to fix it.

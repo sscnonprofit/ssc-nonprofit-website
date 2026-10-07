@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react"
 import { ImageIcon, Loader2Icon, PencilIcon, UploadIcon, XIcon } from "lucide-react"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { ImageCropDialog } from "@/components/admin/image-crop-dialog"
@@ -26,7 +27,15 @@ export function ImageField({
 
   function handleFiles(files: FileList | null) {
     const file = files?.[0]
-    if (!file || !file.type.startsWith("image/")) return
+    if (!file) return
+    if (!["image/jpeg", "image/png", "image/webp", "image/avif"].includes(file.type)) {
+      toast.error("Choose a JPG, PNG, WEBP, or AVIF image")
+      return
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      toast.error("Choose an image smaller than 8 MB")
+      return
+    }
     const reader = new FileReader()
     reader.onload = () => {
       setPendingSrc(reader.result as string)
@@ -45,7 +54,7 @@ export function ImageField({
       const data = await res.json()
       onChange(data.url)
     } catch (error) {
-      console.error("[v0] Image upload failed:", error)
+      toast.error(error instanceof Error ? error.message : "Could not upload the image")
     } finally {
       setIsUploading(false)
       setPendingSrc(null)
@@ -53,7 +62,7 @@ export function ImageField({
   }
 
   return (
-    <div className="space-y-2">
+    <div className="flex flex-col gap-2">
       <label className="text-sm font-medium text-foreground">{label}</label>
 
       <div

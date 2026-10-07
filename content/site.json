@@ -67,7 +67,7 @@
       "label": "Our Company",
       "children": [
         { "label": "History", "href": "/our-company" },
-        { "label": "Leadership", "href": "/our-company#leadership" },
+        { "label": "Leadership", "href": "/leadership" },
         { "label": "The Challenge", "href": "/the-challenge" },
         { "label": "Impact Report", "href": "https://sscnonprofit.org/wp-content/uploads/2026/05/2025SSCImpactReportWeb.pdf", "external": true },
         { "label": "Shop SSC Gear", "href": "https://customcrafttrophy.chipply.com/SSC/store.aspx?action=viewall", "external": true }

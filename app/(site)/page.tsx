@@ -27,6 +27,10 @@ export default async function HomePage() {
     getContent("site", siteFallback),
   ])
 
+  const heroSentences = home.hero.body.split(/(?<=[.!?])\s+/)
+  const heroLead = heroSentences.slice(0, 2).join(" ")
+  const heroMore = heroSentences.slice(2).join(" ")
+
   return (
     <>
       {/* Hero */}
@@ -44,12 +48,9 @@ export default async function HomePage() {
           aria-hidden="true"
         />
         {/* Signature glow, echoing the accent blur used on the closing CTA band. */}
-        <div
-          className="pointer-events-none absolute -right-32 -top-32 -z-10 size-[28rem] rounded-full bg-accent/15 blur-3xl"
-          aria-hidden="true"
-        />
 
-        <div className="mx-auto max-w-7xl px-6 pb-24 pt-20 sm:pb-32 sm:pt-28 lg:pt-32">
+
+        <div className="mx-auto max-w-7xl px-6 pb-24 pt-12 sm:pb-32 sm:pt-24 lg:pt-28">
           <div className="max-w-2xl">
             <div className="flex flex-wrap items-center gap-3">
               <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-1.5 backdrop-blur-sm">
@@ -64,8 +65,8 @@ export default async function HomePage() {
             </div>
 
             <BrandRule className="mt-6 w-24" />
-            <h1 className="mt-6 text-balance text-4xl font-semibold sm:text-5xl lg:text-6xl">{home.hero.title}</h1>
-            <p className="mt-6 max-w-xl text-pretty leading-relaxed text-primary-foreground/85">{home.hero.body}</p>
+            <h1 className="ssc-h1 mt-6 text-balance">{home.hero.title}</h1>
+            <p className="mt-6 max-w-xl text-pretty leading-relaxed text-primary-foreground/85">{heroLead}</p>
 
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
@@ -83,7 +84,16 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <ul className="mt-9 flex flex-wrap gap-3 text-sm">
+            {heroMore && (
+              <details className="mt-5 max-w-xl">
+                <summary className="min-h-11 cursor-pointer py-2 font-display text-sm font-semibold text-primary-foreground underline underline-offset-4">
+                  More about our community
+                </summary>
+                <p className="mt-3 text-pretty leading-relaxed text-primary-foreground/85">{heroMore}</p>
+              </details>
+            )}
+
+            <ul className="mt-5 flex flex-wrap gap-3 text-sm">
               <li className="inline-flex items-center gap-2.5 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-2 backdrop-blur-sm">
                 <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-accent/20">
                   <Award className="size-3.5 text-accent" aria-hidden="true" />

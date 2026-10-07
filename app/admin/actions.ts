@@ -7,6 +7,7 @@ import { db } from "@/lib/db"
 import { pageRevisions, pages } from "@/lib/db/schema"
 import { getSessionUser, requireAdmin, requireEditor } from "@/lib/cms/auth-helpers"
 import { getCmsDoc } from "@/lib/cms/registry"
+import { validateLeadershipContent } from "@/lib/cms/leadership"
 
 function parseContent(raw: string): Record<string, unknown> {
   let parsed: unknown
@@ -24,6 +25,7 @@ function parseContent(raw: string): Record<string, unknown> {
 function revalidateDoc(slug: string) {
   const doc = getCmsDoc(slug)
   doc?.routes.forEach((route) => revalidatePath(route))
+  revalidatePath("/admin")
   revalidatePath("/admin/pages")
   revalidatePath(`/admin/pages/${slug}`)
 }
@@ -33,6 +35,7 @@ export async function saveDraftAction(slug: string, title: string, rawContent: s
   const user = await requireEditor()
   if (!title.trim()) throw new Error("Title is required.")
   const content = parseContent(rawContent)
+  if (slug === "leadership") validateLeadershipContent(content)
 
   await db
     .insert(pages)
@@ -60,6 +63,7 @@ export async function publishPageAction(slug: string) {
   if (!row) throw new Error("Page not found.")
 
   const contentToPublish = row.draftContent ?? row.content
+  if (slug === "leadership") validateLeadershipContent(contentToPublish)
   await db
     .update(pages)
     .set({

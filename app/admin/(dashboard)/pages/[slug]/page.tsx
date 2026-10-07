@@ -5,6 +5,7 @@ import { PageEditor } from "@/components/admin/page-editor"
 import { auth } from "@/lib/auth"
 import { getPageRow, listRevisions } from "@/lib/cms/pages"
 import { getCmsDoc } from "@/lib/cms/registry"
+import { getLeadershipDefaults } from "@/lib/cms/leadership-content"
 
 export default async function AdminPageEditorRoute({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -18,7 +19,7 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
   ])
 
   const role = (session?.user as { role?: string } | undefined)?.role ?? "editor"
-  const activeContent = row?.draftContent ?? row?.content ?? {}
+  const activeContent = row?.draftContent ?? row?.content ?? (slug === "leadership" ? await getLeadershipDefaults() : {})
 
   return (
     <PageEditor

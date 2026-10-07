@@ -34,11 +34,13 @@ export function ArrayField({
   items,
   onChange,
   depth,
+  itemTemplate,
 }: {
   label: string
   items: unknown[]
   onChange: (next: unknown[]) => void
   depth: number
+  itemTemplate?: Record<string, unknown>
 }) {
   const [rows, setRows] = useState<Row[]>(() => items.map((value) => ({ id: makeId(), value })))
   const [openId, setOpenId] = useState<string | null>(rows[0]?.id ?? null)
@@ -65,7 +67,7 @@ export function ArrayField({
   }
 
   function addItem() {
-    const newRow: Row = { id: makeId(), value: createEmptyArrayItem(items) }
+    const newRow: Row = { id: makeId(), value: itemTemplate ? structuredClone(itemTemplate) : createEmptyArrayItem(items) }
     commit([...rows, newRow])
     setOpenId(newRow.id)
   }

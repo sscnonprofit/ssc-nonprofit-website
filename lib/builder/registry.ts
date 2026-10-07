@@ -22,7 +22,7 @@ const button = (prefix: string, label: string): Field[] => [
   { key: `${prefix}Href`, label: `${label} link`, type: "url", placeholder: "/contact or https://" },
 ]
 
-const IMG = "/placeholder.svg?height=800&width=1200"
+const IMG = "/images/SSC_wide-angle-shot-of-new-building.jpg"
 
 export const BLOCKS: BlockDefinition[] = [
   {

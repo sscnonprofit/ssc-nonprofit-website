@@ -28,8 +28,8 @@ export function SectionHeading({
       {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
       <Tag
         className={cn(
-          "text-balance font-semibold",
-          Tag === "h1" ? "text-4xl sm:text-5xl lg:text-6xl" : "text-3xl sm:text-4xl",
+          "text-balance",
+          Tag === "h1" ? "ssc-h1" : Tag === "h3" ? "ssc-h3" : "ssc-h2",
         )}
       >
         {title}

@@ -259,7 +259,7 @@
      plus a soft, tinted shadow rather than a flat outline, for a more
      refined, corporate feel. */
   .ssc-card {
-    @apply rounded-2xl border border-border/70 bg-card transition-all duration-300;
+    @apply rounded-2xl border border-border/70 bg-card text-card-foreground transition-[border-color,box-shadow,transform] duration-300;
     box-shadow: var(--ssc-card-shadow);
   }
   .ssc-card:hover {
@@ -346,10 +346,40 @@
     --ssc-btn-border: var(--ssc-btn-accent-border);
   }
 
-  /* Keep every button rectangular and compact, including buttons composed outside Button. */
-  button:not([role="switch"]),
-  [role="button"] {
+  /* Theme button shape must not flatten segmented controls, menu triggers, or switches. */
+  .ssc-public button[data-slot="button"] {
     border-radius: var(--ssc-btn-radius);
+  }
+
+  .ssc-public {
+    overflow-wrap: anywhere;
+  }
+
+  .ssc-public > section:not([aria-label="Our impact by the numbers"]) {
+    scroll-margin-top: 6rem;
+  }
+
+  .ssc-public > section.py-20,
+  .ssc-public > section.py-24 {
+    padding-block: var(--ssc-section-y);
+  }
+
+  @media (max-width: 639px) {
+    .ssc-public > section.py-20,
+    .ssc-public > section.py-24 {
+      padding-block: calc(var(--ssc-section-y) * 0.65);
+    }
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
   }
 
   .ssc-btn,
@@ -360,11 +390,11 @@
 
   /* Builder typography scale. */
   .ssc-h1 {
-    font-size: clamp(2.25rem, 1.4rem + 3.5vw, var(--ssc-h1));
+    font-size: clamp(min(2.25rem, var(--ssc-h1)), 1.4rem + 3.5cqi, var(--ssc-h1));
     line-height: 1.05;
   }
   .ssc-h2 {
-    font-size: clamp(1.75rem, 1.2rem + 2vw, var(--ssc-h2));
+    font-size: clamp(min(1.75rem, var(--ssc-h2)), 1.2rem + 2cqi, var(--ssc-h2));
     line-height: 1.12;
   }
   .ssc-h3 {
@@ -460,6 +490,17 @@
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .ssc-header-glass {
     background-color: var(--background) !important;
+  }
+}
+
+@layer utilities {
+  @media (max-width: 639px) {
+    input:not([type="color"]):not([type="checkbox"]):not([type="radio"]),
+    select,
+    textarea {
+      font-size: 1rem;
+      min-height: 2.75rem;
+    }
   }
 }
 

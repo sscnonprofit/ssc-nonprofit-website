@@ -26,7 +26,7 @@ export function ControlGroup({
     <section className="flex flex-col gap-4 border-b border-border py-5 last:border-b-0">
       <div className="flex flex-col gap-1">
         <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-        {description && <p className="text-xs leading-relaxed text-muted-foreground">{description}</p>}
+        {description && <p className="text-sm leading-relaxed text-muted-foreground">{description}</p>}
       </div>
       {children}
     </section>
@@ -60,9 +60,9 @@ export function ColorField({
   const rating = ratio ? contrastRating(ratio) : null
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="grid grid-cols-[44px_minmax(0,1fr)_44px] items-center gap-2">
       <label
-        className="relative size-9 shrink-0 cursor-pointer overflow-hidden rounded-md border border-border shadow-sm"
+        className="relative row-span-2 size-11 cursor-pointer overflow-hidden rounded-md border border-border shadow-sm"
         style={{ backgroundColor: value }}
       >
         <span className="sr-only">Pick {label}</span>
@@ -74,16 +74,16 @@ export function ColorField({
         />
       </label>
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <Label htmlFor={id} className="text-xs font-medium">
+        <Label htmlFor={id} className="text-sm font-medium">
           {label}
         </Label>
-        {hint && <span className="truncate text-[11px] text-muted-foreground">{hint}</span>}
+        {hint && <span className="truncate text-sm text-muted-foreground">{hint}</span>}
       </div>
       {rating && (
         <span
           title={`Contrast ${ratio?.toFixed(2)}:1`}
           className={cn(
-            "rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold",
+            "col-start-2 row-start-3 w-fit rounded px-2 py-1 text-sm font-semibold",
             rating === "Fail"
               ? "bg-destructive/15 text-destructive"
               : rating === "AA Large"
@@ -102,7 +102,7 @@ export function ColorField({
           if (HEX.test(e.target.value)) onChange(e.target.value.toLowerCase())
         }}
         onBlur={() => setText(value)}
-        className="h-8 w-24 font-mono text-xs"
+        className="col-start-2 row-start-2 h-11 w-full"
         spellCheck={false}
         aria-label={`${label} hex value`}
       />
@@ -111,7 +111,7 @@ export function ColorField({
           type="button"
           size="icon"
           variant="ghost"
-          className="size-8"
+          className="col-start-3 row-start-1 row-span-3 size-11"
           title="Pick a readable color"
           onClick={() => onChange(readableOn(pairValue))}
         >
@@ -123,7 +123,7 @@ export function ColorField({
           type="button"
           size="icon"
           variant="ghost"
-          className="size-8"
+          className="col-start-3 row-start-1 row-span-3 size-11"
           disabled={value === defaultValue}
           title="Reset to default"
           onClick={() => onChange(defaultValue)}
@@ -156,8 +156,8 @@ export function SliderField({
   return (
     <div className="flex flex-col gap-2.5">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-foreground">{label}</span>
-        <span className="font-mono text-xs text-muted-foreground">{format(value)}</span>
+        <span className="text-sm font-medium text-foreground">{label}</span>
+        <span className="font-mono text-sm text-muted-foreground">{format(value)}</span>
       </div>
       <Slider
         value={value}
@@ -184,8 +184,8 @@ export function Segmented<T extends string>({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-xs font-medium text-foreground">{label}</span>
-      <div role="radiogroup" aria-label={label} className="flex rounded-lg bg-muted p-1">
+      <span className="text-sm font-medium text-foreground">{label}</span>
+      <div role="radiogroup" aria-label={label} className={cn("gap-1 rounded-lg bg-muted p-1", options.length > 3 ? "grid grid-cols-2" : "flex")}>
         {options.map((opt) => (
           <button
             key={opt.value}
@@ -194,7 +194,7 @@ export function Segmented<T extends string>({
             aria-checked={value === opt.value}
             onClick={() => onChange(opt.value)}
             className={cn(
-              "flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors",
+              "min-h-11 min-w-0 flex-1 rounded-md px-2 py-2 text-sm font-medium transition-colors",
               value === opt.value
                 ? "bg-background text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground",
@@ -223,10 +223,10 @@ export function ToggleField({
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex flex-col gap-0.5">
-        <Label htmlFor={id} className="text-xs font-medium">
+        <Label htmlFor={id} className="text-sm font-medium">
           {label}
         </Label>
-        {description && <span className="text-[11px] text-muted-foreground">{description}</span>}
+        {description && <span className="text-sm text-muted-foreground">{description}</span>}
       </div>
       <Switch id={id} checked={checked} onCheckedChange={onChange} />
     </div>
@@ -244,7 +244,7 @@ export function FontPicker({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-xs font-medium text-foreground">{label}</span>
+      <span className="text-sm font-medium text-foreground">{label}</span>
       <div role="radiogroup" aria-label={label} className="grid grid-cols-2 gap-2">
         {FONT_OPTIONS.map((font) => (
           <button
@@ -263,7 +263,7 @@ export function FontPicker({
             <span className="text-lg leading-none text-foreground" style={{ fontFamily: `var(${font.cssVar})` }}>
               Aa
             </span>
-            <span className="truncate text-[11px] text-muted-foreground">{font.label}</span>
+            <span className="truncate text-sm text-muted-foreground">{font.label}</span>
           </button>
         ))}
       </div>

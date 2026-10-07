@@ -8,7 +8,7 @@ import { newId, type BuilderDoc, type Section } from "@/lib/builder/schema"
 type State = { doc: BuilderDoc; past: BuilderDoc[]; future: BuilderDoc[]; selectedId: string | null }
 
 type Action =
-  | { type: "commit"; doc: BuilderDoc; select?: string | null }
+  | { type: "commit"; doc: BuilderDoc | ((doc: BuilderDoc) => BuilderDoc); select?: string | null }
   | { type: "undo" }
   | { type: "redo" }
   | { type: "select"; id: string | null }
@@ -18,22 +18,26 @@ const HISTORY_LIMIT = 80
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case "commit":
+    case "commit": {
+      const next = typeof action.doc === "function" ? action.doc(state.doc) : action.doc
+      const selectedId = action.select === undefined ? state.selectedId : action.select
+      if (JSON.stringify(next) === JSON.stringify(state.doc)) return { ...state, selectedId }
       return {
-        doc: action.doc,
+        doc: next,
         past: [...state.past, state.doc].slice(-HISTORY_LIMIT),
         future: [],
-        selectedId: action.select === undefined ? state.selectedId : action.select,
+        selectedId: next.sections.some((section) => section.id === selectedId) ? selectedId : null,
       }
+    }
     case "undo": {
       const prev = state.past.at(-1)
       if (!prev) return state
-      return { ...state, doc: prev, past: state.past.slice(0, -1), future: [state.doc, ...state.future] }
+      return { ...state, doc: prev, past: state.past.slice(0, -1), future: [state.doc, ...state.future], selectedId: prev.sections.some((section) => section.id === state.selectedId) ? state.selectedId : null }
     }
     case "redo": {
       const [next, ...rest] = state.future
       if (!next) return state
-      return { ...state, doc: next, past: [...state.past, state.doc], future: rest }
+      return { ...state, doc: next, past: [...state.past, state.doc].slice(-HISTORY_LIMIT), future: rest, selectedId: next.sections.some((section) => section.id === state.selectedId) ? state.selectedId : null }
     }
     case "select":
       return { ...state, selectedId: action.id }
@@ -58,11 +62,11 @@ export function useBuilder(initial: BuilderDoc) {
   const [state, dispatch] = useReducer(reducer, { doc: initial, past: [], future: [], selectedId: null })
   const { doc } = state
 
-  const commit = useCallback((next: BuilderDoc, select?: string | null) => dispatch({ type: "commit", doc: next, select }), [])
+  const commit = useCallback((next: BuilderDoc | ((doc: BuilderDoc) => BuilderDoc), select?: string | null) => dispatch({ type: "commit", doc: next, select }), [])
 
   const updateSections = useCallback(
-    (fn: (sections: Section[]) => Section[], select?: string | null) => commit({ ...doc, sections: fn(doc.sections) }, select),
-    [commit, doc],
+    (fn: (sections: Section[]) => Section[], select?: string | null) => commit((current) => ({ ...current, sections: fn(current.sections) }), select),
+    [commit],
   )
 
   const updateSection = useCallback(
@@ -76,7 +80,7 @@ export function useBuilder(initial: BuilderDoc) {
     redo: () => dispatch({ type: "redo" }),
     select: (id: string | null) => dispatch({ type: "select", id }),
     reset: (next: BuilderDoc) => dispatch({ type: "reset", doc: next }),
-    setMeta: (patch: Partial<Pick<BuilderDoc, "title" | "seo">>) => commit({ ...doc, ...patch }),
+    setMeta: (patch: Partial<Pick<BuilderDoc, "title" | "seo">>) => commit((current) => ({ ...current, ...patch })),
     updateSection,
     setText: (id: string, path: string, value: string) =>
       updateSection(id, (s) => ({ ...s, props: setPath(s.props, path, value) })),
@@ -88,16 +92,21 @@ export function useBuilder(initial: BuilderDoc) {
       }, section.id)
       return section.id
     },
-    insertSection: (section: Section, index?: number) =>
+    insertSection: (section: Section, index?: number) => {
+      const copy = { ...structuredClone(section), id: newId() }
       updateSections((list) => {
         const at = index ?? list.length
-        return [...list.slice(0, at), { ...section, id: newId() }, ...list.slice(at)]
-      }),
+        return [...list.slice(0, at), copy, ...list.slice(at)]
+      }, copy.id)
+    },
     duplicate: (id: string) => {
-      const index = doc.sections.findIndex((s) => s.id === id)
-      if (index < 0) return
-      const copy = { ...structuredClone(doc.sections[index]), id: newId() }
-      updateSections((list) => [...list.slice(0, index + 1), copy, ...list.slice(index + 1)], copy.id)
+      const copyId = newId()
+      updateSections((list) => {
+        const index = list.findIndex((section) => section.id === id)
+        if (index < 0) return list
+        const copy = { ...structuredClone(list[index]), id: copyId }
+        return [...list.slice(0, index + 1), copy, ...list.slice(index + 1)]
+      }, copyId)
     },
     remove: (id: string) => updateSections((list) => list.filter((s) => s.id !== id), null),
     move: (id: string, delta: number) =>

@@ -158,7 +158,7 @@ export function SiteHeader({
                 alt={`${site.name} logo`}
                 width={196}
                 height={49}
-                quality={100}
+                quality={75}
                 sizes="(max-width: 639px) 60vw, 196px"
                 style={{ height: logoHeight, width: Math.round(logoHeight * LOGO_RATIO) }}
                 className="max-w-[60vw] object-contain object-left transition-opacity group-hover:opacity-90"

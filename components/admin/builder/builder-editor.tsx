@@ -86,7 +86,7 @@ export function BuilderEditor({
   const router = useRouter()
   const builder = useBuilder(initialDoc)
   const { doc } = builder
-  const [device, setDevice] = useState<Device>("desktop")
+  const [device, setDevice] = useState<Device>("mobile")
   const [leftTab, setLeftTab] = useState<LeftTab>(initialDoc.sections.length ? "layers" : "add")
   const [insertAt, setInsertAt] = useState<number | null>(null)
   const [saveState, setSaveState] = useState<SaveState>("saved")
@@ -99,28 +99,45 @@ export function BuilderEditor({
   const [busy, startTransition] = useTransition()
   const lastSaved = useRef(JSON.stringify(initialDoc))
   const latest = useRef(doc)
+  const saveQueue = useRef<Promise<boolean>>(Promise.resolve(true))
+  const publishing = useRef(false)
+  const importRef = useRef<HTMLInputElement>(null)
   latest.current = doc
 
-  async function persist(snapshot = false, note?: string) {
-    const json = JSON.stringify(latest.current)
-    if (!snapshot && json === lastSaved.current) return true
-    setSaveState("saving")
-    try {
-      const res = await saveBuilderDraftAction(slug, latest.current, { snapshot, note })
-      if (!res.ok) throw new Error(res.error)
-      lastSaved.current = json
-      setUnpublished(true)
-      setSaveState(JSON.stringify(latest.current) === json ? "saved" : "pending")
-      return true
-    } catch (error) {
-      setSaveState("error")
-      toast.error(error instanceof Error ? error.message : "Could not save")
-      return false
-    }
+  function persist(snapshot = false, note?: string) {
+    const task = saveQueue.current.then(async () => {
+      if (publishing.current) return false
+      const savedDoc = latest.current
+      const json = JSON.stringify(savedDoc)
+      if (!snapshot && json === lastSaved.current) {
+        setSaveState("saved")
+        return true
+      }
+      setSaveState("saving")
+      try {
+        const res = await saveBuilderDraftAction(slug, savedDoc, { snapshot, note })
+        if (!res.ok) throw new Error(res.error)
+        lastSaved.current = json
+        setUnpublished(true)
+        const changedDuringSave = JSON.stringify(latest.current) !== json
+        setSaveState(changedDuringSave ? "pending" : "saved")
+        if (changedDuringSave) void persist()
+        return true
+      } catch (error) {
+        setSaveState("error")
+        toast.error(error instanceof Error ? error.message : "Could not save")
+        return false
+      }
+    })
+    saveQueue.current = task
+    return task
   }
 
   useEffect(() => {
-    if (JSON.stringify(doc) === lastSaved.current) return
+    if (JSON.stringify(doc) === lastSaved.current) {
+      setSaveState("saved")
+      return
+    }
     setSaveState("pending")
     const timer = setTimeout(() => void persist(), 1200)
     return () => clearTimeout(timer)
@@ -179,8 +196,14 @@ export function BuilderEditor({
   }
 
   async function openPreview() {
+    const preview = window.open("about:blank", "_blank")
+    if (preview) preview.opener = null
     const ok = await persist()
-    if (ok) window.open(`/api/admin/preview?path=${encodeURIComponent(`/${slug}`)}`, "_blank", "noopener")
+    if (ok && preview) preview.location.replace(`/api/admin/preview?path=${encodeURIComponent(`/${slug}`)}`)
+    else {
+      preview?.close()
+      if (ok) toast.error("Allow popups to open the draft preview")
+    }
   }
 
   async function copyPreviewLink() {
@@ -192,15 +215,51 @@ export function BuilderEditor({
   }
 
   function publish() {
+    if (publishing.current) return
+    publishing.current = true
     startTransition(async () => {
-      const res = await publishBuilderPageAction(slug, latest.current)
-      if (!res.ok) return void toast.error(res.error)
-      lastSaved.current = JSON.stringify(latest.current)
-      setSaveState("saved")
-      setUnpublished(false)
-      toast.success("Page published", { action: { label: "View", onClick: () => window.open(`/${slug}`, "_blank") } })
-      router.refresh()
+      try {
+        await saveQueue.current
+        const publishedDoc = latest.current
+        const res = await publishBuilderPageAction(slug, publishedDoc)
+        if (!res.ok) throw new Error(res.error)
+        const json = JSON.stringify(publishedDoc)
+        lastSaved.current = json
+        const changedDuringPublish = JSON.stringify(latest.current) !== json
+        setSaveState(changedDuringPublish ? "pending" : "saved")
+        setUnpublished(changedDuringPublish)
+        toast.success("Page published", { action: { label: "View", onClick: () => window.open(`/${slug}`, "_blank", "noopener,noreferrer") } })
+        router.refresh()
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : "Could not publish")
+      } finally {
+        publishing.current = false
+        if (JSON.stringify(latest.current) !== lastSaved.current) void persist()
+      }
     })
+  }
+
+  function exportPage() {
+    const url = URL.createObjectURL(new Blob([JSON.stringify(latest.current, null, 2)], { type: "application/json" }))
+    const link = document.createElement("a")
+    link.href = url
+    link.download = `${slug}-page.json`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  async function importPage(file: File) {
+    try {
+      if (file.size > 1_000_000) throw new Error("Page exports must be under 1 MB")
+      const raw = JSON.parse(await file.text())
+      if (raw?.kind !== "builder" || !Array.isArray(raw.sections)) throw new Error("Choose a valid builder page export")
+      const imported = sanitizeDoc(raw)
+      if (!window.confirm("Replace this draft with the imported page? You can undo this change.")) return
+      builder.commit(imported, null)
+      toast.success("Page imported into draft. Review before publishing.")
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not import page")
+    }
   }
 
   function run(action: () => Promise<{ ok: boolean; error?: string; data?: { slug: string } }>, done: (data?: { slug: string }) => void) {
@@ -212,7 +271,7 @@ export function BuilderEditor({
   }
 
   const saveLabel = { saved: "Saved", pending: "Unsaved changes", saving: "Saving...", error: "Save failed" }[saveState]
-  const SaveIcon = { saved: CheckIcon, pending: CloudIcon, saving: Loader2Icon, error: TriangleAlertIcon }[saveState]
+  const SaveStatusIcon = { saved: CheckIcon, pending: CloudIcon, saving: Loader2Icon, error: TriangleAlertIcon }[saveState]
   const devices = [
     { value: "desktop" as const, label: "Desktop", icon: MonitorIcon },
     { value: "tablet" as const, label: "Tablet", icon: TabletIcon },
@@ -221,6 +280,11 @@ export function BuilderEditor({
 
   return (
     <div className="flex h-dvh flex-col bg-background text-foreground">
+      <input ref={importRef} type="file" accept="application/json,.json" className="hidden" aria-label="Import page JSON" onChange={(event) => {
+        const file = event.target.files?.[0]
+        if (file) void importPage(file)
+        event.target.value = ""
+      }} />
       <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border px-3">
         <Button variant="ghost" size="icon" className="size-8" nativeButton={false} render={<Link href="/admin" />}>
           <ArrowLeftIcon className="size-4" />
@@ -237,7 +301,7 @@ export function BuilderEditor({
           className={cn("ml-1 hidden items-center gap-1 text-xs text-muted-foreground md:flex", saveState === "error" && "text-destructive")}
           aria-live="polite"
         >
-          <SaveIcon className={cn("size-3.5", saveState === "saving" && "animate-spin")} />
+          <SaveStatusIcon className={cn("size-3.5", saveState === "saving" && "animate-spin")} />
           {saveLabel}
         </span>
 
@@ -316,6 +380,8 @@ export function BuilderEditor({
                   <CopyIcon className="size-4" />
                   Duplicate page
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={exportPage}>Export page JSON</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => importRef.current?.click()} disabled={busy}>Import page JSON</DropdownMenuItem>
               </DropdownMenuGroup>
               {isAdmin && (
                 <>
@@ -379,6 +445,12 @@ export function BuilderEditor({
           </aside>
         )}
         <main className="min-w-0 flex-1 overflow-y-auto bg-muted/60" aria-label="Page canvas">
+          <div className="sticky top-0 z-40 hidden justify-end border-b border-border bg-background p-2 lg:flex xl:hidden">
+            <Button variant="outline" disabled={!builder.selectedId} onClick={() => setInspectorSheetOpen(true)}>
+              <SlidersHorizontalIcon data-icon="inline-start" />
+              {builder.selectedId ? "Edit selected section" : "Select a section to edit"}
+            </Button>
+          </div>
           <Canvas builder={builder} device={device} themeVars={themeVars} onInsert={openInsert} />
         </main>
         {!focusMode && (
@@ -392,6 +464,10 @@ export function BuilderEditor({
         aria-label="Builder tools"
         className="flex shrink-0 flex-col gap-2 border-t border-border bg-background p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] lg:hidden"
       >
+        <div className="flex items-center justify-between gap-2 px-1 text-sm text-muted-foreground" role="status" aria-live="polite">
+          <span className="flex items-center gap-2"><SaveStatusIcon className={cn("size-4", saveState === "saving" && "animate-spin")} />{saveLabel}</span>
+          <span>{doc.sections.length} sections</span>
+        </div>
         <div className="grid grid-cols-2 gap-2">
           <Button variant="outline" className="h-11" onClick={() => setSectionsSheetOpen(true)}>
             <LayersIcon className="size-4" />

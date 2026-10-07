@@ -3,6 +3,7 @@
 import type { CSSProperties, DragEvent } from "react"
 import { ArrowDownIcon, ArrowUpIcon, CopyIcon, GripVerticalIcon, PlusIcon, Trash2Icon } from "lucide-react"
 
+import { DeviceFrame } from "@/components/admin/device-frame"
 import { EditProvider } from "@/lib/builder/editable"
 import { BLOCK_MAP } from "@/lib/builder/registry"
 import { SectionContent, SectionShell } from "@/lib/builder/render-page"
@@ -12,15 +13,15 @@ import { cn } from "@/lib/utils"
 import type { Builder } from "./use-builder"
 
 export type Device = "desktop" | "tablet" | "mobile"
-export const DEVICE_WIDTH: Record<Device, number | null> = { desktop: null, tablet: 834, mobile: 390 }
+export const DEVICE_WIDTH: Record<Device, number> = { desktop: 1280, tablet: 834, mobile: 390 }
 
 function InsertLine({ onInsert, index }: { onInsert: (i: number) => void; index: number }) {
   return (
-    <div className="group/insert relative z-20 h-0">
+    <div className="group/insert relative z-20 flex h-12 items-center justify-center bg-muted/30 sm:h-8">
       <button
         type="button"
         onClick={() => onInsert(index)}
-        className="absolute left-1/2 top-0 flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground opacity-0 shadow-md transition-opacity focus-visible:opacity-100 group-hover/insert:opacity-100 [.group\/section:hover_&]:opacity-100"
+        className="flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground opacity-100 shadow-md transition-opacity sm:opacity-0 focus-visible:opacity-100 group-hover/insert:opacity-100 [.group\/section:hover_&]:opacity-100"
       >
         <PlusIcon className="size-3.5" />
         Add section
@@ -39,7 +40,7 @@ function ToolbarButton({ label, onClick, disabled, danger, children }: { label: 
         e.stopPropagation()
         onClick()
       }}
-      className={cn("flex size-7 items-center justify-center rounded hover:bg-white/15 disabled:opacity-40", danger && "hover:bg-red-500/80")}
+      className={cn("flex size-11 items-center justify-center rounded hover:bg-primary-foreground/15 disabled:opacity-40 sm:size-8", danger && "hover:bg-destructive hover:text-primary-foreground")}
     >
       {children}
       <span className="sr-only">{label}</span>
@@ -97,7 +98,7 @@ function CanvasSection({ section, index, total, builder, onInsert }: { section: 
           selected ? "flex" : "hidden group-hover/section:flex",
         )}
       >
-        <span className="flex items-center gap-1 px-2 text-[11px] font-semibold" title="Drag to reorder">
+        <span className="hidden max-w-40 items-center gap-1 truncate px-2 text-sm font-semibold sm:flex" title="Drag to reorder">
           <GripVerticalIcon className="size-3.5 opacity-75" aria-hidden="true" />
           {section.label || def.label}
         </span>
@@ -138,11 +139,9 @@ export function Canvas({
   const width = DEVICE_WIDTH[device]
   const { sections } = builder.doc
   return (
-    <div className="min-h-full p-6" onClick={(e) => e.target === e.currentTarget && builder.select(null)}>
-      <div
-        className="mx-auto overflow-hidden rounded-xl border border-border shadow-xl transition-[max-width] duration-300"
-        style={{ maxWidth: width ?? "100%" }}
-      >
+    <div className="min-h-full p-2 sm:p-6" onClick={(e) => e.target === e.currentTarget && builder.select(null)}>
+      <DeviceFrame width={width}>
+      <div className="overflow-hidden rounded-xl border border-border shadow-xl">
         <div
           className="ssc-light @container min-h-[60vh] bg-background text-foreground"
           style={
@@ -176,6 +175,7 @@ export function Canvas({
           )}
         </div>
       </div>
+      </DeviceFrame>
     </div>
   )
 }

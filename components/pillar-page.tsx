@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react"
 import pillarsFallback from "@/content/pillars.json"
 import { BrandRule } from "@/components/brand-rule"
 import { CtaBand } from "@/components/cta-band"
+import { OpenPositions } from "@/components/employment/open-positions"
 import { PageHero } from "@/components/page-hero"
 import { SectionHeading } from "@/components/section-heading"
 import { StatCounter } from "@/components/stat-counter"
@@ -91,6 +92,9 @@ export async function PillarPage({ slug }: { slug: PillarKey }) {
           </div>
         </section>
       ) : null}
+
+      {/* Open positions (employment only) */}
+      {slug === "employment" ? <OpenPositions /> : null}
 
       {/* Partners */}
       {partners ? (

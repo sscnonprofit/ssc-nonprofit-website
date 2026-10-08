@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import {
+  BriefcaseIcon,
   CalendarDaysIcon,
   ExternalLinkIcon,
   FrameIcon,
@@ -97,6 +98,7 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
         { href: "/admin/events", label: "Events", icon: CalendarDaysIcon },
         { href: "/admin/gallery", label: "Gallery", icon: GalleryHorizontalIcon },
         { href: "/admin/exhibitions", label: "Exhibitions", icon: FrameIcon },
+        { href: "/admin/jobs", label: "Jobs", icon: BriefcaseIcon },
       ],
     },
     {

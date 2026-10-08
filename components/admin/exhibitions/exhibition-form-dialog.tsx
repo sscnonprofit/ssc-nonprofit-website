@@ -253,7 +253,12 @@ export function ExhibitionFormDialog({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field id="ex-status" label="Status" hint={isAdmin ? statusHint : "An admin changes the status."}>
-              <Select value={form.status} onValueChange={(value) => patch({ status: value ?? "draft" })} disabled={!isAdmin}>
+              <Select
+                items={EXHIBITION_STATUS_OPTIONS}
+                value={form.status}
+                onValueChange={(value) => patch({ status: value ?? "draft" })}
+                disabled={!isAdmin}
+              >
                 <SelectTrigger id="ex-status" className="h-11 w-full text-base">
                   <SelectValue />
                 </SelectTrigger>

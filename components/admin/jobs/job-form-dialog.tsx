@@ -148,7 +148,11 @@ export function JobFormDialog({
               <Input id="job-location" value={form.location} onChange={(e) => patch({ location: e.target.value })} maxLength={160} placeholder="Sheboygan, WI" className="h-11 text-base" />
             </Field>
             <Field id="job-type" label="Employment type">
-              <Select value={form.employmentType} onValueChange={(value) => patch({ employmentType: value ?? "full_time" })}>
+              <Select
+                items={EMPLOYMENT_TYPES}
+                value={form.employmentType}
+                onValueChange={(value) => patch({ employmentType: value ?? "full_time" })}
+              >
                 <SelectTrigger id="job-type" className="h-11 w-full text-base">
                   <SelectValue />
                 </SelectTrigger>
@@ -215,7 +219,12 @@ export function JobFormDialog({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field id="job-status" label="Status" hint={isAdmin ? statusHint : "An admin changes the status."}>
-              <Select value={form.status} onValueChange={(value) => patch({ status: value ?? "draft" })} disabled={!isAdmin}>
+              <Select
+                items={JOB_STATUS_OPTIONS}
+                value={form.status}
+                onValueChange={(value) => patch({ status: value ?? "draft" })}
+                disabled={!isAdmin}
+              >
                 <SelectTrigger id="job-status" className="h-11 w-full text-base">
                   <SelectValue />
                 </SelectTrigger>

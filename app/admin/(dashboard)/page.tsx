@@ -1,6 +1,7 @@
 import { desc } from "drizzle-orm"
 import {
   ArrowUpRightIcon,
+  BriefcaseIcon,
   CalendarDaysIcon,
   ExternalLinkIcon,
   FileTextIcon,
@@ -78,7 +79,7 @@ export default async function AdminPagesDashboard() {
         <h2 id="overview-heading" className="text-sm font-semibold text-foreground">
           Overview
         </h2>
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <OverviewCard
             href="/admin/events"
             icon={CalendarDaysIcon}
@@ -110,10 +111,20 @@ export default async function AdminPagesDashboard() {
               overview.exhibitions.newSubmissions > 0 ? `${overview.exhibitions.newSubmissions} to review` : undefined
             }
           />
+          <OverviewCard
+            href="/admin/jobs"
+            icon={BriefcaseIcon}
+            title="Jobs"
+            primary={{ value: overview.jobs.open, label: "open postings" }}
+            details={[{ label: "Drafts", value: overview.jobs.drafts }]}
+            attention={
+              overview.jobs.newApplications > 0 ? `${overview.jobs.newApplications} new applicant${overview.jobs.newApplications === 1 ? "" : "s"}` : undefined
+            }
+          />
         </div>
       </section>
 
-      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
         <Stat label="Pages" value={String(pages.length + builderPages.length)} tone="primary" />
         <Stat label="Drafts" value={String(draftCount)} />
         <Stat

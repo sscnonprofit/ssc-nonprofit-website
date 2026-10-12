@@ -23,6 +23,10 @@ export default async function OurCompanyPage() {
     getLeadershipContent(),
   ])
   const visibleMembers = leadership.team.members.filter((member) => member.visible)
+  const historyMilestones = company.history.milestones.map((milestone, index) => ({
+    ...milestone,
+    image: milestone.image || companyFallback.history.milestones[index]?.image || "/placeholder.svg",
+  }))
   const ceo = visibleMembers.find((m) => m.bio)
 
   return (
@@ -62,7 +66,7 @@ export default async function OurCompanyPage() {
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading title={company.history.title} intro={company.history.body} align="center" />
           <div className="mt-16">
-            <HistoryTimeline milestones={company.history.milestones} />
+            <HistoryTimeline milestones={historyMilestones} />
           </div>
         </div>
       </section>

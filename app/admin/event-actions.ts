@@ -96,8 +96,10 @@ export async function saveEventAction(input: EventInput): Promise<Result<{ id: n
 
   const ctaUrl = safeUrl(input.ctaUrl)
   if (ctaUrl === null) return { ok: false, error: "The button link must start with /, https:// or mailto:." }
-  const image = input.image ? safeUrl(input.image) : null
-  if (image === null) return { ok: false, error: "The image link is not valid." }
+  const rawImage = input.image?.trim() ?? ""
+  const checkedImage = rawImage ? safeUrl(rawImage) : ""
+  if (checkedImage === null) return { ok: false, error: "The image link is not valid. Use an uploaded image or a link starting with / or https://." }
+  const image = checkedImage || null
 
   const capacityNumber = input.capacity.trim() ? Math.floor(Number(input.capacity)) : null
   if (capacityNumber !== null && (!Number.isFinite(capacityNumber) || capacityNumber < 1 || capacityNumber > 5000)) {

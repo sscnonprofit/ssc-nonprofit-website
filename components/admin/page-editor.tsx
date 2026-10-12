@@ -93,48 +93,61 @@ export function PageEditor({
       return
     }
     startTransition(async () => {
-      try {
-        await saveDraftAction(slug, title, content)
+      const result = await saveDraftAction(slug, title, content)
+      if (result.success) {
         toast.success("Draft saved.")
         router.refresh()
-      } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Failed to save draft.")
+      } else {
+        toast.error(result.error)
       }
     })
   }
 
   const handlePublish = () => {
+    // Publish must carry over whatever is currently in the editor, not just
+    // whatever draft happens to already be saved in the database — otherwise
+    // an edit (e.g. deleting a team member) made right before clicking
+    // Publish gets silently dropped and the live site stays on stale content.
+    if (!validateJson(content)) {
+      toast.error("Fix the JSON before publishing.")
+      return
+    }
     startTransition(async () => {
-      try {
-        await publishPageAction(slug)
+      const saveResult = await saveDraftAction(slug, title, content)
+      if (!saveResult.success) {
+        toast.error(saveResult.error)
+        return
+      }
+      const result = await publishPageAction(slug)
+      if (result.success) {
         toast.success("Published to the live site.")
         router.refresh()
-      } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Failed to publish.")
+      } else {
+        toast.error(result.error)
       }
     })
   }
 
   const handleDiscard = () => {
     startTransition(async () => {
-      try {
-        await discardDraftAction(slug)
+      const result = await discardDraftAction(slug)
+      if (result.success) {
         toast.success("Draft discarded.")
         router.refresh()
-      } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Failed to discard draft.")
+      } else {
+        toast.error(result.error)
       }
     })
   }
 
   const handleRestore = (revisionId: number) => {
     startTransition(async () => {
-      try {
-        await restoreRevisionAction(slug, revisionId)
+      const result = await restoreRevisionAction(slug, revisionId)
+      if (result.success) {
         toast.success("Revision restored to draft. Review and publish when ready.")
         router.refresh()
-      } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Failed to restore revision.")
+      } else {
+        toast.error(result.error)
       }
     })
   }

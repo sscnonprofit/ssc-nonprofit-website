@@ -18,8 +18,11 @@ export async function ServicePage({ slug }: { slug: ServiceSlug }) {
     getContent("services", servicesFallback),
     getContent("site", siteFallback),
   ])
-  const service = services[slug]
-  const related = service.related.map((r) => services[r as ServiceSlug])
+  const mergedServices = { ...servicesFallback, ...services }
+  const service = mergedServices[slug]
+  const related = service.related
+    .map((r) => mergedServices[r as ServiceSlug])
+    .filter(Boolean)
 
   return (
     <>
@@ -116,7 +119,7 @@ export async function ServicePage({ slug }: { slug: ServiceSlug }) {
               <li key={option.slug}>
                 <Link
                   href={`/${option.slug}`}
-                  className="group relative flex min-h-72 flex-col justify-end overflow-hidden rounded-2xl p-8 text-primary-foreground"
+                  className="group relative isolate flex min-h-72 flex-col justify-end overflow-hidden rounded-2xl p-8 text-primary-foreground"
                 >
                   <Image
                     src={option.heroImage}

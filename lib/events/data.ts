@@ -288,6 +288,35 @@ export async function getPublicEvent(slug: string) {
   return { event, upcoming: occurrencesForEvent(event, booked, { from, to }) }
 }
 
+// --- Art show schedule --------------------------------------------------------
+// The Artists Gallery page (/artists-gallery) shows schedule details —
+// opening reception, submission deadline, drop-off windows, display period —
+// that are tied to real, admin-managed Events instead of hand-typed copy, so
+// updating a date in /admin/events is reflected there automatically. Events
+// opt in by slug: "art-show-opening", "art-show-deadline", "art-show-display",
+// and one or more "art-show-dropoff*" slugs (one per drop-off window).
+
+export type ArtShowSchedule = {
+  opening: EventRow | null
+  deadline: EventRow | null
+  dropoffs: EventRow[]
+  display: EventRow | null
+}
+
+export async function getArtShowSchedule(): Promise<ArtShowSchedule> {
+  const rows = await db.select().from(events).where(eq(events.status, "published"))
+  const bySlug = (slug: string) => rows.find((row) => row.slug === slug) ?? null
+  const dropoffs = rows
+    .filter((row) => row.slug.startsWith("art-show-dropoff"))
+    .sort((a, b) => a.startAt.getTime() - b.startAt.getTime())
+  return {
+    opening: bySlug("art-show-opening"),
+    deadline: bySlug("art-show-deadline"),
+    dropoffs,
+    display: bySlug("art-show-display"),
+  }
+}
+
 // --- Gallery ----------------------------------------------------------------
 
 export type AdminAlbum = {

@@ -279,14 +279,33 @@ export function SiteHeader({
               type="button"
               onClick={() => setOpen((v) => !v)}
               className={cn(
-                "flex size-11 shrink-0 self-center items-center justify-center rounded-xl border bg-background/80 text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.4),inset_0_-2px_0_rgba(0,0,0,0.1),0_2px_4px_rgba(30,10,16,0.14),0_8px_16px_-10px_rgba(30,10,16,0.35)] outline-offset-2 transition-[border-color,color,box-shadow,transform] hover:border-primary/30 hover:text-primary hover:-translate-y-px hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.48),inset_0_-2px_0_rgba(0,0,0,0.12),0_4px_8px_rgba(30,10,16,0.16),0_12px_22px_-12px_rgba(30,10,16,0.4)] active:translate-y-px active:shadow-[inset_0_2px_3px_rgba(0,0,0,0.18),0_1px_2px_rgba(30,10,16,0.16)] lg:hidden",
+                "group/menu-btn relative flex size-11 shrink-0 self-center items-center justify-center overflow-hidden rounded-xl border bg-gradient-to-b from-background/90 to-background/70 text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.4),inset_0_-2px_0_rgba(0,0,0,0.1),0_2px_4px_rgba(30,10,16,0.14),0_8px_16px_-10px_rgba(30,10,16,0.35)] outline-offset-2 transition-[border-color,color,box-shadow,transform] duration-200 hover:border-primary/30 hover:text-primary hover:-translate-y-px hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.48),inset_0_-2px_0_rgba(0,0,0,0.12),0_4px_8px_rgba(30,10,16,0.16),0_14px_26px_-12px_rgba(30,10,16,0.45)] active:translate-y-0 active:scale-95 active:shadow-[inset_0_2px_3px_rgba(0,0,0,0.18),0_1px_2px_rgba(30,10,16,0.16)] lg:hidden",
                 open ? "border-primary/30 text-primary" : "border-foreground/10",
               )}
               aria-expanded={open}
               aria-controls="mobile-nav"
               aria-label={open ? "Close menu" : "Open menu"}
             >
-              {open ? <X className="size-5" aria-hidden="true" /> : <Menu className="size-5" aria-hidden="true" />}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 scale-90 rounded-xl bg-[radial-gradient(circle_at_50%_0%,color-mix(in_oklab,var(--primary)_16%,transparent),transparent_70%)] opacity-0 transition-opacity duration-200 group-hover/menu-btn:opacity-100"
+              />
+              <span className="relative size-5">
+                <Menu
+                  aria-hidden="true"
+                  className={cn(
+                    "absolute inset-0 size-5 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] motion-reduce:transition-none",
+                    open ? "scale-75 rotate-45 opacity-0" : "scale-100 rotate-0 opacity-100",
+                  )}
+                />
+                <X
+                  aria-hidden="true"
+                  className={cn(
+                    "absolute inset-0 size-5 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] motion-reduce:transition-none",
+                    open ? "scale-100 rotate-0 opacity-100" : "scale-75 -rotate-45 opacity-0",
+                  )}
+                />
+              </span>
             </button>
           </div>
 

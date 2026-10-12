@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from "react"
 import Link from "next/link"
-import { CheckCircle2Icon, FileTextIcon, Loader2Icon, UploadIcon, XIcon } from "lucide-react"
+import { FileTextIcon, Loader2Icon, UploadIcon, XIcon } from "lucide-react"
 
 import { submitApplicationAction } from "@/app/admin/job-actions"
 import { Button } from "@/components/ui/button"
@@ -151,9 +151,24 @@ export function JobApplicationForm({ jobId, jobTitle }: { jobId: number; jobTitl
         ref={confirmationRef}
         tabIndex={-1}
         role="status"
-        className="flex flex-col items-center gap-3 rounded-2xl border border-primary/30 bg-primary/10 p-8 text-center outline-none sm:p-12"
-      >
-        <CheckCircle2Icon className="size-10 text-primary" aria-hidden="true" />
+  className="flex flex-col items-center gap-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-8 text-center outline-none sm:p-12"
+  >
+  <div className="relative mb-2 flex size-20 items-center justify-center">
+  <span className="ssc-check-ring absolute inset-0 rounded-full bg-emerald-500/40" aria-hidden="true" />
+  <span className="ssc-check-badge relative flex size-20 items-center justify-center rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/30">
+  <svg viewBox="0 0 24 24" className="size-10" fill="none" aria-hidden="true">
+  <path
+  className="ssc-check-mark"
+  d="M5 12.5l4.5 4.5L19 7.5"
+  stroke="white"
+  strokeWidth="2.75"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+  pathLength={30}
+  />
+  </svg>
+  </span>
+  </div>
         <h3 className="font-display text-2xl font-semibold">Application received</h3>
         <p className="max-w-md text-pretty text-muted-foreground">
           Thank you for applying to {jobTitle}. Our hiring team will review your application and reach out by email or phone if it&apos;s a fit.

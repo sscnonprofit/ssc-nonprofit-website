@@ -9,6 +9,7 @@ import {
   FrameIcon,
   GalleryHorizontalIcon,
   ImagesIcon,
+  InboxIcon,
   LayoutDashboardIcon,
   LogOutIcon,
   MenuIcon,
@@ -40,10 +41,11 @@ type AdminShellProps = {
   userName: string
   userEmail: string
   role: string
+  newApplications?: number
   children: React.ReactNode
 }
 
-type NavItem = { href: string; label: string; icon: React.ComponentType<{ className?: string }> }
+type NavItem = { href: string; label: string; icon: React.ComponentType<{ className?: string }>; badge?: number }
 type NavGroup = { label: string; items: NavItem[] }
 
 /** The dashboard also owns the page editor routes, so it stays highlighted there. */
@@ -79,7 +81,7 @@ function BrandMark() {
   )
 }
 
-export function AdminShell({ userName, userEmail, role, children }: AdminShellProps) {
+export function AdminShell({ userName, userEmail, role, newApplications = 0, children }: AdminShellProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
@@ -99,6 +101,7 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
         { href: "/admin/gallery", label: "Gallery", icon: GalleryHorizontalIcon },
         { href: "/admin/exhibitions", label: "Exhibitions", icon: FrameIcon },
         { href: "/admin/jobs", label: "Jobs", icon: BriefcaseIcon },
+        { href: "/admin/applications", label: "Applications", icon: InboxIcon, badge: newApplications },
       ],
     },
     {
@@ -140,6 +143,12 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
               >
                 <item.icon className="size-4 shrink-0" />
                 {item.label}
+                {item.badge ? (
+                  <span className="ml-auto inline-flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-xs font-semibold tabular-nums text-accent-foreground">
+                    {item.badge}
+                    <span className="sr-only"> new</span>
+                  </span>
+                ) : null}
               </Link>
             )
           })}

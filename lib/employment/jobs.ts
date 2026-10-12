@@ -1,9 +1,9 @@
-import { and, asc, desc, eq, inArray } from "drizzle-orm"
+import { and, asc, count, desc, eq, inArray } from "drizzle-orm"
 
 import { db } from "@/lib/db"
 import { jobApplications, jobPostings } from "@/lib/db/schema"
 import { formatEventDate, toLocalInput } from "@/lib/events/occurrences"
-import { PUBLIC_JOB_STATUSES, type AdminJob, type PublicJob } from "@/lib/employment/job-constants"
+import { PUBLIC_JOB_STATUSES, type AdminJob, type InboxApplication, type PublicJob } from "@/lib/employment/job-constants"
 
 export * from "@/lib/employment/job-constants"
 export { formatEventDate }
@@ -110,6 +110,42 @@ export async function listAdminJobs(): Promise<AdminJob[]> {
       },
     }
   })
+}
+
+export async function listInboxApplications(): Promise<InboxApplication[]> {
+  const rows = await db
+    .select({ application: jobApplications, jobTitle: jobPostings.title, jobSlug: jobPostings.slug })
+    .from(jobApplications)
+    .innerJoin(jobPostings, eq(jobApplications.jobId, jobPostings.id))
+    .orderBy(desc(jobApplications.createdAt))
+
+  return rows.map(({ application: row, jobTitle, jobSlug }) => ({
+    id: row.id,
+    jobId: row.jobId,
+    jobTitle,
+    jobSlug,
+    fullName: row.fullName,
+    email: row.email,
+    phone: row.phone,
+    address: row.address,
+    availability: row.availability,
+    desiredPay: row.desiredPay,
+    startDate: row.startDate,
+    yearsExperience: row.yearsExperience,
+    referralSource: row.referralSource,
+    coverLetter: row.coverLetter,
+    resumeUrl: row.resumeUrl,
+    resumeFilename: row.resumeFilename,
+    eligibleToWork: row.eligibleToWork,
+    status: row.status,
+    reviewNotes: row.reviewNotes,
+    createdAt: row.createdAt.toISOString(),
+  }))
+}
+
+export async function countNewApplications(): Promise<number> {
+  const [row] = await db.select({ total: count() }).from(jobApplications).where(eq(jobApplications.status, "new"))
+  return row?.total ?? 0
 }
 
 export async function listJobApplications(jobId: number) {

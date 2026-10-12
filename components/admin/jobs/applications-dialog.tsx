@@ -209,10 +209,15 @@ export function ApplicationsDialog({
               <DialogDescription className="truncate">{job?.title}</DialogDescription>
             </div>
             {job && applications.length > 0 && (
-              <Button variant="outline" size="sm" className="h-10" nativeButton={false} render={<a href={`/api/admin/jobs/${job.id}/applications`} download />}>
-                <DownloadIcon className="size-4" />
-                Export CSV
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" className="h-10" nativeButton={false} render={<a href={`/admin/applications?job=${job.id}`} />}>
+                  Open in inbox
+                </Button>
+                <Button variant="outline" size="sm" className="h-10" nativeButton={false} render={<a href={`/api/admin/jobs/${job.id}/applications`} download />}>
+                  <DownloadIcon className="size-4" />
+                  Export CSV
+                </Button>
+              </div>
             )}
           </div>
           {applications.length > 3 && (

@@ -89,6 +89,29 @@ export type AdminJob = {
   form: JobForm
 }
 
+export type InboxApplication = {
+  id: number
+  jobId: number
+  jobTitle: string
+  jobSlug: string
+  fullName: string
+  email: string
+  phone: string
+  address: string
+  availability: string
+  desiredPay: string
+  startDate: string
+  yearsExperience: string
+  referralSource: string
+  coverLetter: string
+  resumeUrl: string
+  resumeFilename: string
+  eligibleToWork: boolean
+  status: string
+  reviewNotes: string
+  createdAt: string
+}
+
 export type PublicJob = {
   id: number
   slug: string

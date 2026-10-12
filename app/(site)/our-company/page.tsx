@@ -9,6 +9,7 @@ import { PageHero } from "@/components/page-hero"
 import { SectionHeading } from "@/components/section-heading"
 import { TeamGrid } from "@/components/team-grid"
 import { getContent } from "@/lib/cms/content"
+import { getLeadershipContent } from "@/lib/cms/leadership-content"
 
 export const metadata: Metadata = {
   title: "Our Company",
@@ -17,8 +18,12 @@ export const metadata: Metadata = {
 }
 
 export default async function OurCompanyPage() {
-  const company = await getContent("company", companyFallback)
-  const ceo = company.team.members.find((m) => m.bio)
+  const [company, leadership] = await Promise.all([
+    getContent("company", companyFallback),
+    getLeadershipContent(),
+  ])
+  const visibleMembers = leadership.team.members.filter((member) => member.visible)
+  const ceo = visibleMembers.find((m) => m.bio)
 
   return (
     <>
@@ -66,7 +71,7 @@ export default async function OurCompanyPage() {
       <section id="leadership" className="mx-auto max-w-7xl px-6 py-20 sm:py-24">
         <SectionHeading title={company.team.title} intro={company.team.body} />
         <div className="mt-12">
-          <TeamGrid members={company.team.members} />
+          <TeamGrid members={visibleMembers} />
         </div>
 
         {ceo?.bio ? (

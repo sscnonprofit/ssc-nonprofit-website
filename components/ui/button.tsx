@@ -3,6 +3,11 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
+const FLAT =
+  "shadow-none hover:translate-y-0 hover:shadow-none active:not-aria-[haspopup]:translate-y-0 active:not-aria-[haspopup]:shadow-none"
+const FLAT_OUTLINED =
+  "shadow-xs hover:translate-y-0 hover:shadow-xs active:not-aria-[haspopup]:translate-y-0 active:not-aria-[haspopup]:shadow-none"
+
 const buttonVariants = cva(
   "group/button inline-flex shrink-0 items-center justify-center rounded-[var(--ssc-btn-radius)]! [text-transform:var(--ssc-btn-transform)] [letter-spacing:var(--ssc-btn-tracking)] border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-[background-color,border-color,box-shadow,transform,color] duration-200 ease-out outline-none select-none shadow-[inset_0_1px_0_rgb(255_255_255/0.28),inset_0_-2px_0_rgb(0_0_0/0.12),0_2px_4px_rgb(30_10_16/0.14),0_8px_16px_-10px_rgb(30_10_16/0.35)] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 hover:-translate-y-px hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.32),inset_0_-2px_0_rgb(0_0_0/0.14),0_4px_8px_rgb(30_10_16/0.16),0_12px_22px_-12px_rgb(30_10_16/0.4)] active:not-aria-[haspopup]:translate-y-px active:not-aria-[haspopup]:shadow-[inset_0_2px_3px_rgb(0_0_0/0.18),0_1px_2px_rgb(30_10_16/0.16)] disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
@@ -10,14 +15,17 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/80",
         outline:
-          "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+          FLAT_OUTLINED +
+          " border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost:
-          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
+          FLAT +
+          " hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
         destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-        link: "text-primary underline-offset-4 hover:underline",
+          FLAT +
+          " bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
+        link: FLAT + " text-primary underline-offset-4 hover:underline",
       },
       size: {
         default:

@@ -113,6 +113,17 @@ export function PageEditor({
     })
   }
 
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "s") {
+        event.preventDefault()
+        if (!pending) handleSaveDraft()
+      }
+    }
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  })
+
   const handlePublish = () => {
     // Publish must carry over whatever is currently in the editor, not just
     // whatever draft happens to already be saved in the database — otherwise
@@ -235,26 +246,27 @@ export function PageEditor({
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="visual">
-          <Card>
-            <CardContent className="pt-6">
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="page-title">Title</FieldLabel>
-                  <Input id="page-title" value={title} onChange={(e) => setTitle(e.target.value)} />
-                </Field>
-              </FieldGroup>
-              <div className="mt-5">
-                {contentObj ? (
-                  slug === "leadership" ? <LeadershipEditor content={contentObj} onChange={handleVisualChange} /> : <VisualEditor content={contentObj} onChange={handleVisualChange} />
-                ) : (
-                  <p className="rounded-md border border-dashed border-border p-4 text-sm text-muted-foreground">
-                    This page&apos;s content couldn&apos;t be parsed as an object. Use the JSON tab to fix it.
-                  </p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="visual" className="mt-2 flex flex-col gap-6">
+          <div className="rounded-2xl border border-border bg-card p-4 shadow-xs sm:p-5">
+            <Field>
+              <FieldLabel htmlFor="page-title">Page title</FieldLabel>
+              <Input id="page-title" value={title} onChange={(e) => setTitle(e.target.value)} className="h-10" />
+            </Field>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Press Ctrl+S (Cmd+S on Mac) to save your draft at any time.
+            </p>
+          </div>
+          {contentObj ? (
+            slug === "leadership" ? (
+              <LeadershipEditor content={contentObj} onChange={handleVisualChange} />
+            ) : (
+              <VisualEditor content={contentObj} onChange={handleVisualChange} />
+            )
+          ) : (
+            <p className="rounded-md border border-dashed border-border p-4 text-sm text-muted-foreground">
+              This page&apos;s content couldn&apos;t be parsed as an object. Use the JSON tab to fix it.
+            </p>
+          )}
         </TabsContent>
 
         <TabsContent value="json">

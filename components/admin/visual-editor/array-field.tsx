@@ -19,8 +19,23 @@ import { Input } from "@/components/ui/input"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { DragHandle, SortableItem } from "@/components/admin/visual-editor/sortable-item"
 import { ObjectFields } from "@/components/admin/visual-editor/object-fields"
-import { createEmptyArrayItem, getItemImage, getItemSubtitle, getItemSummary, isItemHidden } from "@/lib/cms/field-utils"
+import { useEditorQuery } from "@/components/admin/visual-editor/editor-context"
+import {
+  createEmptyArrayItem,
+  getItemImage,
+  getItemSubtitle,
+  getItemSummary,
+  isItemHidden,
+  valueMatchesQuery,
+} from "@/lib/cms/field-utils"
 import { cn } from "@/lib/utils"
+
+function singular(label: string) {
+  const lower = label.toLowerCase()
+  if (lower.endsWith("ies")) return `${lower.slice(0, -3)}y`
+  if (lower.endsWith("s") && !lower.endsWith("ss")) return lower.slice(0, -1)
+  return "item"
+}
 
 type Row = { id: string; value: unknown }
 
@@ -55,6 +70,8 @@ export function ArrayField({
   )
 
   const dndId = useId()
+  const query = useEditorQuery()
+  const visibleRows = rows.filter((row) => valueMatchesQuery("", row.value, query))
 
   function commit(next: Row[]) {
     setRows(next)
@@ -147,14 +164,19 @@ export function ArrayField({
         </p>
       ) : (
         <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <SortableContext items={rows.map((r) => r.id)} strategy={verticalListSortingStrategy}>
+          <SortableContext items={visibleRows.map((r) => r.id)} strategy={verticalListSortingStrategy}>
             <div className="space-y-2">
-              {rows.map((row, index) =>
+              {visibleRows.length === 0 && (
+                <p className="rounded-lg border border-dashed border-border py-4 text-center text-sm text-muted-foreground">
+                  No items match your search.
+                </p>
+              )}
+              {visibleRows.map((row) =>
                 isObjectArray ? (
                   <ObjectRow
                     key={row.id}
                     row={row}
-                    index={index}
+                    index={rows.indexOf(row)}
                     isOpen={openIds.has(row.id)}
                     onToggle={() => toggleItem(row.id)}
                     onRemove={() => removeItem(row.id)}
@@ -173,6 +195,17 @@ export function ArrayField({
             </div>
           </SortableContext>
         </DndContext>
+      )}
+
+      {rows.length > 0 && !query && (
+        <button
+          type="button"
+          onClick={addItem}
+          className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-border py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:bg-muted/50 hover:text-foreground"
+        >
+          <PlusIcon className="size-3.5" />
+          Add {singular(label)}
+        </button>
       )}
     </div>
   )

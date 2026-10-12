@@ -93,48 +93,48 @@ export function PageEditor({
       return
     }
     startTransition(async () => {
-      try {
-        await saveDraftAction(slug, title, content)
+      const result = await saveDraftAction(slug, title, content)
+      if (result.success) {
         toast.success("Draft saved.")
         router.refresh()
-      } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Failed to save draft.")
+      } else {
+        toast.error(result.error)
       }
     })
   }
 
   const handlePublish = () => {
     startTransition(async () => {
-      try {
-        await publishPageAction(slug)
+      const result = await publishPageAction(slug)
+      if (result.success) {
         toast.success("Published to the live site.")
         router.refresh()
-      } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Failed to publish.")
+      } else {
+        toast.error(result.error)
       }
     })
   }
 
   const handleDiscard = () => {
     startTransition(async () => {
-      try {
-        await discardDraftAction(slug)
+      const result = await discardDraftAction(slug)
+      if (result.success) {
         toast.success("Draft discarded.")
         router.refresh()
-      } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Failed to discard draft.")
+      } else {
+        toast.error(result.error)
       }
     })
   }
 
   const handleRestore = (revisionId: number) => {
     startTransition(async () => {
-      try {
-        await restoreRevisionAction(slug, revisionId)
+      const result = await restoreRevisionAction(slug, revisionId)
+      if (result.success) {
         toast.success("Revision restored to draft. Review and publish when ready.")
         router.refresh()
-      } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Failed to restore revision.")
+      } else {
+        toast.error(result.error)
       }
     })
   }

@@ -82,6 +82,32 @@ function cloneWithEmptyValues(obj: Record<string, unknown>): Record<string, unkn
   return result
 }
 
+/** Finds the first image URL inside an object item so list rows can show a thumbnail. */
+export function getItemImage(item: unknown): string | null {
+  if (!item || typeof item !== "object" || Array.isArray(item)) return null
+  for (const [key, value] of Object.entries(item as Record<string, unknown>)) {
+    if (typeof value === "string" && value && inferFieldKind(key, value) === "image") return value
+  }
+  return null
+}
+
+/** Picks a secondary line (e.g. a role) that differs from the row's main summary. */
+export function getItemSubtitle(item: unknown, summary: string): string | null {
+  if (!item || typeof item !== "object" || Array.isArray(item)) return null
+  for (const [key, value] of Object.entries(item as Record<string, unknown>)) {
+    if (typeof value !== "string" || !value || value === summary) continue
+    if (inferFieldKind(key, value) === "text") return value
+  }
+  return null
+}
+
+/** True when an item is flagged as hidden from the live site (visible: false / hidden: true). */
+export function isItemHidden(item: unknown): boolean {
+  if (!item || typeof item !== "object" || Array.isArray(item)) return false
+  const record = item as Record<string, unknown>
+  return record.visible === false || record.hidden === true
+}
+
 /** Picks a short label to represent an object item in a collapsed/sortable list row. */
 export function getItemSummary(item: unknown, fallback: string): string {
   if (item && typeof item === "object" && !Array.isArray(item)) {

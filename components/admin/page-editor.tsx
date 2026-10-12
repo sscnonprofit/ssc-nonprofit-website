@@ -1,8 +1,8 @@
 "use client"
 
-import { CodeIcon, History, LayoutPanelLeftIcon, RotateCcw, Save, Send, Trash2 } from "lucide-react"
+import { CodeIcon, ExternalLinkIcon, History, LayoutPanelLeftIcon, RotateCcw, Save, Send, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useState, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { toast } from "sonner"
 
 import {
@@ -68,6 +68,15 @@ export function PageEditor({
   const [contentObj, setContentObj] = useState<Record<string, unknown> | null>(() => tryParseObject(initialContent))
   const [jsonError, setJsonError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
+  const [saved, setSaved] = useState({ title: initialTitle, content: initialContent })
+  const isDirty = title !== saved.title || content !== saved.content
+
+  useEffect(() => {
+    if (!isDirty) return
+    const warn = (event: BeforeUnloadEvent) => event.preventDefault()
+    window.addEventListener("beforeunload", warn)
+    return () => window.removeEventListener("beforeunload", warn)
+  }, [isDirty])
 
   const validateJson = (value: string) => {
     try {
@@ -95,6 +104,7 @@ export function PageEditor({
     startTransition(async () => {
       const result = await saveDraftAction(slug, title, content)
       if (result.success) {
+        setSaved({ title, content })
         toast.success("Draft saved.")
         router.refresh()
       } else {
@@ -118,6 +128,7 @@ export function PageEditor({
         toast.error(saveResult.error)
         return
       }
+      setSaved({ title, content })
       const result = await publishPageAction(slug)
       if (result.success) {
         toast.success("Published to the live site.")
@@ -154,17 +165,34 @@ export function PageEditor({
 
   return (
     <div key={slug} className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="font-serif text-2xl font-semibold text-foreground">{label}</h1>
+      <div className="sticky top-14 z-20 -mx-4 -mt-6 border-b border-border bg-background/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:-mt-8 lg:top-0 lg:px-8">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+        <div className="min-w-0">
+          <h1 className="truncate font-serif text-2xl font-semibold text-foreground">{label}</h1>
           <div className="mt-1.5 flex flex-wrap items-center gap-2">
             <Badge variant={status === "published" ? "default" : "secondary"} className="capitalize">
               {status}
             </Badge>
             {hasDraft && <Badge variant="outline">Draft pending review</Badge>}
-            {routes.length > 0 && (
-              <span className="text-sm text-muted-foreground">{routes.join(", ")}</span>
+            {isDirty && (
+              <Badge variant="outline" className="gap-1.5 border-primary/50 text-foreground">
+                <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
+                Unsaved changes
+              </Badge>
             )}
+            {routes.map((route) => (
+              <a
+                key={route}
+                href={route}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-md text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+              >
+                {route}
+                <ExternalLinkIcon className="size-3" aria-hidden="true" />
+                <span className="sr-only">(opens live page in a new tab)</span>
+              </a>
+            ))}
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -188,6 +216,7 @@ export function PageEditor({
             <Badge variant="outline">Ask an admin to publish</Badge>
           )}
         </div>
+      </div>
       </div>
 
       <Tabs defaultValue="visual">

@@ -299,7 +299,8 @@ export function EventFormSheet({
             </div>
           </section>
 
-          <ImageField label="Event image" value={form.image ?? ""} onChange={(url) => patch({ image: url || null })} aspect={16 / 9} />
+          <ImageField label="Event image (optional)" value={form.image ?? ""} onChange={(url) => patch({ image: url || null })} aspect={16 / 9} />
+          <p className="-mt-2 text-xs text-muted-foreground">You can save the event without uploading an image.</p>
           {form.image && (
             <Field id="event-alt" label="Image description" hint="Read aloud by screen readers.">
               <Input id="event-alt" value={form.imageAlt} onChange={(e) => patch({ imageAlt: e.target.value })} maxLength={200} className="h-11 text-base" />

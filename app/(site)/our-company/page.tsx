@@ -25,7 +25,7 @@ export default async function OurCompanyPage() {
   const visibleMembers = leadership.team.members.filter((member) => member.visible)
   const historyMilestones = company.history.milestones.map((milestone, index) => ({
     ...milestone,
-    image: milestone.image || companyFallback.history.milestones[index]?.image || "/placeholder.svg",
+    image: milestone.image || companyFallback.history.milestones[index]?.image || "/images/ssc-logo.png",
   }))
   const ceo = visibleMembers.find((m) => m.bio)
 

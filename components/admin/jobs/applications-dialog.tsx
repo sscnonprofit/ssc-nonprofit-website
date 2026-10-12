@@ -14,6 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { formatEventDate } from "@/lib/events/occurrences"
@@ -37,11 +38,13 @@ async function loadApplications([, id]: [string, number]) {
 
 function ApplicationCard({
   application,
+  jobTitle,
   canEdit,
   isAdmin,
   onChanged,
 }: {
   application: AdminApplication
+  jobTitle: string
   canEdit: boolean
   isAdmin: boolean
   onChanged: () => void
@@ -93,17 +96,26 @@ function ApplicationCard({
       {details && <p className="text-sm text-foreground">{details}</p>}
       {application.coverLetter && <p className="text-sm leading-relaxed text-muted-foreground">{application.coverLetter}</p>}
 
-      {application.resumeUrl && (
+      <div className="flex flex-wrap gap-2">
+        {application.resumeUrl && (
+          <a
+            href={application.resumeUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-10 max-w-full items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium text-foreground hover:bg-muted"
+          >
+            <FileTextIcon className="size-4 shrink-0" aria-hidden="true" />
+            <span className="truncate">{application.resumeFilename || "View resume"}</span>
+          </a>
+        )}
         <a
-          href={application.resumeUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex min-h-9 w-fit items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium text-foreground hover:bg-muted"
+          href={`mailto:${application.email}?subject=${encodeURIComponent(`Your application to ${jobTitle}`)}`}
+          className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium text-foreground hover:bg-muted"
         >
-          <FileTextIcon className="size-4" aria-hidden="true" />
-          {application.resumeFilename || "View resume"}
+          <MailIcon className="size-4" aria-hidden="true" />
+          Reply
         </a>
-      )}
+      </div>
 
       <details className="rounded-lg bg-muted/50 px-3 py-2 text-sm">
         <summary className="min-h-8 cursor-pointer font-medium text-foreground">Contact details</summary>
@@ -127,6 +139,11 @@ function ApplicationCard({
             Review notes (staff only)
           </Label>
           <Textarea id={`notes-${application.id}`} value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} maxLength={2000} className="text-base" />
+          {notes !== application.reviewNotes && (
+            <Button type="button" size="sm" className="h-10 w-fit" disabled={pending} onClick={() => save(application.status, "Notes saved")}>
+              Save notes
+            </Button>
+          )}
           <div className="flex flex-wrap gap-2" role="group" aria-label={`Review ${application.fullName}`}>
             {APPLICATION_STATUSES.map((status) => (
               <Button
@@ -169,9 +186,13 @@ export function ApplicationsDialog({
   onChanged: () => void
 }) {
   const [filter, setFilter] = useState<string>("all")
+  const [query, setQuery] = useState("")
   const { data, error, isLoading, mutate } = useSWR(job ? (["job-applications", job.id] as [string, number]) : null, loadApplications)
   const applications = data ?? []
-  const visible = filter === "all" ? applications : applications.filter((item) => item.status === filter)
+  const needle = query.trim().toLowerCase()
+  const visible = applications
+    .filter((item) => filter === "all" || item.status === filter)
+    .filter((item) => !needle || `${item.fullName} ${item.email} ${item.phone}`.toLowerCase().includes(needle))
 
   function changed() {
     mutate()
@@ -194,6 +215,16 @@ export function ApplicationsDialog({
               </Button>
             )}
           </div>
+          {applications.length > 3 && (
+            <Input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by name, email, or phone"
+              aria-label="Search applications"
+              className="h-10 text-base"
+            />
+          )}
           <div className="-mx-1 flex gap-2 overflow-x-auto px-1" role="tablist" aria-label="Filter applications">
             {[{ value: "all", label: "All" }, ...APPLICATION_STATUSES].map((item) => {
               const count = item.value === "all" ? applications.length : applications.filter((a) => a.status === item.value).length
@@ -234,7 +265,14 @@ export function ApplicationsDialog({
           ) : (
             <ul className="flex flex-col gap-3">
               {visible.map((application) => (
-                <ApplicationCard key={`${application.id}-${application.status}`} application={application} canEdit={canEdit} isAdmin={isAdmin} onChanged={changed} />
+                <ApplicationCard
+                  key={`${application.id}-${application.status}`}
+                  application={application}
+                  jobTitle={job?.title ?? "this position"}
+                  canEdit={canEdit}
+                  isAdmin={isAdmin}
+                  onChanged={changed}
+                />
               ))}
             </ul>
           )}

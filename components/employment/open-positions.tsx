@@ -27,28 +27,29 @@ export async function OpenPositions() {
               <li key={job.id}>
                 <Link
                   href={`/employment/${job.slug}`}
-                  className="ssc-card group flex flex-col gap-3 p-6 sm:flex-row sm:items-center sm:justify-between"
+                  className="ssc-card group flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="font-display text-lg font-semibold">{job.title}</h3>
+                      <h3 className="text-balance font-display text-lg font-semibold">{job.title}</h3>
                       {job.featured ? (
-                        <span className="rounded-full bg-accent/20 px-2.5 py-0.5 text-xs font-semibold text-foreground">Featured</span>
+                        <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">Featured</span>
                       ) : null}
                     </div>
-                    <p className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                    {job.summary ? <p className="mt-1.5 line-clamp-2 max-w-2xl text-pretty text-sm text-muted-foreground">{job.summary}</p> : null}
+                    <p className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-foreground/80">
+                      <span className="rounded-full border border-border px-2.5 py-0.5 text-xs font-medium">{employmentTypeLabel(job.employmentType)}</span>
                       {job.department ? <span>{job.department}</span> : null}
                       {job.location ? (
                         <span className="inline-flex items-center gap-1">
-                          <MapPinIcon className="size-3.5" aria-hidden="true" />
+                          <MapPinIcon className="size-3.5 text-primary" aria-hidden="true" />
                           {job.location}
                         </span>
                       ) : null}
-                      <span>{employmentTypeLabel(job.employmentType)}</span>
-                      {job.payRange ? <span>{job.payRange}</span> : null}
+                      {job.payRange ? <span className="font-medium">{job.payRange}</span> : null}
                     </p>
                   </div>
-                  <span className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-accent">
+                  <span className="inline-flex min-h-11 shrink-0 items-center gap-2 text-sm font-semibold text-primary">
                     View &amp; apply
                     <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                   </span>

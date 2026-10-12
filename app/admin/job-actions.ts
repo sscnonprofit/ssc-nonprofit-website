@@ -1,6 +1,6 @@
 "use server"
 
-import { eq } from "drizzle-orm"
+import { and, eq, sql } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 
 import { requireAdmin, requireEditor, requirePermission } from "@/lib/cms/auth-helpers"
@@ -276,7 +276,11 @@ export async function submitApplicationAction(input: {
   resumeUrl?: string
   resumeFilename?: string
   eligibleToWork?: boolean
+  website?: string
 }): Promise<Result> {
+  // Bots fill the hidden field; pretend success so they don't retry.
+  if (input.website?.trim()) return { ok: true }
+
   const [job] = await db
     .select({ enabled: jobPostings.applicationsEnabled, status: jobPostings.status, closingDate: jobPostings.closingDate })
     .from(jobPostings)
@@ -287,8 +291,16 @@ export async function submitApplicationAction(input: {
   if (!input.fullName?.trim() || !EMAIL_PATTERN.test(input.email?.trim() ?? "")) {
     return { ok: false, error: "Complete your name and a valid email." }
   }
+  if (!input.eligibleToWork) return { ok: false, error: "Please confirm you are legally eligible to work in the United States." }
   const resumeUrl = safeUrl(input.resumeUrl ?? "")
   if (resumeUrl === null) return { ok: false, error: "The resume link isn't valid." }
+
+  const [duplicate] = await db
+    .select({ id: jobApplications.id })
+    .from(jobApplications)
+    .where(and(eq(jobApplications.jobId, input.jobId), sql`lower(${jobApplications.email}) = ${input.email.trim().toLowerCase()}`))
+    .limit(1)
+  if (duplicate) return { ok: false, error: "We already have an application from this email address for this position." }
 
   await db.insert(jobApplications).values({
     jobId: input.jobId,

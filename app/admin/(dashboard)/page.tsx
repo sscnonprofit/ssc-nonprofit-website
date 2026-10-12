@@ -48,12 +48,18 @@ export default async function AdminPagesDashboard() {
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8">
-      <section className="relative overflow-hidden rounded-2xl border border-primary/15 bg-card p-5 shadow-[0_12px_32px_-24px_rgba(122,31,43,0.55)] sm:p-7">
-        <div className="absolute inset-y-0 right-0 hidden w-1/3 bg-[linear-gradient(135deg,transparent_0%,color-mix(in_oklab,var(--accent)_10%,transparent)_100%)] sm:block" />
+      <section className="relative overflow-hidden rounded-2xl border border-primary/15 bg-card p-5 shadow-[0_12px_32px_-24px_rgba(122,31,43,0.55)] dark:border-primary/20 dark:bg-gradient-to-b dark:from-white/[0.04] dark:to-transparent dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_0_1px_rgba(255,255,255,0.04),0_24px_60px_-28px_color-mix(in_oklab,var(--primary)_55%,transparent)] sm:p-7">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_140%_at_100%_0%,color-mix(in_oklab,var(--accent)_12%,transparent)_0%,transparent_55%)] dark:bg-[radial-gradient(120%_140%_at_100%_0%,color-mix(in_oklab,var(--accent)_16%,transparent)_0%,transparent_55%),radial-gradient(90%_160%_at_0%_100%,color-mix(in_oklab,var(--primary)_18%,transparent)_0%,transparent_60%)]"
+        />
         <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
             <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-              <span className="size-2 rounded-full bg-accent shadow-[0_0_0_4px_color-mix(in_oklab,var(--accent)_16%,transparent)]" />
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60 motion-reduce:hidden" />
+                <span className="relative inline-flex size-2 rounded-full bg-accent shadow-[0_0_0_4px_color-mix(in_oklab,var(--accent)_16%,transparent)]" />
+              </span>
               SSC content workspace
             </div>
             <h1 className="text-balance font-serif text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
@@ -63,10 +69,16 @@ export default async function AdminPagesDashboard() {
               Manage pages, events, galleries and exhibitions in one place. Everything you change stays a draft until
               it is published.
             </p>
+            <div className="ssc-rule mt-4">
+              <span className="bg-brand-1" />
+              <span className="bg-brand-2" />
+              <span className="bg-brand-3" />
+              <span className="bg-brand-4" />
+            </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {draftCount > 0 && (
-              <Badge variant="secondary" className="min-h-10 gap-1.5 rounded-xl px-3">
+              <Badge variant="secondary" className="min-h-10 gap-1.5 rounded-xl border border-border/60 px-3 dark:bg-white/[0.06]">
                 {draftCount} unpublished draft{draftCount === 1 ? "" : "s"}
               </Badge>
             )}

@@ -28,7 +28,7 @@ export const cmsRegistry: CmsDoc[] = [
   { slug: "events", label: "Upcoming Events", group: "page", routes: ["/upcoming-events"], description: "Featured event, community calendars, and event gallery." },
   { slug: "gallery", label: "Artists Gallery", group: "page", routes: ["/artists-gallery"], description: "Craft fair guidelines, drop-off dates, and gallery display info." },
   { slug: "pillars", label: "Pillars", group: "page", routes: ["/community", "/employment", "/environment", "/community-outreach"], description: "Community, Employment, Environment, and Community Outreach pillar pages." },
-  { slug: "services", label: "Services", group: "page", routes: ["/assisted-living", "/short-term-rehab", "/skilled-nursing"], description: "Assisted Living, Short-Term Rehab, and Skilled Nursing service pages." },
+  { slug: "services", label: "Services", group: "page", routes: ["/assisted-living", "/short-term-rehab", "/skilled-nursing", "/end-of-life"], description: "Assisted Living, Short-Term Rehab, and Skilled Nursing service pages." },
 ]
 
 export function getCmsDoc(slug: string): CmsDoc | undefined {

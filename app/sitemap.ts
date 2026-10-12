@@ -9,6 +9,7 @@ const routes = [
   { path: "/assisted-living", priority: 0.9 },
   { path: "/short-term-rehab", priority: 0.9 },
   { path: "/skilled-nursing", priority: 0.9 },
+  { path: "/end-of-life", priority: 0.9 },
   { path: "/our-company", priority: 0.8 },
   { path: "/the-challenge", priority: 0.8 },
   { path: "/contact", priority: 0.8 },

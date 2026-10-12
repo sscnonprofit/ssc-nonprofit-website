@@ -6,9 +6,10 @@ import { getContent } from "@/lib/cms/content"
 
 export async function generateMetadata(): Promise<Metadata> {
   const services = await getContent("services", servicesFallback)
+  const service = services["end-of-life"] ?? servicesFallback["end-of-life"]
   return {
-    title: services["end-of-life"].seo.title,
-    description: services["end-of-life"].seo.description,
+    title: service.seo.title,
+    description: service.seo.description,
     alternates: { canonical: "/end-of-life" },
   }
 }

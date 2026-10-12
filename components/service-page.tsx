@@ -18,8 +18,11 @@ export async function ServicePage({ slug }: { slug: ServiceSlug }) {
     getContent("services", servicesFallback),
     getContent("site", siteFallback),
   ])
-  const service = services[slug]
-  const related = service.related.map((r) => services[r as ServiceSlug])
+  const mergedServices = { ...servicesFallback, ...services }
+  const service = mergedServices[slug]
+  const related = service.related
+    .map((r) => mergedServices[r as ServiceSlug])
+    .filter(Boolean)
 
   return (
     <>

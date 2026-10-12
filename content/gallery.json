@@ -45,12 +45,12 @@
     "title": "Submission guidelines",
     "items": [
       "Artists may submit up to two pieces of artwork for consideration.",
-      "Please submit your original artwork no later than September 16, 2026.",
       "All artwork must be original and ready for display.",
       "A brief artist statement highlighting the connection to the exhibition theme.",
       "The price of your artwork, if you wish to sell it.",
       "A signed Exhibition Agreement."
     ],
+    "deadlineFallback": "Please submit your original artwork no later than September 16, 2026.",
     "agreement": {
       "label": "Exhibition Agreement (PDF)",
       "href": "https://sscnonprofit.org/wp-content/uploads/2025/04/Exhibition-Agreement.pdf"

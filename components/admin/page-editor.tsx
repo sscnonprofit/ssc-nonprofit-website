@@ -104,7 +104,20 @@ export function PageEditor({
   }
 
   const handlePublish = () => {
+    // Publish must carry over whatever is currently in the editor, not just
+    // whatever draft happens to already be saved in the database — otherwise
+    // an edit (e.g. deleting a team member) made right before clicking
+    // Publish gets silently dropped and the live site stays on stale content.
+    if (!validateJson(content)) {
+      toast.error("Fix the JSON before publishing.")
+      return
+    }
     startTransition(async () => {
+      const saveResult = await saveDraftAction(slug, title, content)
+      if (!saveResult.success) {
+        toast.error(saveResult.error)
+        return
+      }
       const result = await publishPageAction(slug)
       if (result.success) {
         toast.success("Published to the live site.")

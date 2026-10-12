@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { Check, Download, Mail, MapPin } from "lucide-react"
+import { Calendar, Check, Download, Mail, MapPin } from "lucide-react"
 
 import galleryFallback from "@/content/gallery.json"
 import siteFallback from "@/content/site.json"
@@ -10,7 +10,8 @@ import { CtaBand } from "@/components/cta-band"
 import { PageHero } from "@/components/page-hero"
 import { SectionHeading } from "@/components/section-heading"
 import { getContent } from "@/lib/cms/content"
-import { listPublicAlbums } from "@/lib/events/data"
+import { getArtShowSchedule, listPublicAlbums } from "@/lib/events/data"
+import { formatEventDate } from "@/lib/events/occurrences"
 
 export const dynamic = "force-dynamic"
 
@@ -22,13 +23,79 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+function formatDay(date: Date) {
+  return formatEventDate(date, { weekday: "long", month: "long", day: "numeric" })
+}
+
+function formatClockTime(date: Date) {
+  return formatEventDate(date, { hour: "numeric", minute: "2-digit" })
+}
+
+function formatTimeRange(start: Date, end: Date | null) {
+  return end ? `${formatClockTime(start)} – ${formatClockTime(end)}` : formatClockTime(start)
+}
+
+function formatMonthYear(date: Date) {
+  return formatEventDate(date, { month: "long", year: "numeric" })
+}
+
 export default async function ArtistsGalleryPage() {
-  const [gallery, site, albums] = await Promise.all([
+  const [gallery, site, albums, schedule] = await Promise.all([
     getContent("gallery", galleryFallback),
     getContent("site", siteFallback),
     listPublicAlbums(),
+    getArtShowSchedule(),
   ])
   const { intro, theme, guidelines, dropoff, display } = gallery
+
+  // Every schedule-dependent value below prefers the live Event from
+  // /admin/events (matched by slug) and falls back to the CMS copy only when
+  // no corresponding event has been scheduled yet.
+  const openingDate = schedule.opening ? formatDay(schedule.opening.startAt) : intro.opening.date
+  const openingTime = schedule.opening
+    ? formatTimeRange(schedule.opening.startAt, schedule.opening.endAt)
+    : intro.opening.time
+  const openingNote = schedule.opening?.summary || intro.opening.note
+  const openingLocation = schedule.opening?.location || null
+
+  // Older published content stored the deadline as a plain bullet instead of
+  // a dedicated fallback field — support both shapes so a previously
+  // published page never breaks while content catches up.
+  const fallbackDeadlineLine: string | undefined =
+    guidelines.deadlineFallback ?? guidelines.items.find((item: string) => /no later than/i.test(item))
+  const deadlineDate = schedule.deadline
+    ? formatEventDate(schedule.deadline.startAt, { month: "long", day: "numeric", year: "numeric" })
+    : (fallbackDeadlineLine?.match(/\b[A-Za-z]+ \d{1,2},? \d{4}\b/)?.[0] ?? null)
+  const deadlineSentence = schedule.deadline
+    ? `Please submit your original artwork no later than ${deadlineDate}.`
+    : (fallbackDeadlineLine ?? "Submission deadline to be announced.")
+  const baseGuidelineItems = guidelines.items.filter((item: string) => !/no later than/i.test(item))
+  const guidelineItems = [baseGuidelineItems[0], deadlineSentence, ...baseGuidelineItems.slice(1)]
+
+  const dropoffDates =
+    schedule.dropoffs.length > 0
+      ? schedule.dropoffs.map((event) => ({
+          day: formatDay(event.startAt),
+          time: formatTimeRange(event.startAt, event.endAt),
+        }))
+      : dropoff.dates
+
+  const displayPeriod = schedule.display
+    ? `${formatMonthYear(schedule.display.startAt)} – ${schedule.display.endAt ? formatMonthYear(schedule.display.endAt) : "Ongoing"}`
+    : null
+  const displayLocation = schedule.display?.location || null
+  const displayItems = display.items.map((item: { label: string; value: string }) => {
+    if (item.label === "Display period" && displayPeriod) return { ...item, value: displayPeriod }
+    if (item.label === "Location" && displayLocation) return { ...item, value: displayLocation }
+    return item
+  })
+
+  const displayPeriodValue = displayItems.find((item: { label: string }) => item.label === "Display period")?.value ?? null
+  const keyDates = [
+    { label: "Submission deadline", value: deadlineDate },
+    { label: "Opening reception", value: `${openingDate} · ${openingTime}` },
+    { label: "On display", value: displayPeriodValue },
+  ].filter((item): item is { label: string; value: string } => Boolean(item.value))
 
   return (
     <>
@@ -94,16 +161,20 @@ export default async function ArtistsGalleryPage() {
             <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary-foreground/70">
               {intro.opening.label}
             </p>
-            <p className="mt-4 font-display text-3xl font-semibold">{intro.opening.date}</p>
-            <p className="mt-1 font-display text-xl">{intro.opening.time}</p>
-            <p className="mt-4 text-sm leading-relaxed text-primary-foreground/80">{intro.opening.note}</p>
+            <p className="mt-4 font-display text-3xl font-semibold">{openingDate}</p>
+            <p className="mt-1 font-display text-xl">{openingTime}</p>
+            <p className="mt-4 text-sm leading-relaxed text-primary-foreground/80">{openingNote}</p>
             <div className="mt-6 flex items-start gap-2 border-t border-primary-foreground/20 pt-6 text-sm text-primary-foreground/80">
               <MapPin className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-              <span>
-                {site.address.street}
-                <br />
-                {site.address.city}, {site.address.state} {site.address.zip}
-              </span>
+              {openingLocation ? (
+                <span>{openingLocation}</span>
+              ) : (
+                <span>
+                  {site.address.street}
+                  <br />
+                  {site.address.city}, {site.address.state} {site.address.zip}
+                </span>
+              )}
             </div>
           </aside>
         </div>
@@ -113,6 +184,21 @@ export default async function ArtistsGalleryPage() {
       <section className="border-y border-border bg-secondary py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeading eyebrow={theme.eyebrow} title={theme.title} intro={theme.body} />
+          {keyDates.length > 0 && (
+            <dl className="mt-10 grid gap-4 sm:grid-cols-3">
+              {keyDates.map((item) => (
+                <div key={item.label} className="ssc-card flex items-start gap-3 p-5">
+                  <Calendar className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden="true" />
+                  <div>
+                    <dt className="font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                      {item.label}
+                    </dt>
+                    <dd className="mt-1 font-display text-base font-semibold leading-snug">{item.value}</dd>
+                  </div>
+                </div>
+              ))}
+            </dl>
+          )}
           <div className="mt-12 grid gap-8 lg:grid-cols-2">
             <div className="ssc-card p-8">
               <h3 className="font-display text-xl font-semibold">{theme.inspirationTitle}</h3>
@@ -144,7 +230,7 @@ export default async function ArtistsGalleryPage() {
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-24">
         <SectionHeading eyebrow={guidelines.eyebrow} title={guidelines.title} />
         <ul className="mt-12 grid gap-4 sm:grid-cols-2">
-          {guidelines.items.map((item) => (
+          {guidelineItems.map((item) => (
             <li
               key={item}
               className="ssc-card flex items-start gap-3 p-6 leading-relaxed"
@@ -171,7 +257,7 @@ export default async function ArtistsGalleryPage() {
           <SectionHeading eyebrow={dropoff.eyebrow} title={dropoff.title} intro={dropoff.body} />
           <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_1fr]">
             <ul className="flex flex-col gap-3">
-              {dropoff.dates.map((d) => (
+              {dropoffDates.map((d: { day: string; time: string }) => (
                 <li
                   key={d.day}
                   className="ssc-card flex flex-col gap-1 p-6 sm:flex-row sm:items-center sm:justify-between"
@@ -221,7 +307,7 @@ export default async function ArtistsGalleryPage() {
             <p className="text-pretty leading-relaxed text-muted-foreground">{display.body}</p>
           </div>
           <dl className="flex flex-col gap-6">
-            {display.items.map((item) => (
+            {displayItems.map((item: { label: string; value: string }) => (
               <div key={item.label} className="border-l-2 border-accent pl-5">
                 <dt className="font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                   {item.label}

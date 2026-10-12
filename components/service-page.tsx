@@ -116,7 +116,7 @@ export async function ServicePage({ slug }: { slug: ServiceSlug }) {
               <li key={option.slug}>
                 <Link
                   href={`/${option.slug}`}
-                  className="group relative flex min-h-72 flex-col justify-end overflow-hidden rounded-2xl p-8 text-primary-foreground"
+                  className="group relative isolate flex min-h-72 flex-col justify-end overflow-hidden rounded-2xl p-8 text-primary-foreground"
                 >
                   <Image
                     src={option.heroImage}

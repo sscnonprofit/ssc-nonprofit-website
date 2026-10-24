@@ -27,7 +27,12 @@ export function ContactForm() {
   }
 
   return (
-    <form action={formAction} className="flex flex-col gap-5" noValidate>
+    <form
+      key={state.values ? [state.values.name, state.values.email, state.values.phone, state.values.topic, state.values.message].join("|") : "initial"}
+      action={formAction}
+      className="flex flex-col gap-5"
+      noValidate
+    >
       {state.status === "error" && state.message && (
         <div
           role="alert"

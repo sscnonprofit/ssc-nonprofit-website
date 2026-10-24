@@ -12,6 +12,7 @@ import {
   InboxIcon,
   LayoutDashboardIcon,
   LogOutIcon,
+  MailIcon,
   MenuIcon,
   PaletteIcon,
   UsersIcon,
@@ -42,6 +43,7 @@ type AdminShellProps = {
   userEmail: string
   role: string
   newApplications?: number
+  newMessages?: number
   children: React.ReactNode
 }
 
@@ -81,7 +83,7 @@ function BrandMark() {
   )
 }
 
-export function AdminShell({ userName, userEmail, role, newApplications = 0, children }: AdminShellProps) {
+export function AdminShell({ userName, userEmail, role, newApplications = 0, newMessages = 0, children }: AdminShellProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
@@ -102,6 +104,7 @@ export function AdminShell({ userName, userEmail, role, newApplications = 0, chi
         { href: "/admin/exhibitions", label: "Exhibitions", icon: FrameIcon },
         { href: "/admin/jobs", label: "Jobs", icon: BriefcaseIcon },
         { href: "/admin/applications", label: "Applications", icon: InboxIcon, badge: newApplications },
+        { href: "/admin/messages", label: "Messages", icon: MailIcon, badge: newMessages },
       ],
     },
     {

@@ -52,13 +52,6 @@ export function AdminAuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
             <div className="relative z-10 flex items-center gap-3">
               <Image src="/images/ssc-logo.png" alt="Sheboygan Senior Community" width={190} height={57} quality={100} sizes="192px" className="h-auto w-48 brightness-0 invert" priority />
             </div>
-            <div className="relative z-10 max-w-sm">
-              <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-primary-foreground/70">Content workspace</p>
-              <h2 className="text-balance font-serif text-4xl leading-tight">Carefully shape the story of community.</h2>
-              <p className="mt-4 text-sm leading-6 text-primary-foreground/75">
-                Manage pages, events, galleries, and the everyday details that help families feel at home.
-              </p>
-            </div>
             <div className="relative z-10 flex items-center gap-2 text-xs text-primary-foreground/70">
               <ShieldCheckIcon className="size-4" /> Secure staff access
             </div>

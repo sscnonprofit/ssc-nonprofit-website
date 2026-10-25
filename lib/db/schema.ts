@@ -278,6 +278,19 @@ export const jobApplications = pgTable("job_applications", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 })
 
+export const contactMessages = pgTable("contact_messages", {
+  id: serial("id").primaryKey(),
+  kind: text("kind").notNull().default("contact"),
+  name: text("name").notNull().default(""),
+  email: text("email").notNull(),
+  phone: text("phone").notNull().default(""),
+  topic: text("topic").notNull().default(""),
+  message: text("message").notNull().default(""),
+  status: text("status").notNull().default("new"),
+  emailed: boolean("emailed").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
 export const galleryPhotos = pgTable("gallery_photos", {
   id: serial("id").primaryKey(),
   albumId: integer("album_id").notNull(),

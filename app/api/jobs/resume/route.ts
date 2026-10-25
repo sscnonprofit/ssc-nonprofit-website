@@ -16,7 +16,12 @@ const EXTENSION_BY_TYPE: Record<string, string> = {
 }
 
 export async function POST(request: NextRequest) {
-  const formData = await request.formData()
+  let formData: FormData
+  try {
+    formData = await request.formData()
+  } catch {
+    return NextResponse.json({ error: "Invalid upload request" }, { status: 400 })
+  }
   const file = formData.get("file")
 
   if (!(file instanceof File)) {

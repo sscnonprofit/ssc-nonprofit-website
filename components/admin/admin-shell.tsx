@@ -12,6 +12,7 @@ import {
   InboxIcon,
   LayoutDashboardIcon,
   LogOutIcon,
+  MailIcon,
   MenuIcon,
   PaletteIcon,
   UsersIcon,
@@ -42,6 +43,7 @@ type AdminShellProps = {
   userEmail: string
   role: string
   newApplications?: number
+  newMessages?: number
   children: React.ReactNode
 }
 
@@ -81,7 +83,7 @@ function BrandMark() {
   )
 }
 
-export function AdminShell({ userName, userEmail, role, newApplications = 0, children }: AdminShellProps) {
+export function AdminShell({ userName, userEmail, role, newApplications = 0, newMessages = 0, children }: AdminShellProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
@@ -102,6 +104,7 @@ export function AdminShell({ userName, userEmail, role, newApplications = 0, chi
         { href: "/admin/exhibitions", label: "Exhibitions", icon: FrameIcon },
         { href: "/admin/jobs", label: "Jobs", icon: BriefcaseIcon },
         { href: "/admin/applications", label: "Applications", icon: InboxIcon, badge: newApplications },
+        { href: "/admin/messages", label: "Messages", icon: MailIcon, badge: newMessages },
       ],
     },
     {
@@ -118,6 +121,7 @@ export function AdminShell({ userName, userEmail, role, newApplications = 0, chi
   ]
 
   const activeItem = navGroups.flatMap((group) => group.items).find((item) => isActive(pathname, item.href))
+  const fullBleed = pathname === "/admin/design" || pathname.startsWith("/admin/design/")
 
   const navLinks = (
     <nav aria-label="Admin" className="flex flex-1 flex-col gap-5 overflow-y-auto p-3">
@@ -265,8 +269,14 @@ export function AdminShell({ userName, userEmail, role, newApplications = 0, chi
         </div>
       </aside>
 
-      <main id="admin-main" className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:ml-60 lg:px-8 lg:py-8">
-        <div className="mx-auto max-w-6xl">{children}</div>
+      <main
+        id="admin-main"
+        className={cn(
+          "min-w-0 flex-1 lg:ml-60",
+          fullBleed ? "flex flex-col" : "px-4 py-6 sm:px-6 lg:px-8 lg:py-8",
+        )}
+      >
+        <div className={fullBleed ? "flex min-h-0 w-full min-w-0 flex-1 flex-col" : "mx-auto max-w-6xl"}>{children}</div>
       </main>
     </div>
   )

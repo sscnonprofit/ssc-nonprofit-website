@@ -121,6 +121,7 @@ export function AdminShell({ userName, userEmail, role, newApplications = 0, new
   ]
 
   const activeItem = navGroups.flatMap((group) => group.items).find((item) => isActive(pathname, item.href))
+  const fullBleed = pathname === "/admin/design" || pathname.startsWith("/admin/design/")
 
   const navLinks = (
     <nav aria-label="Admin" className="flex flex-1 flex-col gap-5 overflow-y-auto p-3">
@@ -268,8 +269,14 @@ export function AdminShell({ userName, userEmail, role, newApplications = 0, new
         </div>
       </aside>
 
-      <main id="admin-main" className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:ml-60 lg:px-8 lg:py-8">
-        <div className="mx-auto max-w-6xl">{children}</div>
+      <main
+        id="admin-main"
+        className={cn(
+          "min-w-0 flex-1 lg:ml-60",
+          fullBleed ? "flex flex-col" : "px-4 py-6 sm:px-6 lg:px-8 lg:py-8",
+        )}
+      >
+        <div className={fullBleed ? "flex min-h-0 w-full min-w-0 flex-1 flex-col" : "mx-auto max-w-6xl"}>{children}</div>
       </main>
     </div>
   )

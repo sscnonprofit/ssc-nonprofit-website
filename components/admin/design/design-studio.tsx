@@ -423,7 +423,7 @@ export function DesignStudio({
             ))}
           </nav>
 
-          <div className="flex min-w-0 flex-1 flex-col overflow-y-auto px-5 lg:max-h-[calc(100dvh-8.5rem)]">
+          <div className="flex min-w-0 flex-1 flex-col overflow-y-auto px-5 lg:max-h-[calc(100dvh-4.5rem)]">
             <h2 className="pt-5 text-base font-semibold text-foreground">
               {PANELS.find((p) => p.id === panel)?.label}
             </h2>
@@ -821,7 +821,7 @@ export function DesignStudio({
           </div>
         </aside>
 
-        <div className={cn("min-w-0 flex-1 overflow-y-auto bg-muted/40 p-3 lg:block lg:max-h-[calc(100dvh-8.5rem)] lg:p-6", workspace === "preview" ? "block" : "hidden")}>
+        <div className={cn("min-w-0 flex-1 overflow-y-auto bg-muted/40 p-3 lg:block lg:max-h-[calc(100dvh-4.5rem)] lg:p-6", workspace === "preview" ? "block" : "hidden")}>
           <div className="mb-3 flex items-center justify-between gap-3 text-sm text-muted-foreground">
             <span>Live site preview</span>
             <span>{deviceWidth ?? 1280}px · {device}</span>

@@ -15,11 +15,15 @@ import {
   occurrences,
   timeLabel,
   type Calendar,
+  type CalendarAppearance,
   type CalendarDocument,
   type CalendarEvent,
   type DayNote,
 } from "./model";
 
+import { calendarAppearance, calendarWeekdays, contrastText, printAccent } from "./appearance";
+
+const hexColor = (hex: string) => rgb(...[1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255) as [number, number, number]);
 type Mode = "month" | "week" | "large";
 type Fonts = { regular: PDFFont; bold: PDFFont; italic: PDFFont };
 type Line = { text: string; font: PDFFont; gap: number };
@@ -62,6 +66,7 @@ function eventLines(
   fonts: Fonts,
   size: number,
   width: number,
+  appearance: CalendarAppearance,
 ): Line[] {
   const lines: Line[] = [];
   for (const e of events) {
@@ -70,14 +75,14 @@ function eventLines(
       e.allDay ? "" : timeLabel(e.time).replace(" AM", "a").replace(" PM", "p"),
       e.cancelled ? `CANCELLED: ${e.title}` : e.title,
       e.host ? `w/${e.host}` : "",
-      location ? `- ${location}` : "",
+      appearance.showLocation && location ? `- ${location}` : "",
     ]
       .filter(Boolean)
       .join(" ");
     const font = e.featured || e.banner ? fonts.bold : fonts.regular;
     const first = wrap(label, font, size, width);
     first.forEach((text, i) =>
-      lines.push({ text, font, gap: i === 0 && lines.length ? size * 0.1 : 0 }),
+      lines.push({ text, font, gap: i === 0 && lines.length ? size * { compact: 0, comfortable: 0.1, spacious: 0.5 }[appearance.density] : 0 }),
     );
     const extra = [
       e.endTime && !e.allDay ? `Until ${timeLabel(e.endTime)}` : "",
@@ -91,7 +96,7 @@ function eventLines(
     ]
       .filter(Boolean)
       .join("; ");
-    wrap(extra, fonts.italic, size, width).forEach((text) =>
+    wrap(appearance.showEventDetails ? extra : "", fonts.italic, size, width).forEach((text) =>
       lines.push({ text, font: fonts.italic, gap: 0 }),
     );
   }
@@ -110,17 +115,21 @@ function cell(
   fonts: Fonts,
   preferred: number,
   minimum: number,
+  appearance: CalendarAppearance,
 ) {
+  const weekend = [0, 6].includes(new Date(`${date}T12:00:00Z`).getUTCDay());
+  const lineHeight = { compact: 1.05, comfortable: 1.1, spacious: 1.25 }[appearance.density];
   page.drawRectangle({
     x,
     y: top - height,
     width,
     height,
     borderColor: rule,
-    borderWidth: 0.55,
+    borderWidth: appearance.gridLines ? 0.55 : 0,
+    ...(appearance.shadeWeekends && weekend ? { color: rgb(0.95, 0.95, 0.95) } : {}),
   });
   page.drawText(String(Number(date.slice(8))), {
-    x: x + 5,
+    x: appearance.headerAlign === "center" ? x + (width - fonts.bold.widthOfTextAtSize(String(Number(date.slice(8))), 10)) / 2 : x + 5,
     y: top - 13,
     font: fonts.bold,
     size: 10,
@@ -128,7 +137,7 @@ function cell(
   });
   if (events.length === 1 && events[0].banner) {
     const size = Math.max(12, preferred),
-      lines = eventLines(events, doc, fonts, size, width - 10);
+      lines = eventLines(events, doc, fonts, size, width - 10, appearance);
     const noteLines = notes.flatMap((n) =>
       wrap(n.text, fonts.italic, minimum, width - 10),
     );
@@ -163,13 +172,13 @@ function cell(
     noteLines: string[] = [],
     needed = 0;
   while (size >= minimum) {
-    lines = eventLines(events, doc, fonts, size, width - 10);
+    lines = eventLines(events, doc, fonts, size, width - 10, appearance);
     noteLines = notes.flatMap((n) =>
       wrap(n.text, n.banner ? fonts.bold : fonts.italic, size, width - 10),
     );
     needed =
-      lines.reduce((n, l) => n + size * 1.1 + l.gap, 0) +
-      noteLines.length * size * 1.1 +
+      lines.reduce((n, l) => n + size * lineHeight + l.gap, 0) +
+      noteLines.length * size * lineHeight +
       (noteLines.length ? 5 : 0);
     if (needed <= height - 20) break;
     size -= 0.25;
@@ -178,7 +187,7 @@ function cell(
   size = Math.max(size, minimum);
   let y = top - 15;
   for (const line of lines) {
-    y -= line.gap + size * 1.1;
+    y -= line.gap + size * lineHeight;
     if (y < top - height + 4) break;
     page.drawText(line.text, {
       x: x + 5,
@@ -188,7 +197,7 @@ function cell(
       color: ink,
     });
   }
-  let noteY = top - height + 5 + (noteLines.length - 1) * size * 1.1;
+  let noteY = top - height + 5 + (noteLines.length - 1) * size * lineHeight;
   for (const line of noteLines) {
     page.drawText(line, {
       x: x + 5,
@@ -197,7 +206,7 @@ function cell(
       size,
       color: ink,
     });
-    noteY -= size * 1.1;
+    noteY -= size * lineHeight;
   }
   return { overflow, size };
 }
@@ -270,6 +279,7 @@ export async function renderCalendarPdf(
   const all = occurrences(doc, month);
   const days = daysInMonth(month);
   for (const calendar of calendars) {
+    const appearance = calendarAppearance(calendar);
     const fonts = calendar.font === "serif" ? serif : sans;
     const events = all
       .filter((e) => e.calendarIds.includes(calendar.id) && e.title)
@@ -293,19 +303,17 @@ export async function renderCalendarPdf(
         overflow.push(`${calendar.name}: ${(error as Error).message}`);
       }
     }
-    const brand =
-      calendar.color === "wine"
-        ? rgb(0.486, 0.07, 0.192)
-        : rgb(0.55, 0.34, 0.09);
+    const brand = hexColor(printAccent(calendar));
+    const brandForeground = hexColor(contrastText(printAccent(calendar)));
     function page(label: string) {
       const p = pdf.addPage([792, 612]);
       p.drawRectangle({ x: 0, y: 0, width: 792, height: 612, color: paper });
       p.drawText(safeText(label), {
-        x: 24,
+        x: appearance.headerAlign === "center" ? 24 + ((image ? 630 : 744) - fonts.bold.widthOfTextAtSize(safeText(label), 21)) / 2 : 24,
         y: 584,
         font: fonts.bold,
         size: 21,
-        color: brand,
+        color: contrastText(printAccent(calendar)) === "#ffffff" ? brand : ink,
       });
       const nameSize = Math.min(
         11,
@@ -324,14 +332,14 @@ export async function renderCalendarPdf(
           ),
       );
       p.drawText(safeText(calendar.name), {
-        x: 24,
+        x: appearance.headerAlign === "center" ? 24 + ((image ? 630 : 744) - fonts.bold.widthOfTextAtSize(safeText(calendar.name), nameSize)) / 2 : 24,
         y: 567,
         font: fonts.bold,
         size: nameSize,
         color: ink,
       });
       p.drawText(safeText(calendar.subtitle), {
-        x: 24,
+        x: appearance.headerAlign === "center" ? 24 + ((image ? 630 : 744) - fonts.regular.widthOfTextAtSize(safeText(calendar.subtitle), subtitleSize)) / 2 : 24,
         y: 553,
         font: fonts.regular,
         size: subtitleSize,
@@ -368,15 +376,7 @@ export async function renderCalendarPdf(
         head = 20,
         width = 744 / 7,
         height = (top - head - 38) / rows;
-      const weekdays = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
+      const weekdays = calendarWeekdays(appearance.weekStartsOn);
       weekdays.forEach((day, i) => {
         p.drawRectangle({
           x: 24 + i * width,
@@ -385,7 +385,7 @@ export async function renderCalendarPdf(
           height: head,
           color: calendar.theme === "classic" ? brand : paper,
           borderColor: rule,
-          borderWidth: 0.55,
+          borderWidth: appearance.gridLines ? 0.55 : 0,
         });
         p.drawText(day, {
           x:
@@ -393,7 +393,7 @@ export async function renderCalendarPdf(
           y: top - 13,
           font: fonts.bold,
           size: 9,
-          color: calendar.theme === "classic" ? paper : ink,
+          color: calendar.theme === "classic" ? brandForeground : ink,
         });
       });
       dates.forEach((date, i) => {
@@ -406,7 +406,7 @@ export async function renderCalendarPdf(
             width,
             height,
             borderColor: rule,
-            borderWidth: 0.55,
+            borderWidth: appearance.gridLines ? 0.55 : 0,
           });
           return;
         }
@@ -421,8 +421,9 @@ export async function renderCalendarPdf(
           notes.filter((n) => n.date === date),
           doc,
           fonts,
-          mode === "week" ? 11 : 9,
+          (mode === "week" ? 11 : 9) * appearance.fontSize / 16,
           mode === "week" ? 9 : 6,
+          appearance,
         );
         if (fit.overflow)
           overflow.push(
@@ -434,7 +435,7 @@ export async function renderCalendarPdf(
           );
       });
     }
-    const offset = new Date(`${month}-01T12:00:00Z`).getUTCDay();
+    const offset = (new Date(`${month}-01T12:00:00Z`).getUTCDay() - appearance.weekStartsOn + 7) % 7;
     const slots: (string | undefined)[] = [
       ...Array(offset).fill(undefined),
       ...days,
@@ -470,8 +471,9 @@ export async function renderCalendarPdf(
           notes.filter((n) => n.date === date),
           doc,
           fonts,
-          16,
+          appearance.fontSize,
           14,
+          appearance,
         );
         if (fit.overflow)
           overflow.push(

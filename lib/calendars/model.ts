@@ -28,6 +28,18 @@ export type Calendar = {
   showNotes: boolean;
   holidays: boolean;
   printMode: "month" | "large" | "week";
+  appearance?: CalendarAppearance;
+};
+export type CalendarAppearance = {
+  accentColor: string;
+  fontSize: number;
+  density: "compact" | "comfortable" | "spacious";
+  weekStartsOn: 0 | 1;
+  shadeWeekends: boolean;
+  gridLines: boolean;
+  showLocation: boolean;
+  showEventDetails: boolean;
+  headerAlign: "left" | "center";
 };
 export type CalendarEvent = {
   id: string;

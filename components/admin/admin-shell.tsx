@@ -100,7 +100,7 @@ export function AdminShell({ userName, userEmail, role, newApplications = 0, new
       items: [
         { href: "/admin", label: "Dashboard", icon: LayoutDashboardIcon },
         { href: "/admin/events", label: "Events", icon: CalendarDaysIcon },
-        { href: "/admin/calendars", label: "Calendar Builder", icon: CalendarDaysIcon },
+        { href: "/admin/calendars", label: "Calendar", icon: CalendarDaysIcon },
         { href: "/admin/gallery", label: "Gallery", icon: GalleryHorizontalIcon },
         { href: "/admin/exhibitions", label: "Exhibitions", icon: FrameIcon },
         { href: "/admin/jobs", label: "Jobs", icon: BriefcaseIcon },

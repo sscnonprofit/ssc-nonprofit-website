@@ -19,6 +19,8 @@ import {
   type DayNote,
 } from "@/lib/calendars/model";
 import { cn } from "@/lib/utils";
+import { appearanceStyle, calendarAppearance, calendarWeekdays } from "@/lib/calendars/appearance";
+import type { CSSProperties } from "react";
 
 export function CalendarView({
   document: doc,
@@ -30,6 +32,7 @@ export function CalendarView({
   onDay,
   onMove,
   large = false,
+  preview = false,
 }: {
   document: CalendarDocument;
   month: string;
@@ -40,9 +43,13 @@ export function CalendarView({
   onDay?: (date: string) => void;
   onMove?: (event: CalendarEvent, date: string) => void;
   large?: boolean;
+  preview?: boolean;
 }) {
+  const calendar = doc.calendars.find((c) => c.id === calendarId);
+  const appearance = calendarAppearance(calendar);
   const days = daysInMonth(month);
-  const offset = new Date(`${month}-01T12:00:00Z`).getUTCDay();
+  const offset = (new Date(`${month}-01T12:00:00Z`).getUTCDay() - appearance.weekStartsOn + 7) % 7;
+  const isWeekend = (date: string) => [0, 6].includes(new Date(`${date}T12:00:00Z`).getUTCDay());
   function dayEvents(date: string) {
     return events
       .filter((e) => e.date === date && e.title)
@@ -64,15 +71,15 @@ export function CalendarView({
         onClick={() => onEvent(e)}
         className={cn(
           "cal-event flex min-h-11 w-full flex-col gap-1 rounded-lg text-left outline-offset-4 transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring",
-          compact ? "p-1.5" : "p-3",
-          e.banner && "bg-primary/10 text-primary",
+          compact && "cal-compact",
+          e.banner && "cal-banner",
           e.cancelled && "text-muted-foreground",
-          large ? "text-lg" : compact ? "text-sm" : "text-base",
+          large && "cal-large",
         )}
       >
         <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <span
-            className={cn("tabular-nums", compact ? "text-sm" : "font-medium")}
+            className={cn("cal-meta tabular-nums", !compact && "font-medium")}
           >
             {e.allDay ? "All day" : timeLabel(e.time)}
           </span>
@@ -90,15 +97,15 @@ export function CalendarView({
         >
           {e.title}
           {e.host ? ` w/${e.host}` : ""}
-          {compact && location ? ` – ${location.code}` : ""}
+          {appearance.showLocation && compact && location ? ` – ${location.code}` : ""}
         </span>
-        {!compact && location && (
+        {appearance.showLocation && !compact && location && (
           <span className="flex items-center gap-1 text-sm text-muted-foreground">
             <MapPin className="size-4" aria-hidden="true" />
             {location.name}
           </span>
         )}
-        {(e.notes || e.detail) && (
+        {appearance.showEventDetails && (e.notes || e.detail) && (
           <span className="text-sm italic leading-relaxed">
             {[e.notes, e.detail].filter(Boolean).join(" · ")}
           </span>
@@ -123,7 +130,7 @@ export function CalendarView({
           className={cn(
             "text-sm leading-relaxed",
             n.banner
-              ? "rounded-lg bg-primary/10 p-3 font-bold text-primary"
+              ? "cal-banner rounded-lg p-3 font-bold"
               : "italic text-muted-foreground",
           )}
         >
@@ -131,21 +138,21 @@ export function CalendarView({
         </p>
       ));
   return (
-    <>
+    <div className={cn("calendar-surface min-w-0", calendar?.font === "serif" ? "font-serif" : "font-sans")} data-grid-lines={appearance.gridLines} style={{ ...appearanceStyle(calendar), "--cal-header-align": appearance.headerAlign } as CSSProperties}>
       <div
-        className="flex flex-col gap-4 lg:hidden"
+        className={cn("flex flex-col gap-4", !preview && "lg:hidden")}
         aria-label="Monthly agenda"
       >
-        {days.map((date) => {
+        {(preview ? days.slice(0, 3) : days).map((date) => {
           const values = dayEvents(date);
           return (
             <section
               key={date}
               id={`day-${date}`}
-              className="overflow-hidden rounded-xl border border-border bg-card text-card-foreground"
+              className={cn("cal-cell overflow-hidden rounded-xl border border-border bg-card text-card-foreground", appearance.shadeWeekends && isWeekend(date) && "cal-weekend")}
             >
-              <header className="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-3">
-                <h3 className="font-semibold">
+              <header className={cn("cal-header flex items-center justify-between border-b border-border bg-muted/50 px-4 py-3", calendar?.theme === "classic" && "cal-header-filled")}>
+                <h3 className="flex-1 font-semibold">
                   {new Date(`${date}T12:00:00Z`).toLocaleDateString("en-US", {
                     weekday: "long",
                     month: "short",
@@ -165,7 +172,7 @@ export function CalendarView({
                   </Button>
                 )}
               </header>
-              <div className="flex flex-col gap-1 p-2">
+              <div className="cal-events flex flex-col gap-1 p-2">
                 {values.map((e) => eventButton(e))}
                 {!values.length && (
                   <p className="p-3 text-sm text-muted-foreground">
@@ -183,19 +190,11 @@ export function CalendarView({
         })}
       </div>
       <div
-        className="hidden overflow-hidden rounded-xl border border-border bg-card text-card-foreground lg:block"
+        className={cn("hidden overflow-hidden rounded-xl border border-border bg-card text-card-foreground", !preview && "lg:block")}
         aria-label="Monthly calendar grid"
       >
-        <div className="grid grid-cols-7 border-b border-border bg-muted/50">
-          {[
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-          ].map((d) => (
+        <div className={cn("cal-header grid grid-cols-7 border-b border-border bg-muted/50", calendar?.theme === "classic" && "cal-header-filled")}>
+          {calendarWeekdays(appearance.weekStartsOn).map((d) => (
             <div
               key={d}
               className="px-2 py-3 text-center text-sm font-semibold"
@@ -213,13 +212,13 @@ export function CalendarView({
                 return (
                   <div
                     key={i}
-                    className="min-h-36 border-b border-r border-border bg-muted/30"
+                    className="cal-cell min-h-36 border-b border-r border-border bg-muted/30"
                   />
                 );
               return (
                 <section
                   key={date}
-                  className="flex min-h-40 min-w-0 flex-col border-b border-r border-border p-1.5"
+                  className={cn("cal-cell flex min-h-40 min-w-0 flex-col border-b border-r border-border p-1.5", appearance.shadeWeekends && isWeekend(date) && "cal-weekend")}
                   onDragOver={(ev) => onMove && ev.preventDefault()}
                   onDrop={(ev) => {
                     ev.preventDefault();
@@ -229,8 +228,8 @@ export function CalendarView({
                     if (event && onMove) onMove(event, date);
                   }}
                 >
-                  <header className="flex items-center justify-between px-1">
-                    <h3 className="text-base font-semibold tabular-nums">
+                  <header className="cal-header flex items-center justify-between px-1">
+                    <h3 className="flex-1 text-base font-semibold tabular-nums">
                       {Number(date.slice(8))}
                       <span className="sr-only"> {month}</span>
                     </h3>
@@ -246,7 +245,7 @@ export function CalendarView({
                       </Button>
                     )}
                   </header>
-                  <div className="flex flex-1 flex-col gap-1">
+                  <div className="cal-events flex flex-1 flex-col gap-1">
                     {dayEvents(date).map((e) => eventButton(e, true))}
                   </div>
                   <div className="flex flex-col gap-1 p-1">
@@ -258,7 +257,7 @@ export function CalendarView({
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

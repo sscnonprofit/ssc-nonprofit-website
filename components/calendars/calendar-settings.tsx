@@ -20,6 +20,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Check, selectClass } from "./event-editor";
+import { CalendarAppearanceControls } from "./calendar-appearance";
 import type { Calendar, Location, Workspace } from "@/lib/calendars/model";
 import type { CalendarAction } from "@/lib/calendars/service";
 
@@ -79,52 +80,7 @@ export function CalendarSettings({
                   onChange={(e) => field("subtitle", e.target.value)}
                 />
               </Field>
-              <Field>
-                <FieldLabel htmlFor="calendar-color">Legend color</FieldLabel>
-                <select
-                  id="calendar-color"
-                  className={selectClass}
-                  value={calendar.color}
-                  onChange={(e) =>
-                    field("color", e.target.value as Calendar["color"])
-                  }
-                >
-                  <option value="wine">SSC Wine</option>
-                  <option value="gold">SSC Gold</option>
-                </select>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="calendar-theme">Print theme</FieldLabel>
-                <select
-                  id="calendar-theme"
-                  className={selectClass}
-                  value={calendar.theme}
-                  onChange={(e) =>
-                    field("theme", e.target.value as Calendar["theme"])
-                  }
-                >
-                  <option value="classic">
-                    Classic (branded weekday headers)
-                  </option>
-                  <option value="minimal">
-                    Minimal (plain weekday headers)
-                  </option>
-                </select>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="calendar-font">Print font</FieldLabel>
-                <select
-                  id="calendar-font"
-                  className={selectClass}
-                  value={calendar.font}
-                  onChange={(e) =>
-                    field("font", e.target.value as Calendar["font"])
-                  }
-                >
-                  <option value="sans">Sans serif</option>
-                  <option value="serif">Serif</option>
-                </select>
-              </Field>
+              <CalendarAppearanceControls calendar={calendar} document={doc} onChange={setCalendar} />
               <Field>
                 <FieldLabel htmlFor="calendar-visibility">
                   Visibility

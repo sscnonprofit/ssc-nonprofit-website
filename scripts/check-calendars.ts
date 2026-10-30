@@ -12,13 +12,30 @@ import {
   warnings,
 } from "../lib/calendars/model";
 import { publicDocument, assertEdit } from "../lib/calendars/access";
-import { validateEvent } from "../lib/calendars/validation";
+import { validateAppearance, validateCalendar, validateEvent } from "../lib/calendars/validation";
+import { DEFAULT_APPEARANCE, calendarAppearance, calendarWeekdays, contrastText } from "../lib/calendars/appearance";
 import { renderCalendarPdf } from "../lib/calendars/pdf";
 import { createIcs } from "../lib/calendars/ics";
 
 async function main() {
   const doc = novemberSeed();
   const events = occurrences(doc, "2026-11");
+  assert.deepEqual(calendarAppearance(doc.calendars[0]), DEFAULT_APPEARANCE);
+  assert.deepEqual(validateAppearance(undefined), DEFAULT_APPEARANCE);
+  assert.equal(calendarWeekdays(1)[0], "Monday");
+  assert.equal(calendarWeekdays(1)[6], "Sunday");
+  assert.equal(contrastText("#ffffff"), "#262626");
+  assert.equal(contrastText("#123456"), "#ffffff");
+  for (const invalid of [null, [], { accentColor: "url(javascript:alert(1))" }, { fontSize: 100 }, { fontSize: 13 }, { density: "unknown" }, { weekStartsOn: 2 }, { gridLines: "false" }, { showLocation: null }, { headerAlign: "right" }]) {
+    assert.throws(() => validateAppearance(invalid));
+  }
+  const customCalendar = validateCalendar({ ...doc.calendars[0], appearance: { ...DEFAULT_APPEARANCE, accentColor: "#ABCDEF", fontSize: 20, density: "spacious", weekStartsOn: 1, shadeWeekends: true, gridLines: false, showLocation: false, showEventDetails: false, headerAlign: "center" } }, doc);
+  assert.equal(customCalendar.appearance?.accentColor, "#abcdef");
+  assert.equal(customCalendar.appearance?.showLocation, false);
+  const customPdf = await renderCalendarPdf(doc, "2026-11", [customCalendar], "week");
+  assert.equal(customPdf.pageCount, 6, "Monday-start November 2026 spans six weeks");
+  assert.equal(customPdf.overflow.length, 0);
+  assert.ok(customPdf.bytes.length > 0);
   assert.equal(daysInMonth("2026-11").length, 30);
   assert.equal(new Date("2026-11-01T12:00:00Z").getUTCDay(), 0);
   assert.equal(

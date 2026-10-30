@@ -7,7 +7,33 @@ import {
   type Series,
 } from "./model";
 
+import { DEFAULT_APPEARANCE } from "./appearance";
+import type { CalendarAppearance } from "./model";
+
 export class CalendarInputError extends Error {}
+
+export function validateAppearance(raw: unknown): CalendarAppearance {
+  if (raw === undefined) return { ...DEFAULT_APPEARANCE };
+  if (!raw || typeof raw !== "object" || Array.isArray(raw))
+    throw new CalendarInputError("Invalid appearance settings");
+  const a = { ...DEFAULT_APPEARANCE, ...raw } as CalendarAppearance;
+  if (
+    typeof a.accentColor !== "string" ||
+    (a.accentColor !== "" && !/^#[0-9a-f]{6}$/i.test(a.accentColor)) ||
+    !Number.isInteger(a.fontSize) || a.fontSize < 14 || a.fontSize > 20 ||
+    !["compact", "comfortable", "spacious"].includes(a.density) ||
+    ![0, 1].includes(a.weekStartsOn) ||
+    !["left", "center"].includes(a.headerAlign) ||
+    [a.shadeWeekends, a.gridLines, a.showLocation, a.showEventDetails].some((v) => typeof v !== "boolean")
+  ) throw new CalendarInputError("Invalid appearance settings");
+  return {
+    accentColor: a.accentColor.toLowerCase(), fontSize: a.fontSize,
+    density: a.density, weekStartsOn: a.weekStartsOn,
+    shadeWeekends: a.shadeWeekends, gridLines: a.gridLines,
+    showLocation: a.showLocation, showEventDetails: a.showEventDetails,
+    headerAlign: a.headerAlign,
+  };
+}
 
 export function text(value: unknown, max = 300): string {
   if (typeof value !== "string" || value.length > max)
@@ -167,5 +193,6 @@ export function validateCalendar(
     showNotes: !!c.showNotes,
     holidays: !!c.holidays,
     printMode: c.printMode,
+    appearance: validateAppearance(c.appearance),
   };
 }

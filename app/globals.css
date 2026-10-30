@@ -459,6 +459,30 @@
   }
 }
 
+.calendar-surface .cal-event {
+  font-size: var(--cal-font-size);
+  padding: var(--cal-event-padding);
+  gap: var(--cal-event-gap);
+}
+.calendar-surface .cal-event.cal-compact {
+  font-size: max(14px, calc(var(--cal-font-size) - 2px));
+}
+.calendar-surface .cal-event.cal-large { font-size: max(18px, var(--cal-font-size)); }
+.calendar-surface .cal-event .cal-meta { font-size: max(14px, calc(var(--cal-font-size) - 2px)); }
+.calendar-surface .cal-events { gap: var(--cal-event-gap); }
+.calendar-surface .cal-header { text-align: var(--cal-header-align, left); }
+.calendar-surface .cal-header.cal-header-filled {
+  background: var(--cal-accent);
+  color: var(--cal-accent-foreground);
+}
+.calendar-surface .cal-weekend { background: color-mix(in oklab, var(--muted) 55%, var(--card)); }
+.calendar-surface[data-grid-lines="false"] .cal-cell { border-color: transparent; }
+.calendar-surface .cal-banner {
+  background: color-mix(in oklab, var(--cal-accent) 15%, var(--card));
+  color: var(--card-foreground);
+  box-shadow: inset 0 2px var(--cal-accent);
+}
+
 @keyframes ssc-fade {
   from {
     opacity: 0;

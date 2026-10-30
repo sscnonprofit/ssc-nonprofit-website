@@ -150,7 +150,7 @@ export function CalendarWorkspace({
         <div className="flex flex-col gap-2">
           <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
             {admin
-              ? "Resident life · calendar builder"
+              ? "Resident life · Calendar"
               : "Sheboygan Senior Community"}
           </p>
           <h1 className="text-balance font-sans text-3xl font-semibold tracking-tight">
@@ -537,36 +537,6 @@ export function CalendarWorkspace({
           updates. All times are local to Sheboygan (America/Chicago).
         </p>
       </details>
-      {admin && doc.sourceNotes.length > 0 && (
-        <details className="rounded-xl border border-border p-4">
-          <summary className="min-h-11 cursor-pointer py-2 font-semibold">
-            November source review
-          </summary>
-          <ul className="flex list-disc flex-col gap-2 pl-5 text-sm leading-relaxed">
-            {doc.sourceNotes.map((n) => (
-              <li key={n}>{n}</li>
-            ))}
-          </ul>
-          <div className="flex flex-col gap-2 pt-3">
-            <a
-              className="min-h-11 py-2 underline"
-              target="_blank"
-              rel="noreferrer"
-              href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Image-7243560A-j2dYkUHOC3DJnklFM9d9N2krll2vjO.jpeg"
-            >
-              Original Willow Lane image
-            </a>
-            <a
-              className="min-h-11 py-2 underline"
-              target="_blank"
-              rel="noreferrer"
-              href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Image-786C26DA-4SB4uJ0z4iRFWgnlPXXbanePuMoJ54.jpeg"
-            >
-              Original Healthcare image
-            </a>
-          </div>
-        </details>
-      )}
       {selected &&
         (admin &&
         (workspace?.role === "admin" ||

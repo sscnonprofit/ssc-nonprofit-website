@@ -94,6 +94,9 @@ export default async function UpcomingEventsPage() {
             title={events.calendars.title}
             intro={events.calendars.body}
           />
+          <Link href="/calendars" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-5 py-3 font-semibold text-primary-foreground">
+            Browse live activity calendars <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
           <ul className="mt-12 grid gap-6 sm:grid-cols-2">
             {events.calendars.items.map((c) => (
               <li key={c.title} className="ssc-card flex flex-col gap-3 p-8">

@@ -291,6 +291,25 @@ export const contactMessages = pgTable("contact_messages", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 })
 
+export const calendarWorkspaces = pgTable("calendar_workspaces", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  document: jsonb("document").notNull(),
+  version: integer("version").notNull().default(1),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const calendarHistory = pgTable("calendar_history", {
+  id: serial("id").primaryKey(),
+  workspaceId: text("workspace_id").notNull(),
+  userId: text("user_id").notNull(),
+  actorName: text("actor_name").notNull(),
+  summary: text("summary").notNull(),
+  document: jsonb("document").notNull(),
+  version: integer("version").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
 export const galleryPhotos = pgTable("gallery_photos", {
   id: serial("id").primaryKey(),
   albumId: integer("album_id").notNull(),

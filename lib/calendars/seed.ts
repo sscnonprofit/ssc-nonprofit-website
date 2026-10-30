@@ -69,7 +69,7 @@ export function novemberSeed(): CalendarDocument {
       },
     ],
     locations: [
-      ["tol", "TOL (full name to be confirmed)", "TOL"],
+      ["tol", "Tree Of Life", "TOL"],
       ["cafe", "Café", "Café"],
       ["lr", "Willow Lane Living Room", "LR"],
       ["dr", "Willow Lane Dining Room", "DR"],
@@ -84,10 +84,7 @@ export function novemberSeed(): CalendarDocument {
       id,
       name,
       code,
-      note:
-        id === "tol"
-          ? "TOL expansion should be confirmed by staff before printing."
-          : "",
+      note: "",
     })),
     events: [],
     series: [],
@@ -95,7 +92,7 @@ export function novemberSeed(): CalendarDocument {
     months: {},
     sourceNotes: [
       "Transcribed from the two supplied November 2026 calendars. Please review against the originals before redistributing.",
-      "TOL is printed as a code in the originals; its full name is not supplied and needs staff confirmation in the master location list.",
+      "TOL stands for Tree Of Life, as confirmed by staff.",
       "Willow Lane November 18 lunch destination is transcribed as Raineri’s Four of a Kind; confirm spelling.",
       "Healthcare November 25 says ‘Afternoon: Deck the Halls with Kohler Students’ without a precise time; retained as an untimed entry.",
       "Healthcare November 1 displays a faint template overlay; dates follow the actual November 2026 Sunday-first calendar.",

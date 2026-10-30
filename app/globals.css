@@ -107,8 +107,7 @@
   --ssc-btn-accent-border: var(--accent);
 }
 
-/* Admin dark theme, Vercel style: near-black canvas, strictly neutral grays, hairline
-   white borders and flat surfaces. The SSC wine and gold are the only chroma. */
+/* Neutral admin chrome stays separate from the published site's brand palette. */
 .dark {
   color-scheme: dark;
 
@@ -120,24 +119,26 @@
   --popover: oklch(0.155 0 0);
   --popover-foreground: oklch(0.985 0 0);
 
-  --primary: oklch(0.72 0.135 12);
+  --primary: oklch(0.92 0 0);
   --primary-foreground: oklch(0.12 0 0);
 
-  --accent: oklch(0.76 0.105 62);
-  --accent-foreground: oklch(0.12 0 0);
+  --accent: oklch(0.24 0 0);
+  --accent-foreground: oklch(0.985 0 0);
 
   --secondary: oklch(0.185 0 0);
   --secondary-foreground: oklch(0.96 0 0);
   --muted: oklch(0.17 0 0);
   --muted-foreground: oklch(0.67 0 0);
 
-  --destructive: oklch(0.68 0.19 25);
+  --destructive: oklch(0.82 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 14%);
   --ring: oklch(0.62 0 0);
 
-  --brand-3: oklch(0.68 0.12 140);
-  --brand-4: oklch(0.56 0.08 150);
+  --brand-1: var(--primary);
+  --brand-2: var(--accent);
+  --brand-3: oklch(0.67 0 0);
+  --brand-4: oklch(0.44 0 0);
 
   --ssc-card-shadow: 0 0 0 1px oklch(1 0 0 / 6%);
   --ssc-card-shadow-hover: 0 0 0 1px oklch(1 0 0 / 12%), 0 16px 32px -20px rgba(0, 0, 0, 0.9);

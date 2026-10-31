@@ -13,7 +13,6 @@ type Props = { calendars: { id: string; name: string }[] }
 export function CalendarSubscribeForm({ calendars }: Props) {
   const [email, setEmail] = useState("")
   const [calendarId, setCalendarId] = useState(calendars[0]?.id ?? "")
-  const [frequency, setFrequency] = useState("weekly")
   const [company, setCompany] = useState("")
   const [state, setState] = useState<{ ok: boolean; message: string } | null>(null)
   const [pending, startTransition] = useTransition()
@@ -21,7 +20,7 @@ export function CalendarSubscribeForm({ calendars }: Props) {
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     startTransition(async () => {
-      const result = await subscribeToCalendarAction({ email, calendarId, frequency, categories: [], company })
+      const result = await subscribeToCalendarAction({ email, calendarId, categories: [], company })
       setState(result.ok ? { ok: true, message: result.message } : { ok: false, message: result.error })
     })
   }
@@ -58,21 +57,6 @@ export function CalendarSubscribeForm({ calendars }: Props) {
           </select>
         </div>
       </div>
-
-      <fieldset className="grid gap-2">
-        <legend className="text-sm font-medium">How often?</legend>
-        <div className="flex flex-wrap gap-4">
-          {[
-            ["weekly", "Every Monday"],
-            ["monthly", "First of the month"],
-          ].map(([value, label]) => (
-            <label key={value} className="flex min-h-11 items-center gap-2 text-sm">
-              <input type="radio" name="frequency" value={value} checked={frequency === value} onChange={() => setFrequency(value)} className="size-4 accent-primary" />
-              {label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
 
       <div className="hidden" aria-hidden="true">
         <label>

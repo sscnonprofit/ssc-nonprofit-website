@@ -1,44 +1,23 @@
 import { and, eq, isNotNull, isNull } from "drizzle-orm"
 
 import { createIcs } from "@/lib/calendars/ics"
-import { daysInMonth, facilityToday, monthLabel, timeLabel } from "@/lib/calendars/model"
+import { facilityToday, timeLabel } from "@/lib/calendars/model"
 import { publicDocument, readStore } from "@/lib/calendars/service"
 import { db } from "@/lib/db"
 import { calendarSubscriptions } from "@/lib/db/schema"
 
+import { calendarEmailIsDue, calendarEmailPeriod } from "./calendar-schedule"
 import { siteUrl } from "./config"
 import { sendEmail } from "./send"
 import { calendarDigestEmail, type DigestGroup } from "./templates"
 
 export type Subscription = typeof calendarSubscriptions.$inferSelect
-export type Frequency = "weekly" | "monthly"
-
-const DAY = 1000 * 60 * 60 * 24
-
-function addDays(date: string, amount: number) {
-  return new Date(new Date(`${date}T12:00:00Z`).getTime() + amount * DAY).toISOString().slice(0, 10)
-}
-
-function shortDate(date: string) {
-  return new Date(`${date}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })
-}
-
 export function unsubscribeUrl(token: string) {
   return `${siteUrl()}/api/email/unsubscribe?token=${token}`
 }
 
 export function manageUrl(token: string) {
   return `${siteUrl()}/email-preferences?token=${token}`
-}
-
-function periodFor(frequency: Frequency, today: string) {
-  if (frequency === "monthly") {
-    const month = today.slice(0, 7)
-    const days = daysInMonth(month)
-    return { start: today, end: days[days.length - 1], label: `${monthLabel(month)} activities` }
-  }
-  const end = addDays(today, 6)
-  return { start: today, end, label: `This week: ${shortDate(today)} – ${shortDate(end)}` }
 }
 
 /** Builds the digest email and its filtered .ics file for one subscriber. */
@@ -49,7 +28,7 @@ export async function buildDigest(subscription: Subscription, today = facilityTo
   if (!calendar) return null
 
   const categories = Array.isArray(subscription.categories) ? (subscription.categories as string[]) : []
-  const period = periodFor(subscription.frequency as Frequency, today)
+  const period = calendarEmailPeriod(today)
   const matching = doc.events
     .filter(
       (event) =>
@@ -114,15 +93,7 @@ export async function sendDigest(subscription: Subscription, today = facilityTod
   return result.ok
 }
 
-function isDue(subscription: Subscription, today: string) {
-  const last = subscription.lastSentAt?.getTime() ?? 0
-  const age = Date.now() - last
-  const weekday = new Date(`${today}T12:00:00Z`).getUTCDay()
-  if (subscription.frequency === "monthly") return today.endsWith("-01") && age > 20 * DAY
-  return weekday === 1 && age > 5 * DAY
-}
-
-/** Weekly digests go out Mondays and monthly digests on the 1st (facility time). */
+/** Confirmed subscribers receive a digest every 30 days, regardless of legacy frequency values. */
 export async function runDigestJob(today = facilityToday()) {
   const active = await db
     .select()
@@ -130,7 +101,8 @@ export async function runDigestJob(today = facilityToday()) {
     .where(and(isNotNull(calendarSubscriptions.confirmedAt), isNull(calendarSubscriptions.unsubscribedAt)))
 
   let sent = 0
-  const due = active.filter((subscription) => isDue(subscription, today))
+  const now = Date.now()
+  const due = active.filter((subscription) => calendarEmailIsDue(subscription, now))
   for (const subscription of due) {
     if (await sendDigest(subscription, today)) sent += 1
   }

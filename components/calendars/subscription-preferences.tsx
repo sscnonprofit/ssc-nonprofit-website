@@ -9,13 +9,11 @@ import { CATEGORIES } from "@/lib/calendars/model"
 type Props = {
   token: string
   calendarName: string
-  initialFrequency: string
   initialCategories: string[]
   unsubscribed: boolean
 }
 
-export function SubscriptionPreferences({ token, calendarName, initialFrequency, initialCategories, unsubscribed }: Props) {
-  const [frequency, setFrequency] = useState(initialFrequency)
+export function SubscriptionPreferences({ token, calendarName, initialCategories, unsubscribed }: Props) {
   const [categories, setCategories] = useState(initialCategories)
   const [gone, setGone] = useState(unsubscribed)
   const [message, setMessage] = useState<string | null>(null)
@@ -27,7 +25,7 @@ export function SubscriptionPreferences({ token, calendarName, initialFrequency,
 
   function save() {
     startTransition(async () => {
-      const result = await updateSubscriptionAction({ token, frequency, categories })
+      const result = await updateSubscriptionAction({ token, categories })
       setMessage(result.ok ? result.message : result.error)
     })
   }
@@ -50,20 +48,7 @@ export function SubscriptionPreferences({ token, calendarName, initialFrequency,
 
   return (
     <div className="grid gap-6 rounded-xl border border-border bg-card p-6">
-      <fieldset className="grid gap-2">
-        <legend className="text-sm font-medium">How often?</legend>
-        <div className="flex flex-wrap gap-4">
-          {[
-            ["weekly", "Every Monday"],
-            ["monthly", "First of the month"],
-          ].map(([value, label]) => (
-            <label key={value} className="flex min-h-11 items-center gap-2 text-sm">
-              <input type="radio" name="frequency" value={value} checked={frequency === value} onChange={() => setFrequency(value)} className="size-4 accent-primary" />
-              {label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
+      <p className="text-sm leading-relaxed text-muted-foreground">Calendar emails are sent every 30 days.</p>
       <fieldset className="grid gap-2">
         <legend className="text-sm font-medium">Activity types (none selected means everything)</legend>
         <div className="flex flex-wrap gap-2">

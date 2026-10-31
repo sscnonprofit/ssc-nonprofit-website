@@ -15,11 +15,6 @@ import { subscriptionConfirmEmail } from "@/lib/email/templates"
 export type SubscribeResult = { ok: true; message: string } | { ok: false; error: string }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const FREQUENCIES = ["weekly", "monthly"] as const
-
-function parseFrequency(value: unknown) {
-  return FREQUENCIES.find((item) => item === value) ?? "weekly"
-}
 
 function parseCategories(value: unknown) {
   const allowed = new Set<string>(CATEGORIES)
@@ -30,7 +25,6 @@ export async function subscribeToCalendarAction(input: {
   email: string
   name?: string
   calendarId: string
-  frequency: string
   categories?: string[]
   company?: string
 }): Promise<SubscribeResult> {
@@ -45,7 +39,7 @@ export async function subscribeToCalendarAction(input: {
   const calendar = publicDocument(store.document).calendars.find((item) => item.id === input.calendarId)
   if (!calendar) return { ok: false, error: "Please choose a calendar." }
 
-  const frequency = parseFrequency(input.frequency)
+  const frequency = "monthly"
   const categories = parseCategories(input.categories)
 
   const [existing] = await db
@@ -70,7 +64,6 @@ export async function subscribeToCalendarAction(input: {
 
   const mail = subscriptionConfirmEmail({
     calendarName: calendar.name,
-    frequency,
     url: `${siteUrl()}/api/email/confirm?token=${token}`,
   })
   const result = await sendEmail({ kind: "subscription-confirm", to: email, ...mail })
@@ -82,14 +75,13 @@ export async function subscribeToCalendarAction(input: {
 
 export async function updateSubscriptionAction(input: {
   token: string
-  frequency: string
   categories: string[]
 }): Promise<SubscribeResult> {
   const token = String(input.token ?? "")
   if (!token) return { ok: false, error: "This link is not valid." }
   const updated = await db
     .update(calendarSubscriptions)
-    .set({ frequency: parseFrequency(input.frequency), categories: parseCategories(input.categories) })
+    .set({ frequency: "monthly", categories: parseCategories(input.categories) })
     .where(eq(calendarSubscriptions.token, token))
     .returning({ id: calendarSubscriptions.id })
   if (!updated.length) return { ok: false, error: "This link is not valid." }

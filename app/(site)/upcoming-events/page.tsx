@@ -100,7 +100,7 @@ export default async function UpcomingEventsPage() {
               Get the calendar by email
             </h2>
             <p className="text-pretty leading-relaxed text-muted-foreground">
-              Choose a calendar and how often you want it. We&apos;ll send it
+              Choose a calendar. We&apos;ll email upcoming activities every 30 days,
               with a calendar file you can add to your phone.
             </p>
           </div>

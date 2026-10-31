@@ -178,18 +178,18 @@
       "cta": { "label": "Contact Vanessa Depies", "href": "/contact" }
     },
     "partners": [
-      { "name": "Sheboygan County Chamber of Commerce", "logo": "/images/Chamber_Logo-Navy.png" },
-      { "name": "Community Cafe", "logo": "/images/Community-Cafe-Logo.png" },
-      { "name": "Sheboygan County Food Bank", "logo": "/images/SCFB_Primary_Logo_RGB.png" },
-      { "name": "HSHS St. Nicholas Hospital", "logo": "/images/HSHS_SNS_4C_H.jpg" },
-      { "name": "Sheboygan County Warming Shelter", "logo": "/images/Sheboygan-County-Warming-Shelter.png" },
-      { "name": "Sheboygan Film Festival", "logo": "/images/Sheboygan-Film-Festival.png" },
-      { "name": "St. Luke United Methodist Church", "logo": "/images/St.Luke-Vertical-Color.jpg" },
-      { "name": "Stephen Siller Tunnel to Towers Foundation", "logo": "/images/StephenSillerLogo.png" },
-      { "name": "Uptown Social", "logo": "/images/Uptown-Social-Logo.png" },
-      { "name": "Velvet Sheep Farms", "logo": "/images/Velvet-Sheep-Farms.png" },
-      { "name": "Sheboygan Visual Artists", "logo": "/images/SVA-Logo-semi-bold.Blue_.300-dpi-scaled.png" },
-      { "name": "Walk to End Alzheimer's", "logo": "/images/Black-Walk-to-End-Alz.jpg" }
+      { "name": "Sheboygan County Chamber of Commerce", "logo": "/images/Chamber_Logo-Navy.png", "href": "https://www.sheboygan.org/" },
+      { "name": "Community Cafe", "logo": "/images/Community-Cafe-Logo.png", "href": "https://scwarmingcenter.org/" },
+      { "name": "Sheboygan County Food Bank", "logo": "/images/SCFB_Primary_Logo_RGB.png", "href": "https://sheboygancountyfoodbank.com/" },
+      { "name": "HSHS St. Nicholas Hospital", "logo": "/images/HSHS_SNS_4C_H.jpg", "href": "https://www.hshs.org/st-nicholas" },
+      { "name": "Sheboygan County Warming Shelter", "logo": "/images/Sheboygan-County-Warming-Shelter.png", "href": "https://scwarmingcenter.org/" },
+      { "name": "Sheboygan Film Festival", "logo": "/images/Sheboygan-Film-Festival.png", "href": "https://www.sheboyganfilmfest.com/" },
+      { "name": "St. Luke United Methodist Church", "logo": "/images/St.Luke-Vertical-Color.jpg", "href": "https://stluke.net/" },
+      { "name": "Stephen Siller Tunnel to Towers Foundation", "logo": "/images/StephenSillerLogo.png", "href": "https://t2t.org/" },
+      { "name": "Uptown Social", "logo": "/images/Uptown-Social-Logo.png", "href": "https://www.uptownsocial.org/" },
+      { "name": "Velvet Sheep Farms", "logo": "/images/Velvet-Sheep-Farms.png", "href": "https://www.velvetsheepfarms.com/" },
+      { "name": "Sheboygan Visual Artists", "logo": "/images/SVA-Logo-semi-bold.Blue_.300-dpi-scaled.png", "href": "https://www.sheboyganvisualartists.org/" },
+      { "name": "Walk to End Alzheimer's", "logo": "/images/Black-Walk-to-End-Alz.jpg", "href": "https://www.alz.org/walk" }
     ],
     "gallery": [
       { "src": "/images/IMG_0850-scaled.jpeg", "alt": "SSC team volunteering in the community" },

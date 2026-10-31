@@ -125,7 +125,7 @@ export function SiteHeader({
             </a>
             <span className="h-3.5 w-px bg-primary-foreground/25" aria-hidden="true" />
             <Link href="/contact" className="px-3 py-1 font-medium opacity-90 transition-opacity hover:opacity-100">
-              Schedule A Visit
+              Embrace the Next Chapter
             </Link>
             <Link href="/donate" className="ssc-btn-accent ml-2 px-4 py-1.5 text-xs">
               Donate
@@ -270,7 +270,7 @@ export function SiteHeader({
 
             <div className="hidden shrink-0 items-center gap-3 lg:flex">
               <Link href="/contact" className="ssc-btn group/cta px-5 py-2.5">
-                Schedule A Visit
+                Embrace the Next Chapter
                 <ArrowRight className="size-4 transition-transform group-hover/cta:translate-x-0.5" aria-hidden="true" />
               </Link>
             </div>
@@ -381,7 +381,7 @@ export function SiteHeader({
 
             <div className="mt-4 grid grid-cols-2 gap-2">
               <Link href="/contact" onClick={() => setOpen(false)} className="ssc-btn px-4 py-3">
-                Schedule A Visit
+                Embrace the Next Chapter
               </Link>
               <Link href="/donate" onClick={() => setOpen(false)} className="ssc-btn-accent px-4 py-3">
                 Donate

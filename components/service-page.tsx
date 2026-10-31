@@ -150,7 +150,7 @@ export async function ServicePage({ slug }: { slug: ServiceSlug }) {
       <CtaBand
         title={`Ready to learn more about ${service.household}?`}
         body="Schedule a personalized tour, or call to talk through availability, costs, and what daily life looks like for your loved one."
-        primary={{ label: "Schedule A Visit", href: "/contact" }}
+        primary={{ label: "Embrace the Next Chapter", href: "/contact" }}
         secondary={{ label: `Call ${site.phone}`, href: site.phoneHref }}
       />
     </>

@@ -34,7 +34,7 @@ function applyTheme(resolved: AdminResolvedTheme) {
  * without a flash, while an explicitly saved dark preference is preserved.
  * Keep the storage key in sync with ADMIN_THEME_STORAGE_KEY.
  */
-export const ADMIN_THEME_INIT_SCRIPT = `(function(){try{var s=localStorage.getItem("${ADMIN_THEME_STORAGE_KEY}");var d=s==="dark";document.documentElement.classList.toggle("dark",d)}catch(e){}})()`
+export const ADMIN_THEME_INIT_SCRIPT = `(function(){try{var s=localStorage.getItem("${ADMIN_THEME_STORAGE_KEY}");var d=s==="dark"||(s==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.toggle("dark",d)}catch(e){}})()`
 
 export function AdminThemeProvider({ children }: { children: React.ReactNode }) {
   const [preference, setPreferenceState] = useState<AdminThemePreference>("light")

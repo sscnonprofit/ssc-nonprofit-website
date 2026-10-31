@@ -11,6 +11,7 @@ import { SectionHeading } from "@/components/section-heading"
 import { StatCounter } from "@/components/stat-counter"
 import { Testimonials } from "@/components/testimonials"
 import { getContent } from "@/lib/cms/content"
+import { getPartnerSection, safePartnerUrl } from "@/lib/cms/partners"
 
 type PillarKey = keyof typeof pillarsFallback
 
@@ -21,7 +22,8 @@ export async function PillarPage({ slug }: { slug: PillarKey }) {
   const stats = "stats" in p ? p.stats : undefined
   const callout = "callout" in p ? p.callout : undefined
   const intro2 = "intro2" in p ? p.intro2 : undefined
-  const partners = "partners" in p ? p.partners : undefined
+  const partnerSection = slug === "community-outreach" ? getPartnerSection(pillars) : null
+  const partners = partnerSection?.partners.filter((partner) => partner.visible) ?? []
   const benefitsCta = "cta" in p.benefits ? p.benefits.cta : undefined
 
   return (
@@ -97,27 +99,25 @@ export async function PillarPage({ slug }: { slug: PillarKey }) {
       {slug === "employment" ? <OpenPositions /> : null}
 
       {/* Partners */}
-      {partners ? (
-        <section className="border-y border-border bg-secondary py-20 sm:py-24">
+      {partnerSection?.enabled && partners.length > 0 ? (
+        <section id="partners" className="border-y border-border bg-secondary py-20 sm:py-24">
           <div className="mx-auto max-w-7xl px-6">
-            <SectionHeading
-              eyebrow="Partners"
-              title="Organizations we stand beside"
-              intro="A few of the local causes and nonprofit partners we support each year."
-              align="center"
-            />
+            <SectionHeading eyebrow={partnerSection.eyebrow} title={partnerSection.title} intro={partnerSection.intro} align="center" />
             <ul className="mt-12 grid grid-cols-2 items-center gap-x-8 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
-              {partners.map((partner) => (
-                <li key={partner.name} className="flex items-center justify-center">
-                  <Image
-                    src={partner.logo || "/placeholder.svg"}
-                    alt={partner.name}
-                    width={180}
-                    height={90}
-                    className="h-16 w-auto max-w-full object-contain"
-                  />
-                </li>
-              ))}
+              {partners.map((partner) => {
+                const logo = safePartnerUrl(partner.logo, true) ? (
+                  <img src={partner.logo} alt={partner.alt || partner.name} width={180} height={90} loading="lazy" className="h-16 w-auto max-w-full object-contain" />
+                ) : <span className="text-center font-medium">{partner.name}</span>
+                return (
+                  <li key={partner.id} className="flex items-center justify-center">
+                    {safePartnerUrl(partner.href) ? (
+                      <a href={partner.href} target="_blank" rel="noopener noreferrer" aria-label={`${partner.name} (opens in a new tab)`} className="flex min-h-24 items-center justify-center rounded-lg p-3 transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
+                        {logo}
+                      </a>
+                    ) : <div className="flex min-h-24 items-center justify-center p-3">{logo}</div>}
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </section>

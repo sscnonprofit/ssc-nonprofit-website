@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache"
 
 import { db } from "@/lib/db"
 import { eventRsvps, events } from "@/lib/db/schema"
+import { sendRsvpConfirmation } from "@/lib/email/events"
 import { expandOccurrences } from "@/lib/events/occurrences"
 
 export type RsvpResult = { ok: true; waitlisted?: boolean } | { ok: false; error: string }
@@ -82,6 +83,8 @@ export async function submitRsvpAction(input: RsvpInput): Promise<RsvpResult> {
     revalidatePath("/upcoming-events")
     revalidatePath(`/upcoming-events/${event.slug}`)
     revalidatePath("/admin/events")
+
+    await sendRsvpConfirmation({ event, start: match.start, end: match.end, name, email, guests, waitlisted })
     return { ok: true, waitlisted }
   } catch (error) {
     if (error instanceof RsvpRejected) return { ok: false, error: error.message }

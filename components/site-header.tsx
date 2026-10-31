@@ -34,11 +34,12 @@ export function SiteHeader({
   header?: ThemeSettings["header"]
 }) {
   const nav = (site.nav as NavItem[]).map((item) => {
-    if (item.label !== "Care & Services" || !item.children) return item
-    if (item.children.some((child) => child.href === "/end-of-life")) return item
+    const normalizedItem = item.label === "The Challenge" ? { ...item, label: "Embrace The Next Chapter" } : item
+    if (normalizedItem.label !== "Care & Services" || !normalizedItem.children) return normalizedItem
+    if (normalizedItem.children.some((child) => child.href === "/end-of-life")) return normalizedItem
     return {
-      ...item,
-      children: [...item.children, { label: "End-of-Life Care", href: "/end-of-life" }],
+      ...normalizedItem,
+      children: [...normalizedItem.children, { label: "End-of-Life Care", href: "/end-of-life" }],
     }
   })
   const pathname = usePathname()
@@ -132,7 +133,7 @@ export function SiteHeader({
             </a>
             <span className="h-3.5 w-px bg-primary-foreground/25" aria-hidden="true" />
             <Link href="/contact" className="px-3 py-1 font-medium opacity-90 transition-opacity hover:opacity-100">
-              Embrace the Next Chapter
+              Schedule A Visit
             </Link>
             <Link href="/donate" className="ssc-btn-accent ml-2 px-4 py-1.5 text-xs">
               Donate
@@ -277,7 +278,7 @@ export function SiteHeader({
 
             <div className="hidden shrink-0 items-center gap-3 lg:flex">
               <Link href="/contact" className="ssc-btn group/cta px-5 py-2.5">
-                Embrace the Next Chapter
+                Embrace The Next Chapter
                 <ArrowRight className="size-4 transition-transform group-hover/cta:translate-x-0.5" aria-hidden="true" />
               </Link>
             </div>
@@ -388,7 +389,7 @@ export function SiteHeader({
 
             <div className="mt-4 grid grid-cols-2 gap-2">
               <Link href="/contact" onClick={() => setOpen(false)} className="ssc-btn px-4 py-3">
-                Embrace the Next Chapter
+                Schedule A Visit
               </Link>
               <Link href="/donate" onClick={() => setOpen(false)} className="ssc-btn-accent px-4 py-3">
                 Donate

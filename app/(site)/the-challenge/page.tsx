@@ -10,7 +10,7 @@ import { SectionHeading } from "@/components/section-heading"
 import { getContent } from "@/lib/cms/content"
 
 export const metadata: Metadata = {
-  title: "The Challenge",
+  title: "Embrace The Next Chapter",
   description:
     "Sheboygan County faces a growing senior living crisis. Learn how SSC's Next Chapter Campaign expands care, housing, and community spaces.",
 }
@@ -22,7 +22,7 @@ export default async function TheChallengePage() {
     <>
       <PageHero
         eyebrow={challenge.hero.eyebrow}
-        title={challenge.hero.title}
+        title="Embrace The Next Chapter"
         body={challenge.hero.body}
         image={challenge.hero.image}
         imageAlt={challenge.hero.imageAlt}

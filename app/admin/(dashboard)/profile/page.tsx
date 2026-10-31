@@ -3,6 +3,7 @@ import { headers } from "next/headers"
 import { eq } from "drizzle-orm"
 
 import { ProfileSettings } from "@/components/admin/profile-settings"
+import { TwoFactorSettings } from "@/components/admin/two-factor-settings"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { user as userTable } from "@/lib/db/schema"
@@ -11,7 +12,7 @@ export default async function ProfilePage() {
   const session = await auth.api.getSession({ headers: await headers() })
   if (!session?.user) redirect("/admin/sign-in")
 
-  const [profile] = await db.select({ prefix: userTable.prefix }).from(userTable).where(eq(userTable.id, session.user.id)).limit(1)
+  const [profile] = await db.select({ prefix: userTable.prefix, twoFactorEnabled: userTable.twoFactorEnabled }).from(userTable).where(eq(userTable.id, session.user.id)).limit(1)
 
   return (
     <div className="mx-auto max-w-2xl space-y-8">
@@ -21,6 +22,7 @@ export default async function ProfilePage() {
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Manage the name, prefix, and avatar your team sees.</p>
       </div>
       <ProfileSettings initialPrefix={profile?.prefix ?? ""} />
+      <TwoFactorSettings initialEnabled={Boolean(profile?.twoFactorEnabled)} email={session.user.email} />
     </div>
   )
 }

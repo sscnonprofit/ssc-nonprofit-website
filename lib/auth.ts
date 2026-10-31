@@ -1,14 +1,53 @@
 import { betterAuth } from "better-auth"
+import { twoFactor } from "better-auth/plugins"
 import { eq } from "drizzle-orm"
 
 import { db, pool } from "@/lib/db"
 import { user as userTable } from "@/lib/db/schema"
+import { sendEmail } from "@/lib/email/send"
+import { passwordChangedEmail, passwordResetEmail, verificationCodeEmail, welcomeStaffEmail } from "@/lib/email/templates"
+
+const OTP_MINUTES = 5
+
+const PRODUCTION_DOMAINS = [
+  "https://sscnonprofit.net",
+  "https://www.sscnonprofit.net",
+  "https://sscnonprofit.org",
+  "https://www.sscnonprofit.org",
+]
+
+// Extra origins can be added without a code change, e.g. BETTER_AUTH_TRUSTED_ORIGINS="https://example.org,https://www.example.org"
+const EXTRA_TRUSTED_ORIGINS = (process.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean)
 
 export const auth = betterAuth({
+  plugins: [
+    twoFactor({
+      issuer: "Sheboygan Senior Community",
+      // Sign-in codes are delivered by email through Resend; no authenticator app needed.
+      skipVerificationOnEnable: true,
+      otpOptions: {
+        period: OTP_MINUTES,
+        digits: 6,
+        sendOTP: async ({ user, otp }) => {
+          const result = await sendEmail({
+            kind: "two-factor-code",
+            to: user.email,
+            ...verificationCodeEmail({ name: user.name || "there", code: otp, minutes: OTP_MINUTES }),
+          })
+          if (!result.ok) throw new Error("We couldn't email your sign-in code. Please try again.")
+        },
+      },
+    }),
+  ],
   database: pool,
   baseURL:
     process.env.BETTER_AUTH_URL ??
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    (process.env.VERCEL_ENV === "production"
+      ? PRODUCTION_DOMAINS[0]
+      : process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : process.env.VERCEL_URL
         ? `https://${process.env.VERCEL_URL}`
@@ -16,8 +55,17 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
+    resetPasswordTokenExpiresIn: 60 * 60,
+    sendResetPassword: async ({ user, url }) => {
+      await sendEmail({ kind: "password-reset", to: user.email, ...passwordResetEmail({ name: user.name || "there", url }) })
+    },
+    onPasswordReset: async ({ user }) => {
+      await sendEmail({ kind: "password-changed", to: user.email, ...passwordChangedEmail({ name: user.name || "there" }) })
+    },
   },
   trustedOrigins: [
+    ...PRODUCTION_DOMAINS,
+    ...EXTRA_TRUSTED_ORIGINS,
     ...(process.env.NODE_ENV === "development"
       ? [
           "http://localhost:3000",
@@ -81,6 +129,14 @@ export const auth = betterAuth({
         before: async (newUser) => {
           const existing = await db.$count(userTable)
           return { data: { ...newUser, role: existing === 0 ? "admin" : "editor" } }
+        },
+        after: async (createdUser) => {
+          const [account] = await db.select({ role: userTable.role }).from(userTable).where(eq(userTable.id, createdUser.id)).limit(1)
+          await sendEmail({
+            kind: "welcome-staff",
+            to: createdUser.email,
+            ...welcomeStaffEmail({ name: createdUser.name || "there", role: account?.role ?? "editor" }),
+          })
         },
       },
     },

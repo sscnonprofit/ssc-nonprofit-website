@@ -7,7 +7,6 @@ import { subscribeToCalendarAction } from "@/app/(site)/upcoming-events/subscrib
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { CATEGORIES } from "@/lib/calendars/model"
 
 type Props = { calendars: { id: string; name: string }[] }
 
@@ -15,19 +14,14 @@ export function CalendarSubscribeForm({ calendars }: Props) {
   const [email, setEmail] = useState("")
   const [calendarId, setCalendarId] = useState(calendars[0]?.id ?? "")
   const [frequency, setFrequency] = useState("weekly")
-  const [categories, setCategories] = useState<string[]>([])
   const [company, setCompany] = useState("")
   const [state, setState] = useState<{ ok: boolean; message: string } | null>(null)
   const [pending, startTransition] = useTransition()
 
-  function toggle(category: string) {
-    setCategories((current) => (current.includes(category) ? current.filter((item) => item !== category) : [...current, category]))
-  }
-
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     startTransition(async () => {
-      const result = await subscribeToCalendarAction({ email, calendarId, frequency, categories, company })
+      const result = await subscribeToCalendarAction({ email, calendarId, frequency, categories: [], company })
       setState(result.ok ? { ok: true, message: result.message } : { ok: false, message: result.error })
     })
   }
@@ -77,26 +71,6 @@ export function CalendarSubscribeForm({ calendars }: Props) {
               {label}
             </label>
           ))}
-        </div>
-      </fieldset>
-
-      <fieldset className="grid gap-2">
-        <legend className="text-sm font-medium">Only these activity types (leave blank for everything)</legend>
-        <div className="flex flex-wrap gap-2">
-          {CATEGORIES.map((category) => {
-            const active = categories.includes(category)
-            return (
-              <button
-                key={category}
-                type="button"
-                aria-pressed={active}
-                onClick={() => toggle(category)}
-                className={`min-h-9 rounded-full border px-3 text-sm transition-colors ${active ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background hover:bg-secondary"}`}
-              >
-                {category}
-              </button>
-            )
-          })}
         </div>
       </fieldset>
 

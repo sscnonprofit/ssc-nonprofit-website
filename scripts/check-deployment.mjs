@@ -16,15 +16,20 @@ export const requiredTables = Object.values(schema)
     }
   })
 
+export function getDatabaseUrl(env = process.env) {
+  return env.SSC_DATABASE_URL?.trim() || env.DATABASE_URL?.trim() || ""
+}
+
 export function checkEnvironment(env) {
   const problems = []
+  const databaseUrl = getDatabaseUrl(env)
   const secret = env.BETTER_AUTH_SECRET?.trim()
   if (!secret || secret.length < 32) {
     problems.push("Set BETTER_AUTH_SECRET to a private, randomly generated value of at least 32 characters in this Vercel project's Environment Variables. Do not use a default or placeholder secret.")
   }
 
   try {
-    const url = new URL(env.DATABASE_URL)
+    const url = new URL(databaseUrl)
     if (!["postgres:", "postgresql:"].includes(url.protocol) || !url.hostname || url.pathname.length < 2) {
       throw new Error("Invalid PostgreSQL URL")
     }
@@ -71,7 +76,7 @@ async function main() {
   let problems = checkEnvironment(process.env)
   if (!problems.length) {
     const pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: getDatabaseUrl(),
       connectionTimeoutMillis: 10000,
       query_timeout: 10000,
     })

@@ -16,6 +16,7 @@ import {
   MailIcon,
   MenuIcon,
   PaletteIcon,
+  SearchCheckIcon,
   UsersIcon,
   UserCircleIcon,
 } from "lucide-react"
@@ -109,6 +110,10 @@ export function AdminShell({ userName, userEmail, role, newApplications = 0, new
         { href: "/admin/applications", label: "Applications", icon: InboxIcon, badge: newApplications },
         { href: "/admin/messages", label: "Messages", icon: MailIcon, badge: newMessages },
       ],
+    },
+    {
+      label: "SEO",
+      items: [{ href: "/admin/seo", label: "SEO & Google Search", icon: SearchCheckIcon }],
     },
     {
       label: "Site",

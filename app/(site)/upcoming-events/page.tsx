@@ -50,6 +50,40 @@ export default async function UpcomingEventsPage() {
         <EventsBrowser items={upcoming} />
       </section>
 
+      {/* Calendars */}
+      <section className="border-y border-border bg-secondary py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <SectionHeading
+            eyebrow={events.calendars.eyebrow}
+            title={events.calendars.title}
+            intro={events.calendars.body}
+          />
+          <Link href="/calendars" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-5 py-3 font-semibold text-primary-foreground">
+            Browse live activity calendars <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
+          <ul className="mt-12 grid gap-6 sm:grid-cols-2">
+            {events.calendars.items.map((c) => (
+              <li key={c.title} className="ssc-card flex flex-col gap-3 p-8">
+                <p className="font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  {c.household}
+                </p>
+                <h3 className="font-display text-xl font-semibold">{c.title}</h3>
+                <p className="leading-relaxed text-muted-foreground">{c.description}</p>
+                <a
+                  href={c.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-auto inline-flex w-fit items-center gap-2 ssc-btn-shape border border-primary px-5 py-3 font-display text-sm font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
+                >
+                  <Download className="size-4" aria-hidden="true" />
+                  View Calendar
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* Featured event */}
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-24">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
@@ -83,40 +117,6 @@ export default async function UpcomingEventsPage() {
               className="object-cover"
             />
           </div>
-        </div>
-      </section>
-
-      {/* Calendars */}
-      <section className="border-y border-border bg-secondary py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-6">
-          <SectionHeading
-            eyebrow={events.calendars.eyebrow}
-            title={events.calendars.title}
-            intro={events.calendars.body}
-          />
-          <Link href="/calendars" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-5 py-3 font-semibold text-primary-foreground">
-            Browse live activity calendars <ArrowRight className="size-4" aria-hidden="true" />
-          </Link>
-          <ul className="mt-12 grid gap-6 sm:grid-cols-2">
-            {events.calendars.items.map((c) => (
-              <li key={c.title} className="ssc-card flex flex-col gap-3 p-8">
-                <p className="font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                  {c.household}
-                </p>
-                <h3 className="font-display text-xl font-semibold">{c.title}</h3>
-                <p className="leading-relaxed text-muted-foreground">{c.description}</p>
-                <a
-                  href={c.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-auto inline-flex w-fit items-center gap-2 ssc-btn-shape border border-primary px-5 py-3 font-display text-sm font-semibold transition-colors hover:bg-primary hover:text-primary-foreground"
-                >
-                  <Download className="size-4" aria-hidden="true" />
-                  View Calendar
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 

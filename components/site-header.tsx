@@ -34,11 +34,12 @@ export function SiteHeader({
   header?: ThemeSettings["header"]
 }) {
   const nav = (site.nav as NavItem[]).map((item) => {
-    if (item.label !== "Care & Services" || !item.children) return item
-    if (item.children.some((child) => child.href === "/end-of-life")) return item
+    const normalizedItem = item.label === "The Challenge" ? { ...item, label: "Embrace The Next Chapter" } : item
+    if (normalizedItem.label !== "Care & Services" || !normalizedItem.children) return normalizedItem
+    if (normalizedItem.children.some((child) => child.href === "/end-of-life")) return normalizedItem
     return {
-      ...item,
-      children: [...item.children, { label: "End-of-Life Care", href: "/end-of-life" }],
+      ...normalizedItem,
+      children: [...normalizedItem.children, { label: "End-of-Life Care", href: "/end-of-life" }],
     }
   })
   const pathname = usePathname()

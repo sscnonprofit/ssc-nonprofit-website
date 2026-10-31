@@ -68,7 +68,7 @@
       "children": [
         { "label": "History", "href": "/our-company" },
         { "label": "Leadership", "href": "/leadership" },
-        { "label": "The Challenge", "href": "/the-challenge" },
+        { "label": "Embrace The Next Chapter", "href": "/the-challenge" },
         { "label": "Impact Report", "href": "https://sscnonprofit.org/wp-content/uploads/2026/05/2025SSCImpactReportWeb.pdf", "external": true }
       ]
     },
@@ -94,7 +94,7 @@
     {
       "heading": "Mission",
       "links": [
-        { "label": "The Challenge", "href": "/the-challenge" },
+        { "label": "Embrace The Next Chapter", "href": "/the-challenge" },
         { "label": "The Solution", "href": "/the-challenge#the-solution" },
         { "label": "Join the Story", "href": "/donate" }
       ]

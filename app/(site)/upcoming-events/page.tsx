@@ -51,7 +51,7 @@ export default async function UpcomingEventsPage() {
         <div className="mb-8 flex flex-col gap-3">
           <BrandRule />
           <h2 id="events-heading" className="text-balance font-display text-3xl font-semibold sm:text-4xl">
-            What&apos;s on
+            SSC Official Events
           </h2>
         </div>
         <EventsBrowser items={upcoming} />

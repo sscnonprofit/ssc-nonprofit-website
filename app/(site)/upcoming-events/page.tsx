@@ -51,7 +51,7 @@ export default async function UpcomingEventsPage() {
         <div className="mb-8 flex flex-col gap-3">
           <BrandRule />
           <h2 id="events-heading" className="text-balance font-display text-3xl font-semibold sm:text-4xl">
-            What&apos;s on
+            SSC Official Events
           </h2>
         </div>
         <EventsBrowser items={upcoming} />
@@ -100,7 +100,7 @@ export default async function UpcomingEventsPage() {
               Get the calendar by email
             </h2>
             <p className="text-pretty leading-relaxed text-muted-foreground">
-              Choose a calendar, how often you want it, and the kinds of activities you care about. We&apos;ll send it
+              Choose a calendar. We&apos;ll email upcoming activities every 30 days,
               with a calendar file you can add to your phone.
             </p>
           </div>

@@ -191,15 +191,15 @@ export function rsvpReminderEmail(input: EventMailInput): Rendered {
 
 /* ------------------------------ Calendar digests ------------------------------ */
 
-export function subscriptionConfirmEmail(input: { calendarName: string; frequency: string; url: string }): Rendered {
+export function subscriptionConfirmEmail(input: { calendarName: string; url: string }): Rendered {
   return {
     subject: `Confirm your ${input.calendarName} updates`,
-    text: `Confirm you'd like ${input.frequency} ${input.calendarName} updates: ${input.url}`,
+    text: `Confirm you'd like ${input.calendarName} updates every 30 days: ${input.url}`,
     html: layout({
       preheader: "One click to confirm your subscription",
       heading: "Please confirm your subscription",
       body:
-        p(`You asked to receive a ${esc(input.frequency)} email with upcoming activities from the <strong>${esc(input.calendarName)}</strong> calendar, with a calendar file attached.`) +
+        p(`You asked to receive an email every 30 days with upcoming activities from the <strong>${esc(input.calendarName)}</strong> calendar, with a calendar file attached.`) +
         p("Confirm to start receiving them. If this wasn't you, just ignore this email and nothing will be sent."),
       cta: { label: "Confirm subscription", url: input.url },
     }),

@@ -49,7 +49,6 @@ export default async function EmailPreferencesPage({ searchParams }: { searchPar
           <SubscriptionPreferences
             token={token}
             calendarName={calendarName}
-            initialFrequency={subscription.frequency}
             initialCategories={Array.isArray(subscription.categories) ? (subscription.categories as string[]) : []}
             unsubscribed={Boolean(subscription.unsubscribedAt) || status === "unsubscribed"}
           />

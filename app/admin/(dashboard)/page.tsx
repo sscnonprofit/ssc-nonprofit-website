@@ -7,6 +7,7 @@ import { CreatePageDialog } from "@/components/admin/builder/create-page-dialog"
 import { DashboardOverview, DashboardTask } from "@/components/admin/dashboard/dashboard-overview"
 import { PageDirectory, type DirectoryEntry } from "@/components/admin/dashboard/page-directory"
 import { SeoOverview } from "@/components/admin/dashboard/seo-overview"
+import { SearchConsoleOverview } from "@/components/admin/dashboard/search-console-overview"
 import { buildSeoAudit } from "@/lib/admin/seo"
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
@@ -89,6 +90,8 @@ export default async function AdminPagesDashboard() {
     <DashboardOverview overview={overview} partnerCount={partnerLive.enabled ? partnerLive.partners.filter((p) => p.visible).length : 0} pageCount={pageCount} drafts={drafts.length} />
 
     <SeoOverview audit={buildSeoAudit(rows)} />
+
+    <SearchConsoleOverview />
 
     <section aria-label="Priority work" className="grid gap-4 lg:grid-cols-2">
       <Card>

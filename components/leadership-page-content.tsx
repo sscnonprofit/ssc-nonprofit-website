@@ -25,20 +25,25 @@ export function LeadershipPageContent({ content }: { content: LeadershipContent 
           ))}
         </ul>
         {members.filter((member) => Object.values(member.bio).some((value) => value.trim())).map((member, index) => (
-          <article key={`${index}-${member.name}`} className="flex flex-col gap-6 rounded-2xl border border-border bg-card p-6 sm:p-10">
-            <div className="flex flex-col gap-2">
-              <h2 className="font-display text-2xl font-semibold">{member.name}</h2>
-              <p className="text-muted-foreground">{member.role}</p>
-              {member.bio.tenure && <p className="whitespace-pre-line leading-relaxed">{member.bio.tenure}</p>}
+          <article key={`${index}-${member.name}`} className="grid gap-8 rounded-2xl border border-border bg-card p-6 sm:p-10 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:items-start">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-border bg-muted">
+              {member.image ? <Image src={member.image} alt={member.imageAlt || member.name} fill sizes="(max-width: 768px) 100vw, 30vw" className="object-cover object-top" /> : <span className="flex h-full items-center justify-center text-2xl text-muted-foreground" aria-hidden="true">{member.name.split(" ").map((part) => part[0]).join("")}</span>}
             </div>
-            <dl className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-2">
+                <h2 className="font-display text-2xl font-semibold">{member.name}</h2>
+                <p className="text-muted-foreground">{member.role}</p>
+                {member.bio.tenure && <p className="whitespace-pre-line leading-relaxed">{member.bio.tenure}</p>}
+              </div>
+              <dl className="flex flex-col gap-6">
               {(["why", "family", "favorite"] as const).map((key) => member.bio[key] ? (
                 <div key={key} className="flex flex-col gap-2">
                   <dt className="font-semibold">{content.biographyLabels[key]}</dt>
                   <dd className="whitespace-pre-line leading-relaxed text-muted-foreground">{member.bio[key]}</dd>
                 </div>
-              ) : null)}
-            </dl>
+                ) : null)}
+              </dl>
+            </div>
           </article>
         ))}
       </section>

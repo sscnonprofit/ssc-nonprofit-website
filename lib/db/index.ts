@@ -3,5 +3,14 @@ import { Pool } from "pg"
 
 import * as schema from "./schema"
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+const connectionString =
+  process.env.SSC_DATABASE_URL ??
+  process.env.DATABASE_URL ??
+  process.env.POSTGRES_URL
+
+if (!connectionString) {
+  throw new Error("A PostgreSQL connection string is required")
+}
+
+export const pool = new Pool({ connectionString })
 export const db = drizzle(pool, { schema })

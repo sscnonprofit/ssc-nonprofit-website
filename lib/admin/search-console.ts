@@ -30,16 +30,16 @@ async function getOrigin() {
   return `${requestHeaders.get("x-forwarded-proto") ?? "https"}://${requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host")}`
 }
 
-async function getGoogleToken() {
-  return getToken(CONNECTOR_UID, { subject: { type: "app" }, scopes: [SEARCH_CONSOLE_SCOPE] })
+async function getGoogleToken(userId: string) {
+  return getToken(CONNECTOR_UID, { subject: { type: "user", id: userId }, scopes: [SEARCH_CONSOLE_SCOPE] })
 }
 
-export async function startSearchConsoleAuthorization() {
+export async function startSearchConsoleAuthorization(userId: string) {
   await requirePermission("view_content")
   const response = await startAuthorization(
     CONNECTOR_UID,
-    { subject: { type: "app" }, scopes: [SEARCH_CONSOLE_SCOPE] },
-    { callbackUrl: `${await getOrigin()}/admin` },
+    { subject: { type: "user", id: userId }, scopes: [SEARCH_CONSOLE_SCOPE] },
+    { callbackUrl: `${await getOrigin()}/admin/seo` },
   )
   return { url: response.url }
 }
@@ -48,10 +48,10 @@ export async function getSearchConsoleOverview(): Promise<SearchConsoleOverview 
   const user = await requirePermission("view_content")
   let token: string
   try {
-    token = await getGoogleToken()
+    token = await getGoogleToken(user.id)
   } catch (error) {
     if (!(error instanceof UserAuthorizationRequiredError)) throw error
-    const authorization = await startSearchConsoleAuthorization()
+    const authorization = await startSearchConsoleAuthorization(user.id)
     return { needsAuthorization: true, authorizationUrl: authorization.url }
   }
 

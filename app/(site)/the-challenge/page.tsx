@@ -22,7 +22,7 @@ export default async function TheChallengePage() {
     <>
       <PageHero
         eyebrow={challenge.hero.eyebrow}
-        title={challenge.hero.title}
+        title="Embrace The Next Chapter"
         body={challenge.hero.body}
         image={challenge.hero.image}
         imageAlt={challenge.hero.imageAlt}

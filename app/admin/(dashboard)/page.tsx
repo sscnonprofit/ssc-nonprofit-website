@@ -74,7 +74,14 @@ export default async function AdminPagesDashboard() {
         </div>
         {canEdit && <CreatePageDialog />}
       </div>
-      <nav aria-label="Quick actions" className="flex flex-wrap gap-2">{shortcuts.map(({ label, href, icon: Icon }) => <Link key={href} href={href} className={buttonVariants({ variant: "secondary", size: "sm" })}><Icon data-icon="inline-start" />{label}</Link>)}</nav>
+      <nav aria-label="Quick actions" className="flex flex-wrap items-center gap-2">
+        {shortcuts.map(({ label, href, icon: Icon }) => (
+          <Link key={href} href={href} className={buttonVariants({ variant: "outline", className: "min-h-11 gap-2" })}>
+            <Icon data-icon="inline-start" />
+            {label}
+          </Link>
+        ))}
+      </nav>
     </header>
 
     <DashboardOverview overview={overview} partnerCount={partnerLive.enabled ? partnerLive.partners.filter((p) => p.visible).length : 0} pageCount={pageCount} drafts={drafts.length} />

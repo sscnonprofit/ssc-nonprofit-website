@@ -80,7 +80,7 @@ export default async function HomePage() {
                 href="/contact"
                 className="inline-flex items-center ssc-btn-shape border border-primary-foreground/35 px-7 py-3.5 font-display font-semibold backdrop-blur-sm transition-colors hover:bg-primary-foreground/10"
               >
-                Embrace the Next Chapter
+                Schedule A Visit
               </Link>
             </div>
 

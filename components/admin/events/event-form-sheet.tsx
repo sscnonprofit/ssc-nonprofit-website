@@ -20,6 +20,12 @@ import { RECURRENCE_OPTIONS, formatEventDate } from "@/lib/events/occurrences"
 
 type FormState = Omit<EventInput, "id">
 
+const EVENT_STATUS_OPTIONS = [
+  { value: "draft", label: "Draft" },
+  { value: "published", label: "Published" },
+  { value: "cancelled", label: "Cancelled" },
+] as const
+
 function blankForm(): FormState {
   const next = new Date()
   next.setDate(next.getDate() + 7)
@@ -176,7 +182,11 @@ export function EventFormSheet({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field id="event-category" label="Category">
-              <Select value={form.category} onValueChange={(value) => patch({ category: value ?? "community" })}>
+              <Select
+                items={EVENT_CATEGORIES}
+                value={form.category}
+                onValueChange={(value) => patch({ category: value ?? "community" })}
+              >
                 <SelectTrigger id="event-category" className="h-11 w-full text-base">
                   <SelectValue />
                 </SelectTrigger>
@@ -208,7 +218,11 @@ export function EventFormSheet({
 
           <section className="flex flex-col gap-4 rounded-lg border border-border p-3" aria-label="Repeat">
             <Field id="event-repeat" label="Repeat">
-              <Select value={form.recurrence} onValueChange={(value) => patch({ recurrence: value ?? "none" })}>
+              <Select
+                items={RECURRENCE_OPTIONS}
+                value={form.recurrence}
+                onValueChange={(value) => patch({ recurrence: value ?? "none" })}
+              >
                 <SelectTrigger id="event-repeat" className="h-11 w-full text-base">
                   <SelectValue />
                 </SelectTrigger>
@@ -285,7 +299,8 @@ export function EventFormSheet({
             </div>
           </section>
 
-          <ImageField label="Event image" value={form.image ?? ""} onChange={(url) => patch({ image: url || null })} aspect={16 / 9} />
+          <ImageField label="Event image (optional)" value={form.image ?? ""} onChange={(url) => patch({ image: url || null })} aspect={16 / 9} />
+          <p className="-mt-2 text-xs text-muted-foreground">You can save the event without uploading an image.</p>
           {form.image && (
             <Field id="event-alt" label="Image description" hint="Read aloud by screen readers.">
               <Input id="event-alt" value={form.imageAlt} onChange={(e) => patch({ imageAlt: e.target.value })} maxLength={200} className="h-11 text-base" />
@@ -322,7 +337,12 @@ export function EventFormSheet({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field id="event-status" label="Status" hint={isAdmin ? undefined : "An admin publishes events."}>
-              <Select value={form.status} onValueChange={(value) => patch({ status: value ?? "draft" })} disabled={!isAdmin}>
+              <Select
+                items={EVENT_STATUS_OPTIONS}
+                value={form.status}
+                onValueChange={(value) => patch({ status: value ?? "draft" })}
+                disabled={!isAdmin}
+              >
                 <SelectTrigger id="event-status" className="h-11 w-full text-base">
                   <SelectValue />
                 </SelectTrigger>

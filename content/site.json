@@ -69,8 +69,7 @@
         { "label": "History", "href": "/our-company" },
         { "label": "Leadership", "href": "/leadership" },
         { "label": "The Challenge", "href": "/the-challenge" },
-        { "label": "Impact Report", "href": "https://sscnonprofit.org/wp-content/uploads/2026/05/2025SSCImpactReportWeb.pdf", "external": true },
-        { "label": "Shop SSC Gear", "href": "https://customcrafttrophy.chipply.com/SSC/store.aspx?action=viewall", "external": true }
+        { "label": "Impact Report", "href": "https://sscnonprofit.org/wp-content/uploads/2026/05/2025SSCImpactReportWeb.pdf", "external": true }
       ]
     },
     {
@@ -78,8 +77,9 @@
       "children": [
         { "label": "Assisted Living", "href": "/assisted-living" },
         { "label": "Short-Term Rehab", "href": "/short-term-rehab" },
-        { "label": "Skilled Nursing", "href": "/skilled-nursing" }
-      ]
+ { "label": "Skilled Nursing", "href": "/skilled-nursing" },
+ { "label": "End-of-Life Care", "href": "/end-of-life" }
+  ]
     },
     {
       "label": "Events",
@@ -104,8 +104,9 @@
       "links": [
         { "label": "Assisted Living", "href": "/assisted-living" },
         { "label": "Short Term Rehab", "href": "/short-term-rehab" },
-        { "label": "Skilled Nursing", "href": "/skilled-nursing" }
-      ]
+ { "label": "Skilled Nursing", "href": "/skilled-nursing" },
+ { "label": "End-of-Life Care", "href": "/end-of-life" }
+  ]
     },
     {
       "heading": "Pillars",
@@ -121,8 +122,7 @@
       "links": [
         { "label": "About us", "href": "/our-company" },
         { "label": "Careers", "href": "https://sscnonprofit.apscareerportal.com/jobs?locale=en-US", "external": true },
-        { "label": "Impact Report", "href": "https://sscnonprofit.org/wp-content/uploads/2026/05/2025SSCImpactReportWeb.pdf", "external": true },
-        { "label": "Shop SSC Gear", "href": "https://customcrafttrophy.chipply.com/SSC/store.aspx?action=viewall", "external": true }
+        { "label": "Impact Report", "href": "https://sscnonprofit.org/wp-content/uploads/2026/05/2025SSCImpactReportWeb.pdf", "external": true }
       ]
     }
   ],
@@ -186,7 +186,14 @@
       "label": "Skilled Nursing",
       "household": "Maple Creek & Oak Drive",
       "blurb": "Maple Creek and Oak Drive are our mirrored skilled nursing households, thoughtfully designed for seniors who require 24-hour professional care.",
-      "image": "/images/Sheboygan-Senior-Community-_long-term-nursing_room_.jpg"
-    }
+  "image": "/images/Sheboygan-Senior-Community-_long-term-nursing_room_.jpg"
+  },
+  {
+  "slug": "end-of-life",
+  "label": "End-of-Life Care",
+  "household": "Compassionate Support",
+  "blurb": "Comfort-focused care, family support, and thoughtful coordination for residents and loved ones during life's final chapter.",
+  "image": "/images/Sheboygan-Senior-Community-_long-term-nursing_room_.jpg"
+  }
   ]
 }

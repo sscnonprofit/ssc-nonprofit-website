@@ -300,6 +300,82 @@
         "a": "Call us at (920) 458-2137 or reach out through our contact page. Our social services team will walk you through availability, paperwork, and payment options, including help completing a Medicaid application if needed."
       }
     ],
-    "related": ["assisted-living", "short-term-rehab"]
+    "related": ["assisted-living", "short-term-rehab", "end-of-life"]
+  },
+
+  "end-of-life": {
+    "slug": "end-of-life",
+    "eyebrow": "Sheboygan Senior Community",
+    "title": "End-of-Life Care",
+    "household": "Compassionate Support",
+    "heroImage": "/images/Sheboygan-Senior-Community-_long-term-nursing_room_.jpg",
+    "heroImageAlt": "A peaceful private room at Sheboygan Senior Community",
+    "seo": {
+      "title": "End-of-Life Care at Sheboygan Senior Community",
+      "description": "Compassionate end-of-life care at Sheboygan Senior Community, supporting residents and families with comfort, dignity, and thoughtful guidance."
+    },
+    "intro": "At Sheboygan Senior Community, end-of-life care is centered on comfort, dignity, and the wishes of each resident. Our team provides attentive support for residents and compassionate guidance for families, creating a peaceful environment where meaningful moments can be shared.",
+    "servicesIntro": "We work closely with residents, families, providers, and hospice partners when appropriate to understand each person's goals and honor their care preferences. Our consistent caregivers help make each day as comfortable, connected, and peaceful as possible.",
+    "features": [
+      {
+        "title": "Comfort-Focused Care",
+        "body": "Our team pays close attention to comfort, symptoms, personal routines, and the small details that help each resident feel safe and cared for."
+      },
+      {
+        "title": "Personalized Care Planning",
+        "body": "We listen to the resident and family, coordinate with providers, and follow the care plan and advance directives that reflect the resident's wishes."
+      },
+      {
+        "title": "Family Support",
+        "body": "Families receive clear communication, compassionate guidance, and space to spend meaningful time together throughout the care journey."
+      },
+      {
+        "title": "Hospice Coordination",
+        "body": "When hospice services are part of a resident's plan, our caregivers collaborate with the hospice team to provide coordinated, respectful care."
+      },
+      {
+        "title": "A Peaceful Environment",
+        "body": "Private rooms, familiar caregivers, flexible visits, and a welcoming community help create a calm setting for residents and the people who love them."
+      },
+      {
+        "title": "Faith and Meaning",
+        "body": "Residents and families may draw on spiritual care, personal traditions, and meaningful rituals as they choose."
+      }
+    ],
+    "gallery": [
+      {
+        "src": "/images/Sheboygan-Senior-Community-_long-term-nursing_room_.jpg",
+        "alt": "A private resident room prepared for comfort and quiet"
+      },
+      {
+        "src": "/images/DSC03562-scaled.jpg",
+        "alt": "A welcoming resident room at Sheboygan Senior Community"
+      }
+    ],
+    "faqEyebrow": "Common Questions",
+    "faqTitle": "End-of-Life Care FAQs",
+    "faqs": [
+      {
+        "q": "How do we begin a conversation about end-of-life care?",
+        "a": "Call our team at (920) 458-2137 or use our contact page. We will listen to your needs, answer questions, and connect you with the right members of our care team."
+      },
+      {
+        "q": "Can hospice provide services at Sheboygan Senior Community?",
+        "a": "Yes. When appropriate, our team can coordinate with the resident's chosen hospice provider so care remains connected and centered on comfort."
+      },
+      {
+        "q": "Can family and friends visit?",
+        "a": "Family and friends are welcome to visit. We work with residents and families to support visits in a way that respects comfort, rest, and personal preferences."
+      },
+      {
+        "q": "Will the care team follow advance directives and personal wishes?",
+        "a": "Yes. We review the resident's care preferences and advance directives with the appropriate people and communicate with the care team so those wishes guide daily care."
+      },
+      {
+        "q": "Who can help us understand costs and paperwork?",
+        "a": "Our social services and admissions teams can walk your family through paperwork, coverage questions, and available resources. Call (920) 458-2137 to get started."
+      }
+    ],
+    "related": ["skilled-nursing", "assisted-living"]
   }
 }

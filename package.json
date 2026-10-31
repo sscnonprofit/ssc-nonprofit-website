@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "tsx scripts/check-deployment.mjs && next build",
+    "check:deployment": "tsx scripts/check-deployment.mjs",
+    "test:deployment": "tsx --test scripts/check-deployment.test.mjs",
     "start": "next start"
   },
   "dependencies": {
@@ -14,6 +16,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@vercel/analytics": "1.6.1",
     "@vercel/blob": "^2.8.0",
+    "@vercel/connect": "^2.7.0",
     "better-auth": "^1.7.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -22,10 +25,12 @@
     "lucide-react": "^1.16.0",
     "next": "16.3.3",
     "next-themes": "^0.4.6",
+    "pdf-lib": "^1.17.1",
     "pg": "^8.23.0",
     "react": "^19",
     "react-dom": "^19",
     "react-easy-crop": "^6.2.3",
+    "recharts": "3.8.0",
     "shadcn": "^4.11.0",
     "sonner": "^2.0.8",
     "swr": "^2.5.1",
@@ -40,6 +45,7 @@
     "@types/react-dom": "^19",
     "postcss": "^8.5",
     "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "5.7.3"
   }
 }

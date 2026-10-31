@@ -12,6 +12,8 @@
   --color-brand-2: var(--brand-2);
   --color-brand-3: var(--brand-3);
   --color-brand-4: var(--brand-4);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
 
   --color-ring: var(--ring);
   --color-input: var(--input);
@@ -72,6 +74,9 @@
   --input: oklch(0.892 0.009 60);
   --ring: oklch(0.355 0.128 12.5);
 
+  --chart-1: oklch(0.49 0.14 155);
+  --chart-2: oklch(0.54 0.19 25);
+
   --radius: 0.5rem;
 
   /* SSC four-band brand rule */
@@ -107,8 +112,7 @@
   --ssc-btn-accent-border: var(--accent);
 }
 
-/* Admin dark theme, Vercel style: near-black canvas, strictly neutral grays, hairline
-   white borders and flat surfaces. The SSC wine and gold are the only chroma. */
+/* Neutral admin chrome stays separate from the published site's brand palette. */
 .dark {
   color-scheme: dark;
 
@@ -120,24 +124,28 @@
   --popover: oklch(0.155 0 0);
   --popover-foreground: oklch(0.985 0 0);
 
-  --primary: oklch(0.72 0.135 12);
+  --primary: oklch(0.92 0 0);
   --primary-foreground: oklch(0.12 0 0);
 
-  --accent: oklch(0.76 0.105 62);
-  --accent-foreground: oklch(0.12 0 0);
+  --accent: oklch(0.24 0 0);
+  --accent-foreground: oklch(0.985 0 0);
 
   --secondary: oklch(0.185 0 0);
   --secondary-foreground: oklch(0.96 0 0);
   --muted: oklch(0.17 0 0);
   --muted-foreground: oklch(0.67 0 0);
 
-  --destructive: oklch(0.68 0.19 25);
+  --destructive: oklch(0.82 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 14%);
   --ring: oklch(0.62 0 0);
+  --chart-1: oklch(0.77 0.17 155);
+  --chart-2: oklch(0.73 0.17 25);
 
-  --brand-3: oklch(0.68 0.12 140);
-  --brand-4: oklch(0.56 0.08 150);
+  --brand-1: var(--primary);
+  --brand-2: var(--accent);
+  --brand-3: oklch(0.67 0 0);
+  --brand-4: oklch(0.44 0 0);
 
   --ssc-card-shadow: 0 0 0 1px oklch(1 0 0 / 6%);
   --ssc-card-shadow-hover: 0 0 0 1px oklch(1 0 0 / 12%), 0 16px 32px -20px rgba(0, 0, 0, 0.9);
@@ -458,6 +466,30 @@
   }
 }
 
+.calendar-surface .cal-event {
+  font-size: var(--cal-font-size);
+  padding: var(--cal-event-padding);
+  gap: var(--cal-event-gap);
+}
+.calendar-surface .cal-event.cal-compact {
+  font-size: max(14px, calc(var(--cal-font-size) - 2px));
+}
+.calendar-surface .cal-event.cal-large { font-size: max(18px, var(--cal-font-size)); }
+.calendar-surface .cal-event .cal-meta { font-size: max(14px, calc(var(--cal-font-size) - 2px)); }
+.calendar-surface .cal-events { gap: var(--cal-event-gap); }
+.calendar-surface .cal-header { text-align: var(--cal-header-align, left); }
+.calendar-surface .cal-header.cal-header-filled {
+  background: var(--cal-accent);
+  color: var(--cal-accent-foreground);
+}
+.calendar-surface .cal-weekend { background: color-mix(in oklab, var(--muted) 55%, var(--card)); }
+.calendar-surface[data-grid-lines="false"] .cal-cell { border-color: transparent; }
+.calendar-surface .cal-banner {
+  background: color-mix(in oklab, var(--cal-accent) 15%, var(--card));
+  color: var(--card-foreground);
+  box-shadow: inset 0 2px var(--cal-accent);
+}
+
 @keyframes ssc-fade {
   from {
     opacity: 0;
@@ -475,6 +507,48 @@
     opacity: 1;
     transform: none;
   }
+}
+
+@keyframes ssc-check-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes ssc-check-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes ssc-check-ring {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+.ssc-check-badge {
+  animation: ssc-check-pop 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+.ssc-check-ring {
+  animation: ssc-check-ring 1.1s ease-out 0.35s both;
+}
+.ssc-check-mark {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: ssc-check-draw 0.45s ease-out 0.4s forwards;
 }
 
 @layer components {

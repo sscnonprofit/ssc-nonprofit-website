@@ -6,7 +6,7 @@ import { BrandRule } from "@/components/brand-rule"
 export function CtaBand({
   title,
   body,
-  primary = { label: "Schedule A Visit", href: "/contact" },
+  primary = { label: "Embrace the Next Chapter", href: "/contact" },
   secondary,
 }: {
   title: string

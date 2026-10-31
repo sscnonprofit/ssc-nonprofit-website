@@ -80,7 +80,7 @@ export default async function HomePage() {
                 href="/contact"
                 className="inline-flex items-center ssc-btn-shape border border-primary-foreground/35 px-7 py-3.5 font-display font-semibold backdrop-blur-sm transition-colors hover:bg-primary-foreground/10"
               >
-                Schedule A Visit
+                Embrace the Next Chapter
               </Link>
             </div>
 
@@ -198,7 +198,7 @@ export default async function HomePage() {
       <CtaBand
         title="Come see the SSC difference for yourself"
         body="Schedule a personalized tour of our 40-acre campus, or reach out to talk through the care options available for your loved one."
-        primary={{ label: "Schedule A Visit", href: "/contact" }}
+        primary={{ label: "Embrace the Next Chapter", href: "/contact" }}
         secondary={{ label: "Explore Careers", href: "/employment" }}
       />
     </>

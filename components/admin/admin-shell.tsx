@@ -3,15 +3,20 @@
 import { useState } from "react"
 import Image from "next/image"
 import {
+  BriefcaseIcon,
   CalendarDaysIcon,
   ExternalLinkIcon,
   FrameIcon,
   GalleryHorizontalIcon,
   ImagesIcon,
+  HandshakeIcon,
+  InboxIcon,
   LayoutDashboardIcon,
   LogOutIcon,
+  MailIcon,
   MenuIcon,
   PaletteIcon,
+  SearchCheckIcon,
   UsersIcon,
   UserCircleIcon,
 } from "lucide-react"
@@ -39,10 +44,12 @@ type AdminShellProps = {
   userName: string
   userEmail: string
   role: string
+  newApplications?: number
+  newMessages?: number
   children: React.ReactNode
 }
 
-type NavItem = { href: string; label: string; icon: React.ComponentType<{ className?: string }> }
+type NavItem = { href: string; label: string; icon: React.ComponentType<{ className?: string }>; badge?: number }
 type NavGroup = { label: string; items: NavItem[] }
 
 /** The dashboard also owns the page editor routes, so it stays highlighted there. */
@@ -78,7 +85,7 @@ function BrandMark() {
   )
 }
 
-export function AdminShell({ userName, userEmail, role, children }: AdminShellProps) {
+export function AdminShell({ userName, userEmail, role, newApplications = 0, newMessages = 0, children }: AdminShellProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
@@ -95,9 +102,18 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
       items: [
         { href: "/admin", label: "Dashboard", icon: LayoutDashboardIcon },
         { href: "/admin/events", label: "Events", icon: CalendarDaysIcon },
+        { href: "/admin/calendars", label: "Calendar", icon: CalendarDaysIcon },
         { href: "/admin/gallery", label: "Gallery", icon: GalleryHorizontalIcon },
         { href: "/admin/exhibitions", label: "Exhibitions", icon: FrameIcon },
+        { href: "/admin/jobs", label: "Jobs", icon: BriefcaseIcon },
+        { href: "/admin/partners", label: "Partners", icon: HandshakeIcon },
+        { href: "/admin/applications", label: "Applications", icon: InboxIcon, badge: newApplications },
+        { href: "/admin/messages", label: "Messages", icon: MailIcon, badge: newMessages },
       ],
+    },
+    {
+      label: "SEO",
+      items: [{ href: "/admin/seo", label: "SEO & Google Search", icon: SearchCheckIcon }],
     },
     {
       label: "Site",
@@ -113,6 +129,7 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
   ]
 
   const activeItem = navGroups.flatMap((group) => group.items).find((item) => isActive(pathname, item.href))
+  const fullBleed = pathname === "/admin/design" || pathname.startsWith("/admin/design/")
 
   const navLinks = (
     <nav aria-label="Admin" className="flex flex-1 flex-col gap-5 overflow-y-auto p-3">
@@ -138,6 +155,12 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
               >
                 <item.icon className="size-4 shrink-0" />
                 {item.label}
+                {item.badge ? (
+                  <span className="ml-auto inline-flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-xs font-semibold tabular-nums text-accent-foreground">
+                    {item.badge}
+                    <span className="sr-only"> new</span>
+                  </span>
+                ) : null}
               </Link>
             )
           })}
@@ -254,8 +277,14 @@ export function AdminShell({ userName, userEmail, role, children }: AdminShellPr
         </div>
       </aside>
 
-      <main id="admin-main" className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:ml-60 lg:px-8 lg:py-8">
-        <div className="mx-auto max-w-6xl">{children}</div>
+      <main
+        id="admin-main"
+        className={cn(
+          "min-w-0 flex-1 lg:ml-60",
+          fullBleed ? "flex flex-col" : "px-4 py-6 sm:px-6 lg:px-8 lg:py-8",
+        )}
+      >
+        <div className={fullBleed ? "flex min-h-0 w-full min-w-0 flex-1 flex-col" : "mx-auto max-w-6xl"}>{children}</div>
       </main>
     </div>
   )

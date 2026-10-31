@@ -2,6 +2,8 @@
 
 import siteFallback from "@/content/site.json"
 import { getContent } from "@/lib/cms/content"
+import { db } from "@/lib/db"
+import { contactMessages } from "@/lib/db/schema"
 
 export type FormState = {
   status: "idle" | "success" | "error"
@@ -62,6 +64,24 @@ async function sendMail({ subject, html, replyTo }: { subject: string; html: str
   return true
 }
 
+/** Persists a submission so it is never lost when email is unavailable. */
+async function saveMessage(input: {
+  kind: "contact" | "newsletter"
+  name: string
+  email: string
+  phone: string
+  topic: string
+  message: string
+}) {
+  try {
+    await db.insert(contactMessages).values(input)
+    return true
+  } catch (error) {
+    console.log("[v0] Failed to save contact message:", error)
+    return false
+  }
+}
+
 async function unconfiguredMessage() {
   const site = await getContent("site", siteFallback)
   return `We couldn't send your message just now. Please call us at ${site.phone} and we'll be glad to help right away.`
@@ -91,8 +111,11 @@ export async function submitContactForm(_prev: FormState, formData: FormData): P
     return { status: "error", message: "Please check the highlighted fields.", fieldErrors, values }
   }
 
+  const saved = await saveMessage({ kind: "contact", name, email, phone, topic, message })
+
+  let emailed = false
   try {
-    const sent = await sendMail({
+    emailed = await sendMail({
       subject: `Website enquiry${topic ? ` — ${topic}` : ""} from ${name}`,
       replyTo: email,
       html: `
@@ -105,17 +128,17 @@ export async function submitContactForm(_prev: FormState, formData: FormData): P
         <p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>
       `,
     })
-
-    if (!sent) {
-      return { status: "error", message: await unconfiguredMessage(), values }
-    }
-
-    return {
-      status: "success",
-      message: "Thank you. We've received your message and someone from our team will be in touch shortly.",
-    }
   } catch {
+    emailed = false
+  }
+
+  if (!saved && !emailed) {
     return { status: "error", message: await unconfiguredMessage(), values }
+  }
+
+  return {
+    status: "success",
+    message: "Thank you. We've received your message and someone from our team will be in touch shortly.",
   }
 }
 
@@ -134,19 +157,22 @@ export async function submitNewsletterForm(_prev: FormState, formData: FormData)
     }
   }
 
+  const saved = await saveMessage({ kind: "newsletter", name: "", email, phone: "", topic: "Newsletter signup", message: "" })
+
+  let emailed = false
   try {
-    const sent = await sendMail({
+    emailed = await sendMail({
       subject: `Newsletter signup — ${email}`,
       replyTo: email,
       html: `<p>New newsletter signup: <strong>${escapeHtml(email)}</strong></p>`,
     })
-
-    if (!sent) {
-      return { status: "error", message: await unconfiguredMessage() }
-    }
-
-    return { status: "success", message: "You're on the list. Thank you for subscribing." }
   } catch {
+    emailed = false
+  }
+
+  if (!saved && !emailed) {
     return { status: "error", message: await unconfiguredMessage() }
   }
+
+  return { status: "success", message: "You're on the list. Thank you for subscribing." }
 }

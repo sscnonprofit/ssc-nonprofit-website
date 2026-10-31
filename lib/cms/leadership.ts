@@ -17,7 +17,7 @@ export function createLeadershipContent(source = company) {
       })),
     },
     biographyLabels: { why: "Why I love working at SSC", family: "Family and pets", favorite: "A favorite thing about Sheboygan County" },
-    cta: { visible: true, title: "Come see the campus for yourself", body: "Walk the halls, meet the caregivers, and see our private rooms.", primary: { label: "Schedule A Visit", href: "/contact" } },
+    cta: { visible: true, title: "Come see the campus for yourself", body: "Walk the halls, meet the caregivers, and see our private rooms.", primary: { label: "Embrace the Next Chapter", href: "/contact" } },
   }
 }
 

@@ -230,6 +230,86 @@ export const galleryExhibitionRsvps = pgTable("gallery_exhibition_rsvps", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 })
 
+// --- Employment: job postings & applications --------------------------------
+
+export const jobPostings = pgTable("job_postings", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  department: text("department").notNull().default(""),
+  location: text("location").notNull().default(""),
+  employmentType: text("employment_type").notNull().default("full_time"),
+  summary: text("summary").notNull().default(""),
+  description: text("description").notNull().default(""),
+  requirements: text("requirements").notNull().default(""),
+  benefits: text("benefits").notNull().default(""),
+  payRange: text("pay_range").notNull().default(""),
+  status: text("status").notNull().default("draft"),
+  featured: boolean("featured").notNull().default(false),
+  applicationsEnabled: boolean("applications_enabled").notNull().default(true),
+  closingDate: timestamp("closing_date", { withTimezone: true }),
+  contactName: text("contact_name").notNull().default(""),
+  contactEmail: text("contact_email").notNull().default(""),
+  updatedBy: text("updated_by"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const jobApplications = pgTable("job_applications", {
+  id: serial("id").primaryKey(),
+  jobId: integer("job_id").notNull(),
+  fullName: text("full_name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull().default(""),
+  address: text("address").notNull().default(""),
+  availability: text("availability").notNull().default(""),
+  desiredPay: text("desired_pay").notNull().default(""),
+  startDate: text("start_date").notNull().default(""),
+  yearsExperience: text("years_experience").notNull().default(""),
+  referralSource: text("referral_source").notNull().default(""),
+  coverLetter: text("cover_letter").notNull().default(""),
+  resumeUrl: text("resume_url").notNull().default(""),
+  resumeFilename: text("resume_filename").notNull().default(""),
+  eligibleToWork: boolean("eligible_to_work").notNull().default(false),
+  status: text("status").notNull().default("new"),
+  reviewNotes: text("review_notes").notNull().default(""),
+  reviewerId: text("reviewer_id"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const contactMessages = pgTable("contact_messages", {
+  id: serial("id").primaryKey(),
+  kind: text("kind").notNull().default("contact"),
+  name: text("name").notNull().default(""),
+  email: text("email").notNull(),
+  phone: text("phone").notNull().default(""),
+  topic: text("topic").notNull().default(""),
+  message: text("message").notNull().default(""),
+  status: text("status").notNull().default("new"),
+  emailed: boolean("emailed").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const calendarWorkspaces = pgTable("calendar_workspaces", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  document: jsonb("document").notNull(),
+  version: integer("version").notNull().default(1),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const calendarHistory = pgTable("calendar_history", {
+  id: serial("id").primaryKey(),
+  workspaceId: text("workspace_id").notNull(),
+  userId: text("user_id").notNull(),
+  actorName: text("actor_name").notNull(),
+  summary: text("summary").notNull(),
+  document: jsonb("document").notNull(),
+  version: integer("version").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
 export const galleryPhotos = pgTable("gallery_photos", {
   id: serial("id").primaryKey(),
   albumId: integer("album_id").notNull(),

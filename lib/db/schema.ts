@@ -14,8 +14,47 @@ export const user = pgTable("user", {
   role: text("role").notNull().default("editor"),
   /** Suspended accounts cannot sign in and existing sessions are rejected. */
   disabled: boolean("disabled").notNull().default(false),
+  /** Managed by Better Auth's two-factor plugin (email one-time codes). */
+  twoFactorEnabled: boolean("twoFactorEnabled").default(false),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+})
+
+export const twoFactor = pgTable("twoFactor", {
+  id: text("id").primaryKey(),
+  secret: text("secret").notNull(),
+  backupCodes: text("backupCodes").notNull(),
+  userId: text("userId").notNull(),
+  verified: boolean("verified").default(true),
+  failedVerificationCount: integer("failedVerificationCount").default(0),
+  lockedUntil: timestamp("lockedUntil"),
+})
+
+/** Audit trail of every transactional email sent through Resend. */
+export const emailLog = pgTable("email_log", {
+  id: serial("id").primaryKey(),
+  kind: text("kind").notNull(),
+  recipient: text("recipient").notNull(),
+  subject: text("subject").notNull(),
+  status: text("status").notNull().default("sent"),
+  providerId: text("provider_id"),
+  error: text("error"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+/** Opt-in subscribers who receive an automatic calendar digest with an .ics attachment. */
+export const calendarSubscriptions = pgTable("calendar_subscriptions", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull(),
+  name: text("name").notNull().default(""),
+  calendarId: text("calendar_id").notNull(),
+  frequency: text("frequency").notNull().default("weekly"),
+  categories: jsonb("categories").notNull().default([]),
+  token: text("token").notNull().unique(),
+  confirmedAt: timestamp("confirmed_at", { withTimezone: true }),
+  unsubscribedAt: timestamp("unsubscribed_at", { withTimezone: true }),
+  lastSentAt: timestamp("last_sent_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 })
 
 export const session = pgTable("session", {
@@ -135,6 +174,7 @@ export const eventRsvps = pgTable("event_rsvps", {
   note: text("note").notNull().default(""),
   status: text("status").notNull().default("confirmed"),
   checkedInAt: timestamp("checked_in_at", { withTimezone: true }),
+  reminderSentAt: timestamp("reminder_sent_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 })
 

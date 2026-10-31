@@ -95,7 +95,11 @@ export function AdminAuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
                   <Field>
                     <div className="flex items-center justify-between gap-3">
                       <FieldLabel htmlFor="password">Password</FieldLabel>
-                      {!isSignUp && <span className="text-xs text-muted-foreground">8+ characters</span>}
+                      {!isSignUp && (
+                        <Link href="/admin/forgot-password" className="text-xs font-medium text-muted-foreground underline-offset-4 hover:text-primary hover:underline">
+                          Forgot password?
+                        </Link>
+                      )}
                     </div>
                     <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} autoComplete={isSignUp ? "new-password" : "current-password"} className="h-12 bg-background text-base" placeholder="Enter your password" />
                   </Field>

@@ -4,6 +4,9 @@ import siteFallback from "@/content/site.json"
 import { getContent } from "@/lib/cms/content"
 import { db } from "@/lib/db"
 import { contactMessages } from "@/lib/db/schema"
+import { staffInbox } from "@/lib/email/config"
+import { sendEmail } from "@/lib/email/send"
+import { inquiryReceivedEmail, newsletterWelcomeEmail } from "@/lib/email/templates"
 
 export type FormState = {
   status: "idle" | "success" | "error"
@@ -27,41 +30,15 @@ function escapeHtml(value: string) {
     .replace(/"/g, "&quot;")
 }
 
-/**
- * Sends mail through the Resend REST API. Returns false (without throwing) when
- * the environment is not configured, so the UI can fall back to phone/email.
- */
+/** Staff alert via Resend. Returns false (without throwing) so the UI can fall back to phone/email. */
 async function sendMail({ subject, html, replyTo }: { subject: string; html: string; replyTo?: string }) {
-  const apiKey = process.env.RESEND_API_KEY
-  const from = process.env.CONTACT_FROM_EMAIL
-  const to = process.env.CONTACT_TO_EMAIL
-
-  if (!apiKey || !from || !to) {
-    console.log("[v0] Resend is not configured — skipping send. Missing RESEND_API_KEY, CONTACT_FROM_EMAIL or CONTACT_TO_EMAIL.")
+  const to = staffInbox()
+  if (!to) {
+    console.log("[v0] No staff inbox configured — set STAFF_NOTIFY_EMAIL.")
     return false
   }
-
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: [to],
-      subject,
-      html,
-      ...(replyTo ? { reply_to: replyTo } : {}),
-    }),
-  })
-
-  if (!res.ok) {
-    console.log("[v0] Resend send failed:", res.status, await res.text())
-    throw new Error("Email delivery failed")
-  }
-
-  return true
+  const result = await sendEmail({ kind: "staff-notification", to, subject, html, replyTo })
+  return result.ok
 }
 
 /** Persists a submission so it is never lost when email is unavailable. */
@@ -136,6 +113,8 @@ export async function submitContactForm(_prev: FormState, formData: FormData): P
     return { status: "error", message: await unconfiguredMessage(), values }
   }
 
+  await sendEmail({ kind: "inquiry-received", to: email, ...inquiryReceivedEmail({ name, topic }) })
+
   return {
     status: "success",
     message: "Thank you. We've received your message and someone from our team will be in touch shortly.",
@@ -173,6 +152,8 @@ export async function submitNewsletterForm(_prev: FormState, formData: FormData)
   if (!saved && !emailed) {
     return { status: "error", message: await unconfiguredMessage() }
   }
+
+  await sendEmail({ kind: "newsletter-welcome", to: email, ...newsletterWelcomeEmail() })
 
   return { status: "success", message: "You're on the list. Thank you for subscribing." }
 }

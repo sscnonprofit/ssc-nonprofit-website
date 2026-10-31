@@ -43,6 +43,7 @@ function revalidateDoc(slug: string) {
   revalidatePath("/admin")
   revalidatePath("/admin/pages")
   revalidatePath(`/admin/pages/${slug}`)
+  if (slug === "pillars") revalidatePath("/admin/partners")
 }
 
 /** Saves a draft and snapshots it as a new revision. Any signed-in editor can do this. */

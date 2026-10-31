@@ -33,7 +33,14 @@ export function SiteHeader({
   site: typeof siteFallback
   header?: ThemeSettings["header"]
 }) {
-  const nav = site.nav as NavItem[]
+  const nav = (site.nav as NavItem[]).map((item) => {
+    if (item.label !== "Care & Services" || !item.children) return item
+    if (item.children.some((child) => child.href === "/end-of-life")) return item
+    return {
+      ...item,
+      children: [...item.children, { label: "End-of-Life Care", href: "/end-of-life" }],
+    }
+  })
   const pathname = usePathname()
   const minimal = header.style === "minimal"
   const transparent = header.style === "transparent"

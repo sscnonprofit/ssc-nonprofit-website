@@ -109,13 +109,21 @@ export async function PillarPage({ slug }: { slug: PillarKey }) {
             <ul className="mt-12 grid grid-cols-2 items-center gap-x-8 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
               {partners.map((partner) => (
                 <li key={partner.name} className="flex items-center justify-center">
-                  <Image
-                    src={partner.logo || "/placeholder.svg"}
-                    alt={partner.name}
-                    width={180}
-                    height={90}
-                    className="h-16 w-auto max-w-full object-contain"
-                  />
+                  <a
+                    href={partner.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex min-h-24 items-center justify-center rounded-lg p-3 transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                  >
+                    <Image
+                      src={partner.logo || "/placeholder.svg"}
+                      alt={partner.name}
+                      width={180}
+                      height={90}
+                      className="h-16 w-auto max-w-full object-contain"
+                    />
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
                 </li>
               ))}
             </ul>

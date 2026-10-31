@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "tsx scripts/check-deployment.mjs && next build",
+    "check:deployment": "tsx scripts/check-deployment.mjs",
+    "test:deployment": "tsx --test scripts/check-deployment.test.mjs",
     "start": "next start"
   },
   "dependencies": {

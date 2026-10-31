@@ -9,6 +9,19 @@ import { passwordChangedEmail, passwordResetEmail, verificationCodeEmail, welcom
 
 const OTP_MINUTES = 5
 
+const PRODUCTION_DOMAINS = [
+  "https://sscnonprofit.net",
+  "https://www.sscnonprofit.net",
+  "https://sscnonprofit.org",
+  "https://www.sscnonprofit.org",
+]
+
+// Extra origins can be added without a code change, e.g. BETTER_AUTH_TRUSTED_ORIGINS="https://example.org,https://www.example.org"
+const EXTRA_TRUSTED_ORIGINS = (process.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean)
+
 export const auth = betterAuth({
   plugins: [
     twoFactor({
@@ -32,7 +45,9 @@ export const auth = betterAuth({
   database: pool,
   baseURL:
     process.env.BETTER_AUTH_URL ??
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    (process.env.VERCEL_ENV === "production"
+      ? PRODUCTION_DOMAINS[0]
+      : process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : process.env.VERCEL_URL
         ? `https://${process.env.VERCEL_URL}`
@@ -49,6 +64,8 @@ export const auth = betterAuth({
     },
   },
   trustedOrigins: [
+    ...PRODUCTION_DOMAINS,
+    ...EXTRA_TRUSTED_ORIGINS,
     ...(process.env.NODE_ENV === "development"
       ? [
           "http://localhost:3000",

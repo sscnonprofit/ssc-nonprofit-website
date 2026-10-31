@@ -6,6 +6,8 @@ import pillarsFallback from "@/content/pillars.json"
 import { CreatePageDialog } from "@/components/admin/builder/create-page-dialog"
 import { DashboardOverview, DashboardTask } from "@/components/admin/dashboard/dashboard-overview"
 import { PageDirectory, type DirectoryEntry } from "@/components/admin/dashboard/page-directory"
+import { SeoOverview } from "@/components/admin/dashboard/seo-overview"
+import { buildSeoAudit } from "@/lib/admin/seo"
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -19,7 +21,7 @@ import { hasPermission } from "@/lib/cms/roles"
 import { db } from "@/lib/db"
 import { contactMessages, pageRevisions } from "@/lib/db/schema"
 
-export const metadata: Metadata = { title: "Dashboard | SSC Content Manager", description: "Manage SSC website content, community partners, and pending work.", robots: { index: false, follow: false } }
+export const metadata: Metadata = { title: "Dashboard | SSC Content Manager", description: "Manage SSC website content, monitor SEO content health, and review pending work.", robots: { index: false, follow: false } }
 
 export default async function AdminPagesDashboard() {
   const user = await requirePermission("view_content")
@@ -85,6 +87,8 @@ export default async function AdminPagesDashboard() {
     </header>
 
     <DashboardOverview overview={overview} partnerCount={partnerLive.enabled ? partnerLive.partners.filter((p) => p.visible).length : 0} pageCount={pageCount} drafts={drafts.length} />
+
+    <SeoOverview audit={buildSeoAudit(rows)} />
 
     <section aria-label="Priority work" className="grid gap-4 lg:grid-cols-2">
       <Card>

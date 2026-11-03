@@ -14,6 +14,7 @@ const routes = [
   { path: "/the-challenge", priority: 0.8 },
   { path: "/contact", priority: 0.8 },
   { path: "/donate", priority: 0.8 },
+  { path: "/leave-a-legacy", priority: 0.7 },
   { path: "/community", priority: 0.7 },
   { path: "/employment", priority: 0.7 },
   { path: "/environment", priority: 0.7 },

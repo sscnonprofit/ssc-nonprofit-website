@@ -35,6 +35,13 @@ export function SiteHeader({
 }) {
   const nav = (site.nav as NavItem[]).map((item) => {
     const normalizedItem = item.label === "The Challenge" ? { ...item, label: "Embrace The Next Chapter" } : item
+    if (normalizedItem.label === "Our Company" && normalizedItem.children) {
+      if (normalizedItem.children.some((child) => child.href === "/leave-a-legacy")) return normalizedItem
+      return {
+        ...normalizedItem,
+        children: [...normalizedItem.children, { label: "Leave A Legacy", href: "/leave-a-legacy" }],
+      }
+    }
     if (normalizedItem.label !== "Care & Services" || !normalizedItem.children) return normalizedItem
     if (normalizedItem.children.some((child) => child.href === "/end-of-life")) return normalizedItem
     return {

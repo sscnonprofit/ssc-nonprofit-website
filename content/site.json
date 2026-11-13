@@ -76,7 +76,13 @@
       "label": "Care & Services",
       "children": [
         { "label": "Assisted Living", "href": "/assisted-living" },
-        { "label": "Short-Term Rehab", "href": "/short-term-rehab" },
+        {
+          "label": "Short-Term Rehab",
+          "href": "/short-term-rehab",
+          "children": [
+            { "label": "Accepted Insurance", "href": "/accepted-insurance" }
+          ]
+        },
  { "label": "Skilled Nursing", "href": "/skilled-nursing" },
  { "label": "End-of-Life Care", "href": "/end-of-life" }
   ]

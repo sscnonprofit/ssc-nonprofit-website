@@ -10,8 +10,9 @@ import type siteFallback from "@/content/site.json"
 import { DEFAULT_THEME, type ThemeSettings } from "@/lib/cms/theme"
 import { cn } from "@/lib/utils"
 import { BrandRule } from "@/components/brand-rule"
+import { NestedNavItem } from "@/components/nested-nav-item"
 
-type NavChild = { label: string; href: string; external?: boolean }
+type NavChild = { label: string; href: string; external?: boolean; children?: NavChild[] }
 type NavItem = { label: string; href?: string; children?: NavChild[] }
 
 const LOGO_RATIO = 196 / 49
@@ -22,8 +23,8 @@ function matchesPath(pathname: string, href?: string) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-function isItemActive(pathname: string, item: NavItem) {
-  return matchesPath(pathname, item.href) || (item.children ?? []).some((c) => !c.external && matchesPath(pathname, c.href))
+function isItemActive(pathname: string, item: NavItem): boolean {
+  return matchesPath(pathname, item.href) || (item.children ?? []).some((child) => !child.external && isItemActive(pathname, child))
 }
 
 export function SiteHeader({
@@ -35,12 +36,26 @@ export function SiteHeader({
 }) {
   const nav = (site.nav as NavItem[]).map((item) => {
     const normalizedItem = item.label === "The Challenge" ? { ...item, label: "Embrace The Next Chapter" } : item
-    if (normalizedItem.label !== "Care & Services" || !normalizedItem.children) return normalizedItem
-    if (normalizedItem.children.some((child) => child.href === "/end-of-life")) return normalizedItem
-    return {
-      ...normalizedItem,
-      children: [...normalizedItem.children, { label: "End-of-Life Care", href: "/end-of-life" }],
+    if (normalizedItem.label === "Our Company" && normalizedItem.children) {
+      if (normalizedItem.children.some((child) => child.href === "/leave-a-legacy")) return normalizedItem
+      return {
+        ...normalizedItem,
+        children: [...normalizedItem.children, { label: "Leave A Legacy", href: "/leave-a-legacy" }],
+      }
     }
+    if (normalizedItem.label !== "Care & Services" || !normalizedItem.children) return normalizedItem
+    const children = normalizedItem.children.map((child) => {
+      if (child.href !== "/short-term-rehab") return child
+      if (child.children?.some((nested) => nested.href === "/accepted-insurance")) return child
+      return {
+        ...child,
+        children: [...(child.children ?? []), { label: "Accepted Insurance", href: "/accepted-insurance" }],
+      }
+    })
+    if (!children.some((child) => child.href === "/end-of-life")) {
+      children.push({ label: "End-of-Life Care", href: "/end-of-life" })
+    }
+    return { ...normalizedItem, children }
   })
   const pathname = usePathname()
   const minimal = header.style === "minimal"
@@ -240,7 +255,7 @@ export function SiteHeader({
                           isOpen ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1.5 opacity-0",
                         )}
                       >
-                        <div className="ssc-glass-nav overflow-hidden rounded-xl border border-foreground/10 bg-background/90 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3),0_28px_56px_-24px_rgba(30,10,16,0.45)]">
+                        <div className="ssc-glass-nav rounded-xl border border-foreground/10 bg-background/90 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3),0_28px_56px_-24px_rgba(30,10,16,0.45)]">
                           <div className="flex items-center gap-2 border-b border-foreground/[0.07] px-4 py-2.5">
                             <span className={cn("size-1.5 rounded-full", BRAND_BG[index % BRAND_BG.length])} aria-hidden="true" />
                             <span className="font-display text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
@@ -250,6 +265,9 @@ export function SiteHeader({
                           <ul className="flex flex-col p-1.5">
                             {item.children.map((child) => {
                               const childActive = !child.external && matchesPath(pathname, child.href)
+                              if (child.children?.length) {
+                                return <NestedNavItem key={child.href} item={child} pathname={pathname} parentOpen={isOpen} onNavigate={() => setMenu(null)} />
+                              }
                               return (
                                 <li key={child.label}>
                                   <NavLink
@@ -275,13 +293,6 @@ export function SiteHeader({
                 })}
               </ul>
             </nav>
-
-            <div className="hidden shrink-0 items-center gap-3 lg:flex">
-              <Link href="/contact" className="ssc-btn group/cta px-5 py-2.5">
-                Embrace The Next Chapter
-                <ArrowRight className="size-4 transition-transform group-hover/cta:translate-x-0.5" aria-hidden="true" />
-              </Link>
-            </div>
 
             <button
               type="button"
@@ -353,6 +364,9 @@ export function SiteHeader({
                       <ul hidden={expanded !== item.label} className="flex flex-col gap-0.5 pb-3">
                         {item.children.map((child) => {
                           const childActive = !child.external && matchesPath(pathname, child.href)
+                          if (child.children?.length) {
+                            return <NestedNavItem key={child.href} item={child} pathname={pathname} parentOpen={open && expanded === item.label} onNavigate={() => setOpen(false)} mobile />
+                          }
                           return (
                             <li key={child.label}>
                               <NavLink

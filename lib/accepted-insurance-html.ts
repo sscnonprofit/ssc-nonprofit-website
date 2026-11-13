@@ -56,30 +56,20 @@ export const acceptedInsuranceHtml = String.raw`<!-- ===========================
 .ssc-ins__deadline svg{width:26px;height:26px;flex:0 0 26px;color:var(--a)}
 .ssc-ins__deadline p{margin:0;font-size:1rem;flex:1 1 260px;opacity:1}
 .ssc-ins__btns{display:flex;flex-wrap:wrap;gap:12px;position:relative;z-index:1}
-.ssc-ins__btn{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;font-weight:700;font-size:1rem;text-decoration:none!important;transition:transform .2s,box-shadow .2s,background .2s,color .2s}
-.ssc-ins__btn svg{width:18px;height:18px}
-.ssc-ins__btn:hover{transform:translateY(-2px)}
-.ssc-ins__btn--light{background:#fcfaf8;color:var(--p)!important;box-shadow:0 8px 20px rgba(0,0,0,.2)}
-.ssc-ins__btn--light:hover{background:var(--a);color:var(--t)!important}
-.ssc-ins__btn--outline{border:2px solid rgba(252,250,248,.55);color:#fcfaf8!important}
-.ssc-ins__btn--outline:hover{background:rgba(252,250,248,.12)}
-.ssc-ins__btn--solid{background:var(--p);color:#fcfaf8!important;box-shadow:var(--shadow)}
-.ssc-ins__btn--solid:hover{background:var(--p-dark)}
+.ssc-ins a.ssc-btn{color:var(--ssc-btn-fg);text-decoration:none;position:relative}
+.ssc-ins a.ssc-btn-secondary{color:var(--foreground)}
+.ssc-ins .ssc-btn svg{width:18px;height:18px}
 
 /* ---------- PLANS ---------- */
 .ssc-ins__plans{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
 .ssc-ins__plan{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px 22px 22px;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s,border-color .25s}
 .ssc-ins__plan:hover{transform:translateY(-4px);box-shadow:var(--shadow-h);border-color:#d9c3ca}
 .ssc-ins__plan::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--p),var(--a))}
-.ssc-ins__logo{height:48px;display:flex;align-items:center;margin-bottom:16px}
-.ssc-ins__logo img{max-height:44px;max-width:170px;width:auto;object-fit:contain}
-.ssc-ins__logo .ssc-ins__mono{display:none}
-.ssc-ins__logo.is-fallback img{display:none}
-.ssc-ins__logo.is-fallback .ssc-ins__mono{display:grid}
-.ssc-ins__mono{width:52px;height:52px;border-radius:14px;place-items:center;background:var(--p-tint);color:var(--p);font-family:var(--f);font-weight:800;font-size:1.15rem}
+.ssc-ins__logo{height:64px;display:flex;align-items:center;margin-bottom:16px}
+.ssc-ins__logo img{width:100%;height:52px;max-width:180px;object-fit:contain;object-position:left center}
 .ssc-ins__plan h3{font-size:1.25rem}
-.ssc-ins__pill{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:.8rem;font-weight:700;color:var(--g);background:var(--g-tint);border-radius:999px;padding:5px 12px}
-.ssc-ins__pill svg{width:14px;height:14px}
+.ssc-ins__status{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:.8rem;font-weight:700;color:var(--g);background:var(--g-tint);border-radius:var(--ssc-btn-radius);padding:5px 12px}
+.ssc-ins__status svg{width:14px;height:14px}
 .ssc-ins__meta{display:grid;grid-template-columns:1fr;gap:14px;margin-top:22px}
 @media(min-width:760px){.ssc-ins__meta{grid-template-columns:1fr 1fr}}
 .ssc-ins__callout{display:flex;gap:14px;align-items:flex-start;border-radius:var(--r-sm);padding:16px 18px;font-size:.95rem}
@@ -137,9 +127,7 @@ export const acceptedInsuranceHtml = String.raw`<!-- ===========================
 .ssc-ins__cta h2{color:#fcfaf8;position:relative}
 .ssc-ins__cta p{margin:10px 0 0;opacity:.88;position:relative}
 .ssc-ins__cta a{color:#fcfaf8}
-.ssc-ins__phone{font-family:var(--f);font-size:clamp(1.5rem,3vw,2rem);font-weight:800;color:#fcfaf8!important;text-decoration:none!important;display:inline-flex;align-items:center;gap:12px;background:rgba(252,250,248,.08);border:1px solid rgba(252,250,248,.25);border-radius:999px;padding:14px 26px;position:relative;transition:background .2s,color .2s}
-.ssc-ins__phone:hover{background:var(--a);color:var(--t)!important}
-.ssc-ins__phone svg{width:24px;height:24px}
+.ssc-ins__cta .ssc-btn{justify-self:start}
 .ssc-ins .ssc-ins__disclaimer{font-size:.84rem;font-style:italic;color:var(--muted);text-align:center;max-width:760px;margin:28px auto 0}
 
 /* ---------- motion ---------- */
@@ -149,21 +137,21 @@ export const acceptedInsuranceHtml = String.raw`<!-- ===========================
 @media(max-width:600px){.ssc-ins{font-size:16px}
   .ssc-ins__plans{gap:10px}.ssc-ins__plan{display:flex;align-items:center;gap:14px;padding:16px 16px 16px 18px}
   .ssc-ins__plan::before{inset:0 auto 0 0;width:5px;height:auto;background:linear-gradient(180deg,var(--p),var(--a))}
-  .ssc-ins__logo{height:auto;flex:0 0 auto;margin:0;min-width:44px}.ssc-ins__logo img{max-height:30px;max-width:110px}.ssc-ins__mono{width:44px;height:44px;font-size:1rem;border-radius:12px}
-  .ssc-ins__plan h3{font-size:1.05rem;flex:1}.ssc-ins__pill{margin:0}
-  .ssc-ins__section{margin-top:56px}.ssc-ins__qs li{padding-left:72px}.ssc-ins__btn{width:100%;justify-content:center}}
+  .ssc-ins__logo{height:auto;margin:0;min-width:0}.ssc-ins__logo img{height:44px;max-width:104px}
+  .ssc-ins__plan h3{font-size:1.05rem;flex:1}.ssc-ins__status{margin:0}
+  .ssc-ins__section{margin-top:56px}.ssc-ins__qs li{padding-left:72px}.ssc-ins .ssc-btn{width:100%;justify-content:center}}
 
 /* Host integration: use the existing site font and keep narrow layouts accessible. */
 .ssc-ins{--f:var(--font-bricolage),ui-sans-serif,system-ui,sans-serif;line-height:1.6}
 .ssc-ins h1{font-family:var(--f);color:#fcfaf8;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;letter-spacing:-.025em;line-height:1.15;max-width:15ch;margin:0;text-wrap:balance}
 .ssc-ins__eyebrow{font-size:14px;color:var(--p)}
 .ssc-ins__hero .ssc-ins__eyebrow{color:var(--a)}
-.ssc-ins__pill{font-size:14px;color:var(--t)}
+.ssc-ins__status{font-size:14px;color:var(--t)}
 .ssc-ins__qs{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
 .ssc-ins a:focus-visible{outline:3px solid var(--a);outline-offset:4px}
 #ssc-ins-plans{scroll-margin-top:160px}
 @media(min-width:1000px){.ssc-ins__qs{grid-template-columns:repeat(6,1fr)}}
-@media(max-width:600px){.ssc-ins__plan{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px 14px}.ssc-ins__logo{grid-row:span 2}.ssc-ins__plan h3{overflow-wrap:anywhere}.ssc-ins__pill{justify-self:start}}
+@media(max-width:600px){.ssc-ins__plan{display:grid;grid-template-columns:104px minmax(0,1fr);gap:8px 14px}.ssc-ins__logo{grid-row:span 2}.ssc-ins__plan h3{overflow-wrap:anywhere}.ssc-ins__status{justify-self:start}}
 </style>
 
 <section class="ssc-ins" id="ssc-ins" aria-labelledby="ssc-ins-title">
@@ -181,9 +169,9 @@ export const acceptedInsuranceHtml = String.raw`<!-- ===========================
     </div>
 
     <div class="ssc-ins__btns">
-      <a class="ssc-ins__btn ssc-ins__btn--light" href="#ssc-ins-plans">
+      <a class="ssc-btn ssc-btn-accent" href="#ssc-ins-plans">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>See accepted plans</a>
-      <a class="ssc-ins__btn ssc-ins__btn--outline" href="tel:+19204582137">
+      <a class="ssc-btn ssc-btn-secondary" href="tel:+19204582137">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>Call (920) 458-2137</a>
     </div>
   </header>
@@ -197,14 +185,14 @@ export const acceptedInsuranceHtml = String.raw`<!-- ===========================
     </div>
 
     <ul class="ssc-ins__plans">
-      <li class="ssc-ins__plan"><div class="ssc-ins__logo is-fallback"><div class="ssc-ins__mono" aria-hidden="true">M</div></div><h3>Medicare</h3>
-        <span class="ssc-ins__pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accepted</span></li>
-      <li class="ssc-ins__plan"><div class="ssc-ins__logo is-fallback"><div class="ssc-ins__mono" aria-hidden="true">UH</div></div><h3>UnitedHealthcare</h3>
-        <span class="ssc-ins__pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accepted</span></li>
-      <li class="ssc-ins__plan"><div class="ssc-ins__logo is-fallback"><div class="ssc-ins__mono" aria-hidden="true">NH</div></div><h3>Network Health</h3>
-        <span class="ssc-ins__pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accepted</span></li>
-      <li class="ssc-ins__plan"><div class="ssc-ins__logo is-fallback"><div class="ssc-ins__mono" aria-hidden="true">H</div></div><h3>Humana</h3>
-        <span class="ssc-ins__pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accepted</span></li>
+      <li class="ssc-ins__plan"><div class="ssc-ins__logo"><img src="/images/insurance-medicare.svg" width="180" height="52" alt="" decoding="async"></div><h3>Medicare</h3>
+        <span class="ssc-ins__status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accepted</span></li>
+      <li class="ssc-ins__plan"><div class="ssc-ins__logo"><img src="/images/insurance-unitedhealthcare.svg" width="180" height="52" alt="" decoding="async"></div><h3>UnitedHealthcare</h3>
+        <span class="ssc-ins__status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accepted</span></li>
+      <li class="ssc-ins__plan"><div class="ssc-ins__logo"><img src="/images/insurance-network-health.svg" width="180" height="52" alt="" decoding="async"></div><h3>Network Health</h3>
+        <span class="ssc-ins__status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accepted</span></li>
+      <li class="ssc-ins__plan"><div class="ssc-ins__logo"><img src="/images/insurance-humana.png" width="180" height="52" alt="" decoding="async"></div><h3>Humana</h3>
+        <span class="ssc-ins__status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accepted</span></li>
     </ul>
 
     <div class="ssc-ins__meta">
@@ -258,7 +246,7 @@ export const acceptedInsuranceHtml = String.raw`<!-- ===========================
         <p>The <a href="https://www.sheboygancounty.com/departments/departments-f-q/health-and-human-services/aging-and-disability-resource-center" target="_blank" rel="noopener">Aging &amp; Disability Resource Center (ADRC) of Sheboygan County</a> can help you compare plans at no cost.</p>
         <!-- TODO: add other free resources (e.g. Patch Adams) once contacted -->
       </div>
-      <a class="ssc-ins__btn ssc-ins__btn--solid" href="tel:+19204674100">Call ADRC 920-467-4100</a>
+      <a class="ssc-btn" href="tel:+19204674100">Call ADRC 920-467-4100</a>
     </div>
   </div>
 
@@ -296,7 +284,7 @@ export const acceptedInsuranceHtml = String.raw`<!-- ===========================
       <h2>Not sure about your coverage?</h2>
       <p>Our team is happy to walk through your situation with you. You can also <a href="/short-term-rehab">learn more about Short-Term Rehab</a>.</p>
     </div>
-    <a class="ssc-ins__phone" href="tel:+19204582137">
+    <a class="ssc-btn ssc-btn-accent" href="tel:+19204582137">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>(920) 458-2137</a>
   </div>
 

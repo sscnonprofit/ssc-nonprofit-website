@@ -189,7 +189,7 @@ export const acceptedInsuranceHtml = String.raw`<!-- ===========================
         <span class="ssc-ins__status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accepted</span></li>
       <li class="ssc-ins__plan"><div class="ssc-ins__logo"><img src="/images/insurance-unitedhealthcare.svg" width="180" height="52" alt="" decoding="async"></div><h3>UnitedHealthcare</h3>
         <span class="ssc-ins__status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accepted</span></li>
-      <li class="ssc-ins__plan"><div class="ssc-ins__logo"><img src="/images/insurance-network-health.svg" width="180" height="52" alt="" decoding="async"></div><h3>Network Health</h3>
+      <li class="ssc-ins__plan"><div class="ssc-ins__logo"><img src="/images/network-health-logo.svg" width="180" height="52" alt="" decoding="async"></div><h3>Network Health</h3>
         <span class="ssc-ins__status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accepted</span></li>
       <li class="ssc-ins__plan"><div class="ssc-ins__logo"><img src="/images/insurance-humana.png" width="180" height="52" alt="" decoding="async"></div><h3>Humana</h3>
         <span class="ssc-ins__status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accepted</span></li>

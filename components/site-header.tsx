@@ -294,13 +294,6 @@ export function SiteHeader({
               </ul>
             </nav>
 
-            <div className="hidden shrink-0 items-center gap-3 lg:flex">
-              <Link href="/contact" className="ssc-btn group/cta px-5 py-2.5">
-                Embrace The Next Chapter
-                <ArrowRight className="size-4 transition-transform group-hover/cta:translate-x-0.5" aria-hidden="true" />
-              </Link>
-            </div>
-
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}

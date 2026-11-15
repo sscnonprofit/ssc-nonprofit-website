@@ -1,6 +1,7 @@
 import { drizzle } from "drizzle-orm/node-postgres"
 import { Pool } from "pg"
 
+import { withVerifiedSsl } from "./connection-string"
 import * as schema from "./schema"
 
 const connectionString =
@@ -12,5 +13,5 @@ if (!connectionString) {
   throw new Error("A PostgreSQL connection string is required")
 }
 
-export const pool = new Pool({ connectionString })
+export const pool = new Pool({ connectionString: withVerifiedSsl(connectionString) })
 export const db = drizzle(pool, { schema })

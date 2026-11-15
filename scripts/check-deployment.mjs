@@ -3,6 +3,7 @@ import { getTableConfig, PgTable } from "drizzle-orm/pg-core"
 import { Pool } from "pg"
 import { pathToFileURL } from "node:url"
 
+import { withVerifiedSsl } from "../lib/db/connection-string.ts"
 import * as schema from "../lib/db/schema.ts"
 
 export const requiredTables = Object.values(schema)
@@ -76,7 +77,7 @@ async function main() {
   let problems = checkEnvironment(process.env)
   if (!problems.length) {
     const pool = new Pool({
-      connectionString: getDatabaseUrl(),
+      connectionString: withVerifiedSsl(getDatabaseUrl()),
       connectionTimeoutMillis: 10000,
       query_timeout: 10000,
     })

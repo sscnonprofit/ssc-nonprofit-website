@@ -1,12 +1,13 @@
 export const EMAIL_TIME_ZONE = "America/Chicago"
 
 /**
- * Resend only delivers from a verified domain. Until one is verified, the
- * shared onboarding sender works for testing but can only reach the Resend
- * account owner. Set EMAIL_FROM once the SSC domain is verified.
+ * Resend only delivers to arbitrary recipients from a verified domain
+ * (sscnonprofit.net is verified). The shared onboarding@resend.dev sender can
+ * only reach the Resend account owner, so it must never be the default.
+ * EMAIL_FROM overrides this, but must also use a verified domain.
  */
 export function fromAddress() {
-  return process.env.EMAIL_FROM || process.env.CONTACT_FROM_EMAIL || "Sheboygan Senior Community <onboarding@resend.dev>"
+  return process.env.EMAIL_FROM || process.env.CONTACT_FROM_EMAIL || "Sheboygan Senior Community <noreply@sscnonprofit.net>"
 }
 
 export function replyToAddress() {

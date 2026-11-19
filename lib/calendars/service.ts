@@ -8,6 +8,7 @@ import {
 } from "@/lib/db/schema";
 import { getSessionUser, type SessionUser } from "@/lib/cms/auth-helpers";
 import {
+  clearMonth,
   forCalendar,
   isDate,
   isMonth,
@@ -350,6 +351,13 @@ export async function mutateWorkspace(input: CalendarAction) {
           });
       }
       summary = `Copied previous month’s one-off events to ${month}`;
+      break;
+    }
+    case "clearMonth": {
+      const cal = needMonth();
+      assertEdit(actor, doc, [id]);
+      const removed = clearMonth(doc, id, month);
+      summary = `Cleared ${cal.name}, ${month} (${removed} one-off ${removed === 1 ? "activity" : "activities"} and recurring schedule)`;
       break;
     }
     case "bulk": {

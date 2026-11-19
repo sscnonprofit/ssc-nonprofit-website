@@ -215,6 +215,39 @@ export function occurrences(
       a.title.localeCompare(b.title),
   );
 }
+/**
+ * Empties one calendar's month in place and returns how many one-off events
+ * were taken off it. Day notes are kept.
+ */
+export function clearMonth(
+  doc: CalendarDocument,
+  calendarId: string,
+  month: string,
+): number {
+  // One-off events: drop this calendar, deleting events no other calendar uses.
+  let removed = 0;
+  doc.events = doc.events.flatMap((e) => {
+    if (!e.date.startsWith(month) || !e.calendarIds.includes(calendarId))
+      return [e];
+    removed++;
+    const calendarIds = e.calendarIds.filter((c) => c !== calendarId);
+    if (!calendarIds.length) return [];
+    const overrides = { ...e.overrides };
+    delete overrides[calendarId];
+    return [{ ...e, calendarIds, overrides }];
+  });
+  // Recurring events only show in generated months, so un-generating hides
+  // them; "Generate month" brings back a fresh schedule.
+  const state = doc.months[monthKey(calendarId, month)];
+  if (state) state.generated = false;
+  // Drop this month's per-day edits on series that belong only to this
+  // calendar, so regenerating starts clean. Shared series are left alone.
+  for (const s of doc.series)
+    if (s.calendarIds.length === 1 && s.calendarIds[0] === calendarId)
+      for (const date of Object.keys(s.exceptions))
+        if (date.startsWith(month)) delete s.exceptions[date];
+  return removed;
+}
 export function forCalendar(e: CalendarEvent, id: string): CalendarEvent {
   return { ...e, ...e.overrides[id] };
 }

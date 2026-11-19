@@ -14,6 +14,7 @@ import {
   Upload,
   Copy,
   RefreshCw,
+  Eraser,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -119,6 +120,7 @@ export function CalendarWorkspace({
   ];
   const issues = calendar ? warnings(all, calendarId) : [];
   const state = doc.months[monthKey(calendarId, month)];
+  const monthCount = all.filter((e) => e.calendarIds.includes(calendarId)).length;
   async function run(action: Omit<CalendarAction, "version">) {
     if (!workspace || pending) return false;
     setPending(true);
@@ -398,6 +400,31 @@ export function CalendarWorkspace({
                 onClick={() => setPanel("note")}
               >
                 Day note / banner
+              </Button>
+              <Button
+                variant="destructive"
+                className="min-h-11"
+                disabled={pending || !monthCount}
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      [
+                        `Clear all ${monthCount} ${monthCount === 1 ? "activity" : "activities"} from ${calendar!.name} for ${monthLabel(month)}?`,
+                        "One-off activities are removed and the recurring schedule is hidden until you click Generate month. Day notes and banners are kept.",
+                        state?.status === "published"
+                          ? "The published calendar stays live until you publish again."
+                          : "",
+                        "An admin can undo this from History.",
+                      ]
+                        .filter(Boolean)
+                        .join("\n\n"),
+                    )
+                  )
+                    run({ action: "clearMonth", ...base });
+                }}
+              >
+                <Eraser data-icon="inline-start" />
+                Clear month
               </Button>
               {workspace?.role === "admin" && (
                 <>

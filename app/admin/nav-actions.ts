@@ -8,7 +8,7 @@ import { getPageRow } from "@/lib/cms/pages"
 import { db } from "@/lib/db"
 import { pageRevisions, pages } from "@/lib/db/schema"
 
-export type NavChild = { label: string; href: string; external?: boolean }
+export type NavChild = { label: string; href: string; external?: boolean; children?: NavChild[] }
 export type NavItem = { label: string; href?: string; children?: NavChild[] }
 export type FooterGroup = { heading: string; links: NavChild[] }
 
@@ -29,9 +29,16 @@ function safeLabel(value: unknown) {
   return value.trim()
 }
 
-function validateChild(input: unknown): NavChild {
+function validateChild(input: unknown, nested = true): NavChild {
   const child = input as Partial<NavChild>
-  return { label: safeLabel(child.label), href: safeHref(child.href), ...(child.external ? { external: true } : {}) }
+  // Keep one level of nested links (e.g. Short-Term Rehab → Accepted Insurance) so saving doesn't drop them.
+  const children = nested && Array.isArray(child.children) ? child.children.slice(0, 20).map((c) => validateChild(c, false)) : []
+  return {
+    label: safeLabel(child.label),
+    href: safeHref(child.href),
+    ...(child.external ? { external: true } : {}),
+    ...(children.length ? { children } : {}),
+  }
 }
 
 function validateNav(input: unknown): NavItem[] {
@@ -39,7 +46,7 @@ function validateNav(input: unknown): NavItem[] {
   return input.map((raw) => {
     const item = raw as Partial<NavItem>
     const label = safeLabel(item.label)
-    const children = Array.isArray(item.children) ? item.children.slice(0, 20).map(validateChild) : undefined
+    const children = Array.isArray(item.children) ? item.children.slice(0, 20).map((child) => validateChild(child)) : undefined
     if (children?.length) return { label, children }
     return { label, href: safeHref(item.href) }
   })
@@ -50,7 +57,7 @@ function validateFooter(input: unknown): FooterGroup[] {
   return input.map((raw) => {
     const group = raw as Partial<FooterGroup>
     if (!Array.isArray(group.links)) throw new Error("Footer groups need links.")
-    return { heading: safeLabel(group.heading), links: group.links.slice(0, 20).map(validateChild) }
+    return { heading: safeLabel(group.heading), links: group.links.slice(0, 20).map((link) => validateChild(link, false)) }
   })
 }
 

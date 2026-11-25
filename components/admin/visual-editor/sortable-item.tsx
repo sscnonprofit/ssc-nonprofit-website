@@ -36,16 +36,16 @@ export function SortableItem({
   )
 }
 
-export function DragHandle(props: React.ComponentProps<"button">) {
+export function DragHandle({ className, ...props }: React.ComponentProps<"button">) {
   return (
     <button
       type="button"
-      className={cn(
-        "flex size-7 shrink-0 cursor-grab touch-none items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground active:cursor-grabbing",
-        props.className
-      )}
       aria-label="Drag to reorder"
       {...props}
+      className={cn(
+        "flex size-7 shrink-0 cursor-grab touch-none items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground active:cursor-grabbing",
+        className
+      )}
     >
       <GripVerticalIcon className="size-4" />
     </button>

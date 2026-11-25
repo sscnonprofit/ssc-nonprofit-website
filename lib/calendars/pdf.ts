@@ -142,7 +142,10 @@ function cell(
       wrap(n.text, fonts.italic, minimum, width - 10),
     );
     const contentHeight = lines.length * size * 1.15;
-    let y = top - height / 2 + contentHeight / 2;
+    // Center the banner between the date number and the notes at the bottom.
+    const notesTop =
+      top - height + 5 + noteLines.length * minimum * 1.1 + (noteLines.length ? 3 : 0);
+    let y = (top - 16 + notesTop) / 2 + contentHeight / 2;
     for (const line of lines) {
       y -= size * 1.15;
       page.drawText(line.text, {

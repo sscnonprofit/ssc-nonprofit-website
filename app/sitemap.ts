@@ -21,6 +21,7 @@ const routes = [
   { path: "/environment", priority: 0.7 },
   { path: "/community-outreach", priority: 0.7 },
   { path: "/upcoming-events", priority: 0.6 },
+  { path: "/cafe-menu", priority: 0.6 },
   { path: "/artists-gallery", priority: 0.6 },
 ]
 

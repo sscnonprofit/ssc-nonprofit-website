@@ -19,6 +19,7 @@ import {
   SearchCheckIcon,
   UsersIcon,
   UserCircleIcon,
+  UtensilsIcon,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -103,6 +104,7 @@ export function AdminShell({ userName, userEmail, role, newApplications = 0, new
         { href: "/admin", label: "Dashboard", icon: LayoutDashboardIcon },
         { href: "/admin/events", label: "Events", icon: CalendarDaysIcon },
         { href: "/admin/calendars", label: "Calendar", icon: CalendarDaysIcon },
+        { href: "/admin/cafe-menu", label: "Café Menu", icon: UtensilsIcon },
         { href: "/admin/gallery", label: "Gallery", icon: GalleryHorizontalIcon },
         { href: "/admin/exhibitions", label: "Exhibitions", icon: FrameIcon },
         { href: "/admin/jobs", label: "Jobs", icon: BriefcaseIcon },

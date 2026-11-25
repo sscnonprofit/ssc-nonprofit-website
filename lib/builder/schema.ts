@@ -262,6 +262,7 @@ export const RESERVED_SLUGS = new Set([
   "section-templates",
   "artists-gallery",
   "accepted-insurance",
+  "cafe-menu",
   "assisted-living",
   "community",
   "community-outreach",

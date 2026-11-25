@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { count, desc, eq } from "drizzle-orm"
-import { ArrowRightIcon, BriefcaseIcon, CalendarDaysIcon, ExternalLinkIcon, FrameIcon, HandshakeIcon, ImagesIcon, MenuIcon } from "lucide-react"
+import { ArrowRightIcon, BriefcaseIcon, CalendarDaysIcon, ExternalLinkIcon, FrameIcon, HandshakeIcon, ImagesIcon, MenuIcon, UtensilsIcon } from "lucide-react"
 import Link from "next/link"
 import pillarsFallback from "@/content/pillars.json"
 import { CreatePageDialog } from "@/components/admin/builder/create-page-dialog"
@@ -57,9 +57,10 @@ export default async function AdminPagesDashboard() {
     { label: "Manage partners", href: "/admin/partners", icon: HandshakeIcon },
     { label: "Events", href: "/admin/events", icon: CalendarDaysIcon },
     { label: "Calendar builder", href: "/admin/calendars", icon: CalendarDaysIcon },
+    { label: "Café menu", href: "/admin/cafe-menu", icon: UtensilsIcon },
     ...(canEdit ? [{ label: "Media library", href: "/admin/media", icon: ImagesIcon }, { label: "Navigation", href: "/admin/navigation", icon: MenuIcon }] : []),
   ]
-  const activityHref = (slug: string, note: string | null) => note?.toLowerCase().includes("partner") ? "/admin/partners" : builderPages.some((p) => p.slug === slug) ? `/admin/builder/${slug}` : slug === "theme" ? "/admin/design" : `/admin/pages/${slug}`
+  const activityHref = (slug: string, note: string | null) => note?.toLowerCase().includes("partner") ? "/admin/partners" : slug === "cafe-menu" ? "/admin/cafe-menu" :builderPages.some((p) => p.slug === slug) ? `/admin/builder/${slug}` : slug === "theme" ? "/admin/design" : `/admin/pages/${slug}`
 
   return <div className="flex flex-col gap-6 sm:gap-8">
     <header className="flex flex-col gap-5 border-b border-border pb-6">

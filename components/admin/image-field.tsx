@@ -1,28 +1,38 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { createContext, useContext, useRef, useState } from "react"
 import { ImageIcon, Loader2Icon, PencilIcon, UploadIcon, XIcon } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { ImageCropDialog } from "@/components/admin/image-crop-dialog"
+import { outputType } from "@/lib/cms/crop-image"
 import { cn } from "@/lib/utils"
+
+/**
+ * Crop frame shape (width / height) for image fields rendered inside it, for
+ * editors that build fields generically, e.g. portrait leadership photos.
+ */
+export const ImageAspectContext = createContext<number | undefined>(undefined)
 
 export function ImageField({
   label,
   value,
   onChange,
-  aspect = 16 / 9,
+  aspect: aspectProp,
 }: {
   label: string
   value: string
   onChange: (url: string) => void
   aspect?: number
 }) {
+  const contextAspect = useContext(ImageAspectContext)
+  const aspect = aspectProp ?? contextAspect ?? 16 / 9
   const inputRef = useRef<HTMLInputElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [pendingSrc, setPendingSrc] = useState<string | null>(null)
+  const [pendingType, setPendingType] = useState("image/jpeg")
   const [cropOpen, setCropOpen] = useState(false)
 
   function handleFiles(files: FileList | null) {
@@ -32,15 +42,18 @@ export function ImageField({
       toast.error("Choose a JPG, PNG, WEBP, or AVIF image")
       return
     }
-    if (file.size > 8 * 1024 * 1024) {
-      toast.error("Choose an image smaller than 8 MB")
+    // The picture is scaled down before upload, so large phone photos are fine.
+    if (file.size > 30 * 1024 * 1024) {
+      toast.error("Choose an image smaller than 30 MB")
       return
     }
     const reader = new FileReader()
     reader.onload = () => {
       setPendingSrc(reader.result as string)
+      setPendingType(outputType(file.type))
       setCropOpen(true)
     }
+    reader.onerror = () => toast.error("Could not read this file")
     reader.readAsDataURL(file)
   }
 
@@ -48,9 +61,12 @@ export function ImageField({
     setIsUploading(true)
     try {
       const formData = new FormData()
-      formData.append("file", blob, "image.jpg")
+      formData.append("file", blob, `image.${blob.type.split("/")[1] || "jpg"}`)
       const res = await fetch("/api/admin/upload", { method: "POST", body: formData })
-      if (!res.ok) throw new Error("Upload failed")
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        throw new Error(data?.error ? `Upload failed: ${data.error}` : "Upload failed")
+      }
       const data = await res.json()
       onChange(data.url)
     } catch (error) {
@@ -67,9 +83,11 @@ export function ImageField({
 
       <div
         className={cn(
-          "group relative flex aspect-video w-full max-w-sm items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-border bg-muted/40 transition-colors",
+          "group relative flex w-full items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-border bg-muted/40 transition-colors",
+          aspect < 1 ? "max-w-[14rem]" : "max-w-sm",
           isDragging && "border-primary bg-primary/5"
         )}
+        style={{ aspectRatio: aspect }}
         onDragOver={(e) => {
           e.preventDefault()
           setIsDragging(true)
@@ -107,7 +125,7 @@ export function ImageField({
             <span className="text-sm font-medium">{isUploading ? "Uploading..." : "Drop an image or click to upload"}</span>
             <span className="inline-flex items-center gap-1 text-xs">
               <UploadIcon className="size-3" />
-              PNG, JPG, or WEBP up to 8MB
+              PNG, JPG, or WEBP
             </span>
           </button>
         )}
@@ -130,7 +148,7 @@ export function ImageField({
         }}
       />
 
-      <ImageCropDialog open={cropOpen} imageSrc={pendingSrc} aspect={aspect} onOpenChange={setCropOpen} onCropped={handleCropped} />
+      <ImageCropDialog open={cropOpen} imageSrc={pendingSrc} aspect={aspect} mimeType={pendingType} onOpenChange={setCropOpen} onCropped={handleCropped} />
     </div>
   )
 }

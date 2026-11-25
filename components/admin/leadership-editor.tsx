@@ -2,6 +2,7 @@
 
 import { ObjectFields } from "@/components/admin/visual-editor/object-fields"
 import { ArrayField } from "@/components/admin/visual-editor/array-field"
+import { ImageAspectContext } from "@/components/admin/image-field"
 import { emptyLeadershipMember } from "@/lib/cms/leadership"
 
 export function LeadershipEditor({ content, onChange }: { content: Record<string, unknown>; onChange: (next: Record<string, unknown>) => void }) {
@@ -14,7 +15,10 @@ export function LeadershipEditor({ content, onChange }: { content: Record<string
       <p className="text-sm leading-relaxed text-muted-foreground">Edit page settings below. Add, remove, or drag team members into order. Turn off Visible to hide a member without deleting them. Save a draft before previewing; publish when ready.</p>
       <ObjectFields data={settings} onChange={(next) => onChange({ ...next, team })} />
       <ObjectFields data={teamSettings} onChange={(next) => onChange({ ...content, team: { ...next, members } })} />
-      <ArrayField label="Team members" items={members as unknown[]} itemTemplate={emptyLeadershipMember} depth={0} onChange={(next) => onChange({ ...content, team: { ...team, members: next } })} />
+      {/* Member photos are shown as 3:4 portraits on the Leadership page, so crop them to match. */}
+      <ImageAspectContext value={3 / 4}>
+        <ArrayField label="Team members" items={members as unknown[]} itemTemplate={emptyLeadershipMember} depth={0} onChange={(next) => onChange({ ...content, team: { ...team, members: next } })} />
+      </ImageAspectContext>
     </div>
   )
 }
